@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,19 +21,13 @@ import { showToast } from "utils/helper";
 
 function Paid() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
-
-  setColumns([
+  const columns = [
     { Header: "Id", accessor: "paidModeId", width: "15%", align: "left" },
     { Header: "mode", accessor: "mode", align: "left" },
     { Header: "action", accessor: "action", align: "center" },
-  ]);
+  ];
 
   const navigate = useNavigate();
-
-  const jumpToEdit = useCallback((id) => {
-    navigate(`/paidmode/edit/${id}`);
-  }, [navigate]);
 
   useEffect(() => {
     try {
@@ -51,7 +45,7 @@ function Paid() {
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => jumpToEdit(data.paidModeId)}
+                  onClick={() => navigate(`/paidmode/edit/${data.paidModeId}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -70,7 +64,7 @@ function Paid() {
     } catch (err) {
       showToast(err.message, false);
     }
-  }, [jumpToEdit]);
+  }, [navigate, setRows]);
 
   return (
     <DashboardLayout>

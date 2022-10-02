@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,20 +21,14 @@ import { showToast } from "utils/helper";
 
 function MembershipPlan() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
-
-  setColumns([
+  const columns = [
     { Header: "Id", accessor: "membershipPlanId", width: "15%", align: "left" },
     { Header: "planName", accessor: "planName", align: "left" },
     { Header: "minutes", accessor: "minutes", align: "center" },
     { Header: "action", accessor: "action", align: "center" },
-  ]);
+  ];
 
   const navigate = useNavigate();
-
-  const jumpToEdit = useCallback((id) => {
-    navigate(`/membershipplan/edit/${id}`);
-  }, [navigate]);
 
   useEffect(() => {
     try {
@@ -52,7 +46,7 @@ function MembershipPlan() {
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => jumpToEdit(data.membershipPlanId)}
+                  onClick={() => navigate(`/membershipplan/edit/${data.membershipPlanId}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -71,7 +65,7 @@ function MembershipPlan() {
     } catch (err) {
       showToast(err.message, false);
     }
-  }, [jumpToEdit]);
+  }, [navigate, setRows]);
 
   return (
     <DashboardLayout>

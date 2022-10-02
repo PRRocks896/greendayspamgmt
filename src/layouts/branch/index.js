@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -36,19 +36,13 @@ import { showToast } from "utils/helper";
 
 function Branch() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
-
-  setColumns([
+  const columns = [
     { Header: "Id", accessor: "branchId", width: "15%", align: "left" },
     { Header: "branchName", accessor: "branchName", align: "left" },
     { Header: "cityName", accessor: "cityName", align: "center" },
     { Header: "action", accessor: "action", align: "center" },
-  ]);
+  ];
   const navigate = useNavigate();
-
-  const jumpToEdit = useCallback((id) => {
-    navigate(`/branch/edit/${id}`);
-  }, [navigate]);
 
   useEffect(() => {
     try {
@@ -67,7 +61,7 @@ function Branch() {
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => jumpToEdit(data.branchId)}
+                  onClick={() => navigate(`/branch/edit/${data.branchId}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -86,7 +80,7 @@ function Branch() {
     } catch (error) {
       showToast(error.message, false);
     }
-  }, [jumpToEdit]);
+  }, [navigate]);
 
   return (
     <DashboardLayout>

@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,9 +21,7 @@ import { showToast } from "utils/helper";
 
 function Employee() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
-
-  setColumns([
+  const columns = [
     { Header: "employeeId", accessor: "employeeId", width: "15%", align: "left" },
     { Header: "firstName", accessor: "firstName", align: "left" },
     { Header: "fatherName", accessor: "fatherName", align: "center" },
@@ -31,13 +29,9 @@ function Employee() {
     { Header: "branchName", accessor: "branchName", align: "center" },
     { Header: "cityName", accessor: "cityName", align: "center" },
     { Header: "action", accessor: "action", align: "center" },
-  ]);
+  ];
 
   const navigate = useNavigate();
-
-  const jumpToEdit = useCallback((id) => {
-    navigate(`/employee/edit/${id}`);
-  }, [navigate]);
 
   useEffect(() => {
     try {
@@ -55,7 +49,7 @@ function Employee() {
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => jumpToEdit(data.employeeId)}
+                  onClick={() => navigate(`/employee/edit/${data.employeeId}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -74,7 +68,7 @@ function Employee() {
     } catch (err) {
       showToast(err.message, false);
     }
-  }, [jumpToEdit]);
+  }, [navigate]);
 
   return (
     <DashboardLayout>

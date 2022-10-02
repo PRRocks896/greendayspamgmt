@@ -3,6 +3,8 @@ import { Suspense, lazy } from "react";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
+import SignIn from "layouts/authentication/sign-in";
+
 // Material Dashboard 2 React layouts
 const AddEditBranch = lazy(() => import("layouts/branch/component/addEdit"));
 const AddEditMembershipPlan = lazy(() => import("layouts/membershipplan/component/addEdit"));
@@ -16,8 +18,9 @@ const MembershipPlan = lazy(() => import("layouts/membershipplan"));
 const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
 const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
-const Profile = lazy(() => import("layouts/profile"));
-const SignIn = lazy(() => import("layouts/authentication/sign-in"));
+// const Profile = lazy(() => import("layouts/profile"));
+// const SignIn = lazy(() => import("layouts/authentication/sign-in"));
+
 
 export const routes = [
   {
@@ -226,29 +229,25 @@ export const routes = [
       </Suspense>
     ),
   },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Profile />
-      </Suspense>
-    ),
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Profile",
+  //   key: "profile",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/profile",
+  //   component: (
+  //     <Suspense fallback={<div>Loading...</div>}>
+  //       <Profile />
+  //     </Suspense>
+  //   ),
+  // },
   {
     type: "logout",
     name: "Sign Out",
     key: "sign-out",
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <SignIn />
-      </Suspense>
-    ),
+    component: <SignIn />,
   },
   // {
   //   type: "collapse",

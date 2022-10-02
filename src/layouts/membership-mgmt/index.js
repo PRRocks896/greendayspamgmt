@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,9 +21,7 @@ import { showToast } from "utils/helper";
 
 function MembershipMgmt() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
-
-  setColumns([
+  const columns = [
     { Header: "billNo", accessor: "billNo", align: "left" },
     { Header: "customerName", accessor: "customerName", align: "left" },
     { Header: "phoneNumber", accessor: "phoneNumber", align: "left" },
@@ -33,13 +31,9 @@ function MembershipMgmt() {
     { Header: "branchName", accessor: "branchName", align: "left" },
     { Header: "cityName", accessor: "cityName", align: "left" },
     { Header: "action", accessor: "action", align: "center" },
-  ]);
+  ];
 
   const navigate = useNavigate();
-
-  const jumpToEdit = useCallback((id) => {
-    navigate(`/membershipmgmt/edit/${id}`);
-  }, [navigate]);
 
   useEffect(() => {
     try {
@@ -59,7 +53,7 @@ function MembershipMgmt() {
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => jumpToEdit(data.membershipManagementId)}
+                  onClick={() => navigate(`/membershipmgmt/edit/${data.membershipManagementId}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -78,7 +72,7 @@ function MembershipMgmt() {
     } catch (err) {
       showToast(err.message, false);
     }
-  }, [jumpToEdit, setRows]);
+  }, [navigate, setRows]);
 
   return (
     <DashboardLayout>
