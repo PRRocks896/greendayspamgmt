@@ -56,18 +56,21 @@ function AddEditMembershipMgmt() {
         },
     });
 
-    useEffect(async () => {
+    useEffect(() => {
         try {
-            const [resCity, resBranch, resMembershipPlan, resPaidMode] = await Promise.all([
-                fetchCityList(),
-                fetchBranchDropdownList(),
-                fetchMembershipPlanDropdown(),
-                fetchPaidModeDropDown(),
-            ]);
-            setCityList(resCity.resultObject);
-            setBranchList(resBranch.resultObject);
-            setMembershipPlanList(resMembershipPlan.resultObject);
-            setPaidMode(resPaidMode.resultObject);
+            async function getCityBranchMembershipPlanPaidMode() {
+                const [resCity, resBranch, resMembershipPlan, resPaidMode] = await Promise.all([
+                    fetchCityList(),
+                    fetchBranchDropdownList(),
+                    fetchMembershipPlanDropdown(),
+                    fetchPaidModeDropDown(),
+                ]);
+                setCityList(resCity.resultObject);
+                setBranchList(resBranch.resultObject);
+                setMembershipPlanList(resMembershipPlan.resultObject);
+                setPaidMode(resPaidMode.resultObject);
+            }
+            getCityBranchMembershipPlanPaidMode();
         } catch (err) {
             console.error(err);
             showToast(err.message, false);
@@ -83,20 +86,24 @@ function AddEditMembershipMgmt() {
         }
     }, [pathname]);
 
-    useEffect(async () => {
+    useEffect(() => {
         if (id) {
             try {
-                const response = await fetchByIdMembershipMgmt(id);
-                console.log(response);
-                if (response.status === 200) {
-                    reset(response.resultObject);
-                    setSelectedImage(`${endpoint}/${response.resultObject?.customerPhotoPath}`);
+                async function MembershipMgmtBtId(id) {
+                    const response = await fetchByIdMembershipMgmt(id);
+                    if (response.status === 200) {
+                        reset(response.resultObject);
+                        setSelectedImage(`${endpoint}/${response.resultObject?.customerPhotoPath}`);
+                    } else {
+                        showToast(response.message);
+                    }
                 }
+                MembershipMgmtBtId(id);
             } catch (err) {
                 showToast(err.message, false);
             }
         }
-    }, [id, reset, showToast]);
+    }, [id, reset]);
 
     //use for images manually upload and drop
     const onDrop = useCallback((acceptedFiles) => {
@@ -109,7 +116,7 @@ function AddEditMembershipMgmt() {
             reader.readAsDataURL(file);
             return file;
         });
-    }, []);
+    }, [setValue]);
 
     const handleSave = async (info) => {
         try {
@@ -155,6 +162,7 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="customerName"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -175,6 +183,7 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="phoneNumber"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -207,6 +216,7 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="emailId"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -350,6 +360,7 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="managerName"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -370,6 +381,7 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="billNo"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -424,7 +436,7 @@ function AddEditMembershipMgmt() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setSelectedImage(null)}> delete</Icon>}
-                                                        <img style={{ height: "calc(100vh - 100px)" }} src={selectedImage} alt="customer photo" />
+                                                        <img style={{ height: "calc(100vh - 100px)" }} src={selectedImage} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>

@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 // react-hook-form components
 import { useForm, Controller } from "react-hook-form";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import InputLabel from "@mui/material/InputLabel";
-import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -19,7 +17,6 @@ import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
 
 import { sendMembershipRedeemOtpSend, fetchMembershipRedeem } from "service/membership-redeem.service";
 import { showToast } from "utils/helper";
@@ -28,26 +25,26 @@ import { endpoint } from "utils/constant";
 function MembershipRedeem() {
   const [redeemDetail, setRedeemDetail] = useState(null);
   const [sentOtp, setSentOtp] = useState(false);
-  const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([
-    { Header: "Id", accessor: "membershipPlanId", width: "15%", align: "left" },
-    { Header: "planName", accessor: "planName", align: "left" },
-    { Header: "minutes", accessor: "minutes", align: "center" },
-    { Header: "action", accessor: "action", align: "center" },
-  ]);
+  // const [rows, setRows] = useState([]);
+  // const [columns, setColumns] = useState([
+  //   { Header: "Id", accessor: "membershipPlanId", width: "15%", align: "left" },
+  //   { Header: "planName", accessor: "planName", align: "left" },
+  //   { Header: "minutes", accessor: "minutes", align: "center" },
+  //   { Header: "action", accessor: "action", align: "center" },
+  // ]);
 
-  const { handleSubmit, control, reset } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: {
       phoneNumber: "",
       otp: "",
     },
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const jumpToEdit = (id) => {
-    navigate(`/membershipplan/edit/${id}`);
-  };
+  // const jumpToEdit = (id) => {
+  //   navigate(`/membershipplan/edit/${id}`);
+  // };
 
   const handleSendOtp = async (info) => {
     try {
@@ -273,7 +270,7 @@ function MembershipRedeem() {
                             </MDTypography>
                         </MDBox>
                         <MDBox>
-                        <img style={{ height: "calc(100vh - 250px)" }} src={`${endpoint}/${redeemDetail.customerPhotoPath}`} alt="customer photo" />
+                        <img style={{ height: "calc(100vh - 250px)" }} src={`${endpoint}/${redeemDetail.customerPhotoPath}`} alt="customer" />
                         </MDBox>
                     </MDBox>
                 }

@@ -13,10 +13,10 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useReducer } from "react";
+import { useState } from "react";
 
 // react-router-dom components
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -50,7 +50,7 @@ function Basic() {
   const navigate = useNavigate();
   const [sentOtp, setSentOtp] = useState(false);
 
-  const { handleSubmit, control, getValues } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: {
       mobileNumber: "",
       otp: "",

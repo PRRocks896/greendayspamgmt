@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,7 +21,9 @@ import { showToast } from "utils/helper";
 
 function Paid() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([
+  const [columns, setColumns] = useState([]);
+
+  setColumns([
     { Header: "Id", accessor: "paidModeId", width: "15%", align: "left" },
     { Header: "mode", accessor: "mode", align: "left" },
     { Header: "action", accessor: "action", align: "center" },
@@ -29,43 +31,46 @@ function Paid() {
 
   const navigate = useNavigate();
 
-  const jumpToEdit = (id) => {
+  const jumpToEdit = useCallback((id) => {
     navigate(`/paidmode/edit/${id}`);
-  };
+  }, [navigate]);
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const response = await fetchPaidMode({
-        searchText: "",
-        isActive: true,
-        page: 0,
-        size: 1000,
-      });
-      if (response.status === 200 && response.resultObject?.data?.length > 0) {
-        const updatedData = response.resultObject.data?.map((data, index) => {
-          return {
-            ...data,
-            action: (
-              <MDTypography
-                component="span"
-                onClick={() => jumpToEdit(data.paidModeId)}
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-                style={{ cursor: "pointer" }}
-              >
-                <Icon fontSize="medium">edit</Icon>
-                {/* Edit */}
-              </MDTypography>
-            ),
-          };
+      async function getPaidMode() {
+        const response = await fetchPaidMode({
+          searchText: "",
+          isActive: true,
+          page: 0,
+          size: 1000,
         });
-        setRows(updatedData);
+        if (response.status === 200 && response.resultObject?.data?.length > 0) {
+          const updatedData = response.resultObject.data?.map((data, index) => {
+            return {
+              ...data,
+              action: (
+                <MDTypography
+                  component="span"
+                  onClick={() => jumpToEdit(data.paidModeId)}
+                  variant="caption"
+                  color="text"
+                  fontWeight="medium"
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon fontSize="medium">edit</Icon>
+                  {/* Edit */}
+                </MDTypography>
+              ),
+            };
+          });
+          setRows(updatedData);
+        }
       }
+      getPaidMode();
     } catch (err) {
       showToast(err.message, false);
     }
-  }, []);
+  }, [jumpToEdit]);
 
   return (
     <DashboardLayout>

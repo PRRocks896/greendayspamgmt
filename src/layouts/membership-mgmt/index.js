@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,7 +21,9 @@ import { showToast } from "utils/helper";
 
 function MembershipMgmt() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([
+  const [columns, setColumns] = useState([]);
+
+  setColumns([
     { Header: "billNo", accessor: "billNo", align: "left" },
     { Header: "customerName", accessor: "customerName", align: "left" },
     { Header: "phoneNumber", accessor: "phoneNumber", align: "left" },
@@ -32,47 +34,51 @@ function MembershipMgmt() {
     { Header: "cityName", accessor: "cityName", align: "left" },
     { Header: "action", accessor: "action", align: "center" },
   ]);
+
   const navigate = useNavigate();
 
-  const jumpToEdit = (id) => {
+  const jumpToEdit = useCallback((id) => {
     navigate(`/membershipmgmt/edit/${id}`);
-  };
+  }, [navigate]);
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const response = await fetchMembershipMgmt({
-        searchText: "",
-        isActive: true,
-        page: 0,
-        size: 1000,
-        cityId: 0,
-        branchId: 0,
-      });
-      if (response.status === 200 && response.resultObject?.data?.length > 0) {
-        const updatedData = response.resultObject.data?.map((data, index) => {
-          return {
-            ...data,
-            action: (
-              <MDTypography
-                component="span"
-                onClick={() => jumpToEdit(data.membershipManagementId)}
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-                style={{ cursor: "pointer" }}
-              >
-                <Icon fontSize="medium">edit</Icon>
-                {/* Edit */}
-              </MDTypography>
-            ),
-          };
+      async function membershipMgmt() {
+        const response = await fetchMembershipMgmt({
+          searchText: "",
+          isActive: true,
+          page: 0,
+          size: 1000,
+          cityId: 0,
+          branchId: 0,
         });
-        setRows(updatedData);
+        if (response.status === 200 && response.resultObject?.data?.length > 0) {
+          const updatedData = response.resultObject.data?.map((data, index) => {
+            return {
+              ...data,
+              action: (
+                <MDTypography
+                  component="span"
+                  onClick={() => jumpToEdit(data.membershipManagementId)}
+                  variant="caption"
+                  color="text"
+                  fontWeight="medium"
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon fontSize="medium">edit</Icon>
+                  {/* Edit */}
+                </MDTypography>
+              ),
+            };
+          });
+          setRows(updatedData);
+        }
       }
+      membershipMgmt();
     } catch (err) {
       showToast(err.message, false);
     }
-  }, []);
+  }, [jumpToEdit, setRows]);
 
   return (
     <DashboardLayout>

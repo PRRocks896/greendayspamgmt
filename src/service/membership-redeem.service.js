@@ -1,4 +1,4 @@
-import { get, post } from "./web.request";
+import { get } from "./web.request";
 import { api } from "../utils/constant";
 import { replaceUrlVariable } from "../utils/helper";
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,7 +21,9 @@ import { showToast } from "utils/helper";
 
 function MembershipPlan() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([
+  const [columns, setColumns] = useState([]);
+
+  setColumns([
     { Header: "Id", accessor: "membershipPlanId", width: "15%", align: "left" },
     { Header: "planName", accessor: "planName", align: "left" },
     { Header: "minutes", accessor: "minutes", align: "center" },
@@ -30,43 +32,46 @@ function MembershipPlan() {
 
   const navigate = useNavigate();
 
-  const jumpToEdit = (id) => {
+  const jumpToEdit = useCallback((id) => {
     navigate(`/membershipplan/edit/${id}`);
-  };
+  }, [navigate]);
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const response = await fetchMembershipPlan({
-        searchText: "",
-        isActive: true,
-        page: 0,
-        size: 100,
-      });
-      if (response.status === 200 && response.resultObject?.data?.length > 0) {
-        const updatedData = response.resultObject.data?.map((data, index) => {
-          return {
-            ...data,
-            action: (
-              <MDTypography
-                component="span"
-                onClick={() => jumpToEdit(data.membershipPlanId)}
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-                style={{ cursor: "pointer" }}
-              >
-                <Icon fontSize="medium">edit</Icon>
-                {/* Edit */}
-              </MDTypography>
-            ),
-          };
+      async function getMembershipPlan() {
+        const response = await fetchMembershipPlan({
+          searchText: "",
+          isActive: true,
+          page: 0,
+          size: 100,
         });
-        setRows(updatedData);
+        if (response.status === 200 && response.resultObject?.data?.length > 0) {
+          const updatedData = response.resultObject.data?.map((data, index) => {
+            return {
+              ...data,
+              action: (
+                <MDTypography
+                  component="span"
+                  onClick={() => jumpToEdit(data.membershipPlanId)}
+                  variant="caption"
+                  color="text"
+                  fontWeight="medium"
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon fontSize="medium">edit</Icon>
+                  {/* Edit */}
+                </MDTypography>
+              ),
+            };
+          });
+          setRows(updatedData);
+        }
       }
+      getMembershipPlan();
     } catch (err) {
       showToast(err.message, false);
     }
-  }, []);
+  }, [jumpToEdit]);
 
   return (
     <DashboardLayout>

@@ -43,20 +43,23 @@ function AddEditMembershipPlan() {
     }
   }, [pathname]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (id) {
       try {
-        const response = await fetchByIdMembershipPlan(id);
-        if (response.status === 200) {
-          reset(response.resultObject);
-        } else {
-          showToast(response.message, false);
+        async function membershipById(id) {
+          const response = await fetchByIdMembershipPlan(id);
+          if (response.status === 200) {
+            reset(response.resultObject);
+          } else {
+            showToast(response.message, false);
+          }
         }
+        membershipById(id);
       } catch (err) {
         showToast(err.message, false);
       }
     }
-  }, [id]);
+  }, [id, reset]);
 
   const handleSave = async (info) => {
     try {

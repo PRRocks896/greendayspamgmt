@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -36,7 +36,9 @@ import { showToast } from "utils/helper";
 
 function Branch() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([
+  const [columns, setColumns] = useState([]);
+
+  setColumns([
     { Header: "Id", accessor: "branchId", width: "15%", align: "left" },
     { Header: "branchName", accessor: "branchName", align: "left" },
     { Header: "cityName", accessor: "cityName", align: "center" },
@@ -44,44 +46,47 @@ function Branch() {
   ]);
   const navigate = useNavigate();
 
-  const jumpToEdit = (id) => {
+  const jumpToEdit = useCallback((id) => {
     navigate(`/branch/edit/${id}`);
-  };
+  }, [navigate]);
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const response = await fetchBranchList({
-        cityId: 0,
-        searchText: "",
-        isActive: true,
-        page: 0,
-        size: 100,
-      });
-      if (response.status === 200 && response.resultObject?.data?.length > 0) {
-        const updatedData = response.resultObject.data?.map((data, index) => {
-          return {
-            ...data,
-            action: (
-              <MDTypography
-                component="span"
-                onClick={() => jumpToEdit(data.branchId)}
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-                style={{ cursor: "pointer" }}
-              >
-                <Icon fontSize="medium">edit</Icon>
-                {/* Edit */}
-              </MDTypography>
-            ),
-          };
+      async function fetchBranch() {
+        const response = await fetchBranchList({
+          cityId: 0,
+          searchText: "",
+          isActive: true,
+          page: 0,
+          size: 100,
         });
-        setRows(updatedData);
+        if (response.status === 200 && response.resultObject?.data?.length > 0) {
+          const updatedData = response.resultObject.data?.map((data, index) => {
+            return {
+              ...data,
+              action: (
+                <MDTypography
+                  component="span"
+                  onClick={() => jumpToEdit(data.branchId)}
+                  variant="caption"
+                  color="text"
+                  fontWeight="medium"
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon fontSize="medium">edit</Icon>
+                  {/* Edit */}
+                </MDTypography>
+              ),
+            };
+          });
+          setRows(updatedData);
+        }
       }
+      fetchBranch();
     } catch (error) {
       showToast(error.message, false);
     }
-  }, []);
+  }, [jumpToEdit]);
 
   return (
     <DashboardLayout>

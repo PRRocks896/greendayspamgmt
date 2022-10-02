@@ -45,17 +45,20 @@ function AddEditBranch() {
     },
   });
 
-  useEffect(async () => {
-    try {
-      const response = await fetchCityList();
-      if (response.status === 200) {
-        setCityList(response.resultObject);
-      } else {
-        showToast(response.message, false);
+  useEffect(() => {
+    async function fetchCity() {
+      try {
+        const response = await fetchCityList();
+        if (response.status === 200) {
+          setCityList(response.resultObject);
+        } else {
+          showToast(response.message, false);
+        }
+      } catch (err) {
+        showToast(err.message, false);
       }
-    } catch (err) {
-      showToast(err.message, false);
     }
+    fetchCity();
   }, []);
 
   useEffect(() => {
@@ -68,23 +71,26 @@ function AddEditBranch() {
     }
   }, [pathname]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (id) {
-      try {
-        const response = await fetchByIdBranch(id);
-        if (response.status === 200) {
-          reset({
-            ...response.resultObject,
-            openingDate: moment(response.resultObject?.openingDate).format("yyyy-MM-DD"),
-          });
-        } else {
-          showToast(response.message, false);
+      async function branchByID(id) {
+        try {
+          const response = await fetchByIdBranch(id);
+          if (response.status === 200) {
+            reset({
+              ...response.resultObject,
+              openingDate: moment(response.resultObject?.openingDate).format("yyyy-MM-DD"),
+            });
+          } else {
+            showToast(response.message, false);
+          }
+        } catch (err) {
+          showToast(err.message, false);
         }
-      } catch (err) {
-        showToast(err.message, false);
       }
+      branchByID(id);
     }
-  }, [id]);
+  }, [id, reset]);
 
   const handleSave = async (info) => {
     if (isEditMode) {
@@ -166,6 +172,7 @@ function AddEditBranch() {
                     <Controller
                       name="branchName"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        // eslint-disable-next-line
                         <MDInput
                           type="text"
                           value={value}
@@ -186,6 +193,7 @@ function AddEditBranch() {
                     <Controller
                       name="mobileNumber"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        // eslint-disable-next-line
                         <MDInput
                           type="text"
                           value={value}
@@ -218,6 +226,7 @@ function AddEditBranch() {
                     <Controller
                       name="landlineNumber"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        // eslint-disable-next-line
                         <MDInput
                           type="text"
                           value={value}
@@ -241,6 +250,7 @@ function AddEditBranch() {
                     <Controller
                       name="emailId"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        // eslint-disable-next-line
                         <MDInput
                           type="text"
                           value={value}
@@ -265,6 +275,7 @@ function AddEditBranch() {
                     <Controller
                       name="address"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        // eslint-disable-next-line
                         <MDInput
                           type="text"
                           value={value}
@@ -285,6 +296,7 @@ function AddEditBranch() {
                     <Controller
                       name="openingDate"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        // eslint-disable-next-line
                         <MDInput
                           type="date"
                           value={value}

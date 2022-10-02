@@ -54,14 +54,17 @@ function AddEditEmployee() {
         },
     });
 
-    useEffect(async () => {
+    useEffect(() => {
         try {
-            const [resCity, resBranch] = await Promise.all([
-                fetchCityList(),
-                fetchBranchDropdownList(),
-            ]);
-            setCityList(resCity.resultObject);
-            setBranchList(resBranch.resultObject);
+            async function fetchCityBranch() {
+                const [resCity, resBranch] = await Promise.all([
+                    fetchCityList(),
+                    fetchBranchDropdownList(),
+                ]);
+                setCityList(resCity.resultObject);
+                setBranchList(resBranch.resultObject);
+            }
+            fetchCityBranch();
         } catch (err) {
             console.error(err);
             showToast(err.message, false);
@@ -77,24 +80,27 @@ function AddEditEmployee() {
         }
     }, [pathname]);
 
-    useEffect(async () => {
+    useEffect(() => {
         if (id) {
             try {
-                const response = await fetchByIdEmployee(id);
-                console.log(response);
-                if (response.status === 200) {
-                    reset(response.resultObject);
-                    setLivePhoto(`${endpoint}/${response.resultObject?.livePhotoPath}`);
-                    setIdProof(`${endpoint}/${response.resultObject?.idProofPath}`);
-                    setAddressPhoto(`${endpoint}/${response.resultObject?.addressProofPath}`);
-                } else {
-                    showToast(response.message, false);
+                async function employeeByID(id) {
+                    const response = await fetchByIdEmployee(id);
+                    console.log(response);
+                    if (response.status === 200) {
+                        reset(response.resultObject);
+                        setLivePhoto(`${endpoint}/${response.resultObject?.livePhotoPath}`);
+                        setIdProof(`${endpoint}/${response.resultObject?.idProofPath}`);
+                        setAddressPhoto(`${endpoint}/${response.resultObject?.addressProofPath}`);
+                    } else {
+                        showToast(response.message, false);
+                    }
                 }
+                employeeByID(id);
             } catch (err) {
                 showToast(err.message, false);
             }
         }
-    }, [id, reset, showToast]);
+    }, [id, reset]);
 
     //use for images manually upload and drop
     const onDropLivePhoto = useCallback((acceptedFiles) => {
@@ -108,7 +114,7 @@ function AddEditEmployee() {
             reader.readAsDataURL(file);
             return file;
         });
-    }, []);
+    }, [setValue, setLivePhoto]);
 
     const onDropIdProof = useCallback((acceptedFiles) => {
         acceptedFiles.map((file) => {
@@ -120,7 +126,7 @@ function AddEditEmployee() {
             reader.readAsDataURL(file);
             return file;
         });
-    }, []);
+    }, [setValue, setIdProof]);
 
     const onDropAddressPhoto = useCallback((acceptedFiles) => {
         acceptedFiles.map((file) => {
@@ -132,11 +138,11 @@ function AddEditEmployee() {
             reader.readAsDataURL(file);
             return file;
         });
-    }, []);
+    }, [setValue, setAddressPhoto]);
 
     const handleSave = async (info) => {
         try {
-            console.log(info);
+            // console.log(info);
             if(id === null) {
                 const response = await createEmployee(getFormData(info));
                 if (response.status === 200) {
@@ -391,7 +397,7 @@ function AddEditEmployee() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setLivePhoto(null)}> delete</Icon>}
-                                                        <img style={{ height: "calc(100vh - 250px)" }} src={livePhoto} alt="customer photo" />
+                                                        <img style={{ height: "calc(100vh - 250px)" }} src={livePhoto} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -430,7 +436,7 @@ function AddEditEmployee() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setIdProof(null)}> delete</Icon>}
-                                                        <img style={{ width: "100%", height: "calc(100vh - 250px)" }} src={idProof} alt="customer photo" />
+                                                        <img style={{ width: "100%", height: "calc(100vh - 250px)" }} src={idProof} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -470,7 +476,7 @@ function AddEditEmployee() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setAddressPhoto(null)}> delete</Icon>}
-                                                        <img style={{width: "100%", height: "calc(100vh - 250px)" }} src={addressPhoto} alt="customer photo" />
+                                                        <img style={{width: "100%", height: "calc(100vh - 250px)" }} src={addressPhoto} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>

@@ -20,6 +20,7 @@ import ivana from "assets/images/ivana-square.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
+// eslint-disable-next-line
 export default [
   {
     image: kal,

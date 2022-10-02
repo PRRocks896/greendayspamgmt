@@ -6,9 +6,9 @@ import { useForm, Controller } from "react-hook-form";
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+// import InputLabel from "@mui/material/InputLabel";
+// import Select from "@mui/material/Select";
+// import MenuItem from "@mui/material/MenuItem";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -43,20 +43,23 @@ function AddEditPaid() {
     }
   }, [pathname]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (id) {
       try {
-        const response = await fetchByIdPaidMode(id);
-        if (response.status === 200) {
-          reset(response.resultObject);
-        } else {
-          showToast(response.message, false);
+        async function getPaidModeById(id) {
+          const response = await fetchByIdPaidMode(id);
+          if (response.status === 200) {
+            reset(response.resultObject);
+          } else {
+            showToast(response.message, false);
+          }
         }
+        getPaidModeById(id);
       } catch (err) {
         showToast(err.message, false);
       }
     }
-  }, [id]);
+  }, [id, reset]);
 
   const handleSave = async (info) => {
       try {

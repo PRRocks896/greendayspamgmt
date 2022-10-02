@@ -117,7 +117,7 @@ export default function App() {
         navigate("/");
       }
     }
-  }, [pathname]);
+  }, [pathname, navigate]);
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {

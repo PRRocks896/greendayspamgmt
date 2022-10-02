@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
@@ -21,7 +21,9 @@ import { showToast } from "utils/helper";
 
 function Employee() {
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([
+  const [columns, setColumns] = useState([]);
+
+  setColumns([
     { Header: "employeeId", accessor: "employeeId", width: "15%", align: "left" },
     { Header: "firstName", accessor: "firstName", align: "left" },
     { Header: "fatherName", accessor: "fatherName", align: "center" },
@@ -33,43 +35,46 @@ function Employee() {
 
   const navigate = useNavigate();
 
-  const jumpToEdit = (id) => {
+  const jumpToEdit = useCallback((id) => {
     navigate(`/employee/edit/${id}`);
-  };
+  }, [navigate]);
 
-  useEffect(async () => {
+  useEffect(() => {
     try {
-      const response = await fetchEmployee({
-        searchText: "",
-        isActive: true,
-        page: 0,
-        size: 1000,
-      });
-      if (response.status === 200 && response.resultObject?.data?.length > 0) {
-        const updatedData = response.resultObject.data?.map((data, index) => {
-          return {
-            ...data,
-            action: (
-              <MDTypography
-                component="span"
-                onClick={() => jumpToEdit(data.employeeId)}
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-                style={{ cursor: "pointer" }}
-              >
-                <Icon fontSize="medium">edit</Icon>
-                {/* Edit */}
-              </MDTypography>
-            ),
-          };
+      async function getEmployee() {
+        const response = await fetchEmployee({
+          searchText: "",
+          isActive: true,
+          page: 0,
+          size: 1000,
         });
-        setRows(updatedData);
+        if (response.status === 200 && response.resultObject?.data?.length > 0) {
+          const updatedData = response.resultObject.data?.map((data, index) => {
+            return {
+              ...data,
+              action: (
+                <MDTypography
+                  component="span"
+                  onClick={() => jumpToEdit(data.employeeId)}
+                  variant="caption"
+                  color="text"
+                  fontWeight="medium"
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon fontSize="medium">edit</Icon>
+                  {/* Edit */}
+                </MDTypography>
+              ),
+            };
+          });
+          setRows(updatedData);
+        }
       }
+      getEmployee();
     } catch (err) {
       showToast(err.message, false);
     }
-  }, []);
+  }, [jumpToEdit]);
 
   return (
     <DashboardLayout>
