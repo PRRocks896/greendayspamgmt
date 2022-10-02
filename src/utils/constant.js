@@ -1,4 +1,4 @@
-export const endpoint = "http://greenapp.fabbang.com";
+export const endpoint = "https://greenapp.fabbang.com";
 
 export const api = {
   login: "/v1/api/user/login",
