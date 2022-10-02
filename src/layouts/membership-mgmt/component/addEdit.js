@@ -231,6 +231,7 @@ function AddEditMembershipMgmt() {
                                                     rules={{
                                                         required: "Please enter Email",
                                                         pattern: {
+                                                            // eslint-disable-next-line
                                                             value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                                                             message: "Enter valid Email",
                                                         },
