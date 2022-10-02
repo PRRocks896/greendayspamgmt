@@ -67,7 +67,7 @@ function Employee() {
         setRows(updatedData);
       }
     } catch (err) {
-      showToast(error.message, false);
+      showToast(err.message, false);
     }
   }, []);
 

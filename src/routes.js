@@ -1,5 +1,8 @@
 import { Suspense, lazy } from "react";
 
+// @mui icons
+import Icon from "@mui/material/Icon";
+
 // Material Dashboard 2 React layouts
 const AddEditBranch = lazy(() => import("layouts/branch/component/addEdit"));
 const AddEditMembershipPlan = lazy(() => import("layouts/membershipplan/component/addEdit"));
@@ -15,9 +18,6 @@ const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
 const Profile = lazy(() => import("layouts/profile"));
 const SignIn = lazy(() => import("layouts/authentication/sign-in"));
-
-// @mui icons
-import Icon from "@mui/material/Icon";
 
 export const routes = [
   {
