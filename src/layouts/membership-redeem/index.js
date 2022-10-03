@@ -17,6 +17,7 @@ import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import Redeem from "layouts/membership-redeem/component/redeem";
 
 import { sendMembershipRedeemOtpSend, fetchMembershipRedeem } from "service/membership-redeem.service";
 import { showToast } from "utils/helper";
@@ -24,27 +25,15 @@ import { endpoint } from "utils/constant";
 
 function MembershipRedeem() {
   const [redeemDetail, setRedeemDetail] = useState(null);
+  const [redeemFormShow, setRedeemFormShow] = useState(false);
   const [sentOtp, setSentOtp] = useState(false);
-  // const [rows, setRows] = useState([]);
-  // const [columns, setColumns] = useState([
-  //   { Header: "Id", accessor: "membershipPlanId", width: "15%", align: "left" },
-  //   { Header: "planName", accessor: "planName", align: "left" },
-  //   { Header: "minutes", accessor: "minutes", align: "center" },
-  //   { Header: "action", accessor: "action", align: "center" },
-  // ]);
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, setValue } = useForm({
     defaultValues: {
       phoneNumber: "",
       otp: "",
     },
   });
-
-  // const navigate = useNavigate();
-
-  // const jumpToEdit = (id) => {
-  //   navigate(`/membershipplan/edit/${id}`);
-  // };
 
   const handleSendOtp = async (info) => {
     try {
@@ -75,40 +64,6 @@ function MembershipRedeem() {
     }
   }
 
-//   useEffect(async () => {
-//     try {
-//       const response = await fetchMembershipPlan({
-//         searchText: "",
-//         isActive: true,
-//         page: 0,
-//         size: 100,
-//       });
-//       if (response.status === 200 && response.resultObject?.data?.length > 0) {
-//         const updatedData = response.resultObject.data?.map((data, index) => {
-//           return {
-//             ...data,
-//             action: (
-//               <MDTypography
-//                 component="span"
-//                 onClick={() => jumpToEdit(data.membershipPlanId)}
-//                 variant="caption"
-//                 color="text"
-//                 fontWeight="medium"
-//                 style={{ cursor: "pointer" }}
-//               >
-//                 <Icon fontSize="medium">edit</Icon>
-//                 {/* Edit */}
-//               </MDTypography>
-//             ),
-//           };
-//         });
-//         setRows(updatedData);
-//       }
-//     } catch (err) {
-//       showToast(error.message, false);
-//     }
-//   }, []);
-
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -123,62 +78,54 @@ function MembershipRedeem() {
                 px={2}
                 variant="gradient"
                 bgColor="info"
-                borderRadius="lg"
+                borderRadius="10px"
                 display="grid"
                 gridTemplateColumns="1fr 1fr"
                 coloredShadow="info"
+                border="1px solid #344767"
+                padding="10px"
               >
                 <MDTypography variant="h6" color="white">
                   Membership Redeem
                 </MDTypography>
-                {/* <MDTypography
-                  variant="h6"
-                  component={Link}
-                  to="/membershipplan/add"
-                  borderRadius="lg"
-                  color="white"
-                  textAlign="end"
-                >
-                  <Icon fontSize="large">add</Icon>
-                </MDTypography> */}
               </MDBox>
               <MDBox pt={3} pb={3} px={3}>
                 {!redeemDetail ?
                     <MDBox component="form" role="form">
                         {!sentOtp && (
                             <MDBox mb={2}>
-                            <Controller
-                            name="phoneNumber"
-                            render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                <MDInput
-                                type="text"
-                                value={value}
-                                label="Mobile Number"
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error?.message ? error.message : ""}
-                                fullWidth
-                                />
-                            )}
-                            control={control}
-                            rules={{
-                                required: "Please add phone number",
-                                minLength: {
-                                value: 10,
-                                message: "Cannot be smaller than 10 characters",
-                                },
-                                maxLength: {
-                                value: 10,
-                                message: "Cannot be longer than 10 characters",
-                                },
-            
-                                pattern: {
-                                value: /^[0-9]/,
-                                message: "Enter only digit allow",
-                                },
-                            }}
-                            />
-                        </MDBox>
+                              <Controller
+                              name="phoneNumber"
+                              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                  <MDInput
+                                  type="text"
+                                  value={value}
+                                  label="Mobile Number"
+                                  onChange={onChange}
+                                  error={!!error}
+                                  helperText={error?.message ? error.message : ""}
+                                  fullWidth
+                                  />
+                              )}
+                              control={control}
+                              rules={{
+                                  required: "Please add phone number",
+                                  minLength: {
+                                  value: 10,
+                                  message: "Cannot be smaller than 10 characters",
+                                  },
+                                  maxLength: {
+                                  value: 10,
+                                  message: "Cannot be longer than 10 characters",
+                                  },
+              
+                                  pattern: {
+                                  value: /^[0-9]/,
+                                  message: "Enter only digit allow",
+                                  },
+                              }}
+                              />
+                          </MDBox>
                         )}
                         {sentOtp && (
                             <MDBox mb={2}>
@@ -216,11 +163,11 @@ function MembershipRedeem() {
                         )}
                         {sentOtp ? (
                             <MDBox mt={4} mb={1} style={{ display: "flex" }}>
-                                <MDButton
+                              <MDButton
                                 component="button"
                                 variant="gradient"
                                 color="info"
-                                onClick={() => setSentOtp(false)}
+                                onClick={() => [setSentOtp(false), setValue("otp", "")]}
                                 style={{ marginRight: "8px" }}
                                 fullWidth
                                 >
@@ -234,11 +181,11 @@ function MembershipRedeem() {
                                 fullWidth
                                 >
                                 Verify OTP
-                                </MDButton>
+                              </MDButton>
                             </MDBox>
                         ) : (
                             <MDBox mt={4} mb={1}>
-                                <MDButton
+                              <MDButton
                                 component="button"
                                 variant="gradient"
                                 color="info"
@@ -246,44 +193,43 @@ function MembershipRedeem() {
                                 fullWidth
                                 >
                                 Get OTP
-                                </MDButton>
+                              </MDButton>
                             </MDBox>
                         )}
                     </MDBox>
                 : 
-                    <MDBox style={{display: "grid", gridTemplateColumns: "3fr 1fr"}}>
-                        <MDBox>
-                            <MDTypography variant="span">
-                                Customer Name: {redeemDetail.customerName}
-                            </MDTypography>
-                            <br />
-                            <MDTypography variant="span">
-                                Phone No: {redeemDetail.phoneNumber}
-                            </MDTypography>
-                            <br />
-                            <MDTypography variant="span">
-                                Plan Name: {redeemDetail.planName}
-                            </MDTypography>
-                            <br />
-                            <MDTypography variant="span">
-                                Duration: {redeemDetail.minutes}
-                            </MDTypography>
-                        </MDBox>
-                        <MDBox>
-                        <img style={{ height: "calc(100vh - 250px)" }} src={`${endpoint}/${redeemDetail.customerPhotoPath}`} alt="customer" />
-                        </MDBox>
+                  <MDBox style={{display: "grid", gridTemplateColumns: "3fr 1fr"}}>
+                    <MDBox>
+                      <MDTypography variant="span">
+                        Customer Name: {redeemDetail.customerName}
+                      </MDTypography>
+                      <br />
+                      <MDTypography variant="span">
+                        Phone No: {redeemDetail.phoneNumber}
+                      </MDTypography>
+                      <br />
+                      <MDTypography variant="span">
+                        Plan Name: {redeemDetail.planName}
+                      </MDTypography>
+                      <br />
+                      <MDTypography variant="span">
+                        Duration: {redeemDetail.minutes} Min.
+                      </MDTypography>
+                      <br/>
+                      <br/>
+                      <MDButton variant="gradient" color="info" onClick={() => setRedeemFormShow(true)}>Redeem</MDButton>
                     </MDBox>
+                    <MDBox>
+                      <img style={{ height: "calc(100vh - 250px)" }} src={`${endpoint}/${redeemDetail.customerPhotoPath}`} alt="customer" />
+                    </MDBox>
+                  </MDBox>
+                }
+                {redeemFormShow &&
+                  <MDBox mb={2}>
+                    <Redeem detail={redeemDetail} closeRedeemForm={setRedeemFormShow}/>
+                  </MDBox>
                 }
               </MDBox>
-              {/* <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={true}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox> */}
             </Card>
           </Grid>
         </Grid>

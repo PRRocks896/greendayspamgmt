@@ -24,7 +24,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import { createEmployee, updateEmployee, fetchByIdEmployee } from "service/employee.service";
 import { fetchCityList } from "service/city.service";
-import { fetchBranchDropdownList } from "service/branch.service";
+import { fetchBranchList } from "service/branch.service";
 import { getFormData, showToast } from "utils/helper";
 import { endpoint } from "utils/constant";
 
@@ -56,15 +56,12 @@ function AddEditEmployee() {
 
     useEffect(() => {
         try {
-            async function fetchCityBranch() {
-                const [resCity, resBranch] = await Promise.all([
-                    fetchCityList(),
-                    fetchBranchDropdownList(),
-                ]);
+            async function fetchCity() {
+                const resCity = await fetchCityList();
                 setCityList(resCity.resultObject);
-                setBranchList(resBranch.resultObject);
+                // setBranchList(resBranch.resultObject);
             }
-            fetchCityBranch();
+            fetchCity();
         } catch (err) {
             console.error(err);
             showToast(err.message, false);
@@ -165,6 +162,19 @@ function AddEditEmployee() {
             showToast(err.message, false);
         }
     };
+
+    const fetchBranchViaCityID = useCallback(async (cityId) => {
+        const resBranch = await fetchBranchList({
+            cityId: cityId,
+            searchText: "",
+            isActive: true,
+            page: 0,
+            size: 0
+        });
+        if(resBranch.status === 200) {
+            setBranchList(resBranch.resultObject?.data);
+        }
+    }, [setBranchList]);
 
     return (
         <DashboardLayout>
@@ -315,7 +325,7 @@ function AddEditEmployee() {
                                                                 fullWidth
                                                             >
                                                                 {cityList?.map((city, index) => (
-                                                                    <MenuItem key={`city_list_${index}`} value={city.value}>
+                                                                    <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
                                                                         {city.name}
                                                                     </MenuItem>
                                                                 ))}
@@ -346,8 +356,8 @@ function AddEditEmployee() {
                                                                 fullWidth
                                                             >
                                                                 {branchList?.map((branch, index) => (
-                                                                    <MenuItem key={`branch_list_${index}`} value={branch.value}>
-                                                                        {branch.name}
+                                                                    <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
+                                                                        {branch.branchName}
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>

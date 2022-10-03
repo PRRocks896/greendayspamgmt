@@ -24,7 +24,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import { createMembershipMgmt, fetchByIdMembershipMgmt } from "service/membership-mgmt.service";
 import { fetchCityList } from "service/city.service";
-import { fetchBranchDropdownList } from "service/branch.service";
+import { fetchBranchList } from "service/branch.service";
 import { fetchMembershipPlanDropdown } from "service/membership.service";
 import { fetchPaidModeDropDown } from "service/paid.service";
 import { getFormData, showToast } from "utils/helper";
@@ -59,14 +59,12 @@ function AddEditMembershipMgmt() {
     useEffect(() => {
         try {
             async function getCityBranchMembershipPlanPaidMode() {
-                const [resCity, resBranch, resMembershipPlan, resPaidMode] = await Promise.all([
+                const [resCity, resMembershipPlan, resPaidMode] = await Promise.all([
                     fetchCityList(),
-                    fetchBranchDropdownList(),
                     fetchMembershipPlanDropdown(),
                     fetchPaidModeDropDown(),
                 ]);
                 setCityList(resCity.resultObject);
-                setBranchList(resBranch.resultObject);
                 setMembershipPlanList(resMembershipPlan.resultObject);
                 setPaidMode(resPaidMode.resultObject);
             }
@@ -132,6 +130,19 @@ function AddEditMembershipMgmt() {
             showToast(err.message, false);
         }
     };
+
+    const fetchBranchViaCityID = useCallback(async (cityId) => {
+        const resBranch = await fetchBranchList({
+            cityId: cityId,
+            searchText: "",
+            isActive: true,
+            page: 0,
+            size: 0
+        });
+        if(resBranch.status === 200) {
+            setBranchList(resBranch.resultObject?.data);
+        }
+    }, [setBranchList]);
 
     return (
         <DashboardLayout>
@@ -254,7 +265,7 @@ function AddEditMembershipMgmt() {
                                                                 fullWidth
                                                             >
                                                                 {cityList?.map((city, index) => (
-                                                                    <MenuItem key={`city_list_${index}`} value={city.value}>
+                                                                    <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
                                                                         {city.name}
                                                                     </MenuItem>
                                                                 ))}

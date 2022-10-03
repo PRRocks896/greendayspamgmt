@@ -50,7 +50,7 @@ function Basic() {
   const navigate = useNavigate();
   const [sentOtp, setSentOtp] = useState(false);
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, setValue } = useForm({
     defaultValues: {
       mobileNumber: "",
       otp: "",
@@ -198,7 +198,7 @@ function Basic() {
                   component="button"
                   variant="gradient"
                   color="info"
-                  onClick={() => setSentOtp(false)}
+                  onClick={() => [setSentOtp(false), setValue("otp", "")]}
                   style={{ marginRight: "8px" }}
                   fullWidth
                 >
