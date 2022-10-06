@@ -22,7 +22,12 @@ import MDDragdrop from "components/MDDragdrop";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-import { createMembershipMgmt, fetchByIdMembershipMgmt } from "service/membership-mgmt.service";
+import { 
+    createMembershipMgmt, 
+    fetchByIdMembershipMgmt, 
+    sendOtp,
+    verifyOtp
+} from "service/membership-mgmt.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
 import { fetchMembershipPlanDropdown } from "service/membership.service";
@@ -39,12 +44,19 @@ function AddEditMembershipMgmt() {
     const [membershipPlanList, setMembershipPlanList] = useState([]);
     const [paidMode, setPaidMode] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
-    const { handleSubmit, control, reset, setValue } = useForm({
+    const [otp, setOtp] = useState(null);
+    const [isVerify, setIsVerify] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
+    const [disableBtn, setDisableBtn] = useState(false);
+
+    
+    const { handleSubmit, control, reset, setValue, getValues } = useForm({
         defaultValues: {
             membershipManagementId: 0,
             customerName: "",
             phoneNumber: "",
             emailId: "",
+            hours: 0,
             cityId: "",
             branchId: "",
             membershipPlanId: "",
@@ -102,6 +114,42 @@ function AddEditMembershipMgmt() {
             }
         }
     }, [id, reset]);
+
+    const sendOtpforExtraHours = async () => {
+        try {
+            const response = await sendOtp(JSON.parse(localStorage.getItem("userData")).userId);
+            if (response.status === 200) {
+                setIsVerify(true);
+                showToast(response.message, true);
+            } else {
+                setIsVerify(false);
+                showToast(response.message, false);
+            }
+        } catch(err) {
+            setIsVerify(false);
+            showToast(err.message, false);
+        }
+    }
+
+    const verifyOtpforExtraHours = async () => {
+        try {
+            const response = await verifyOtp(JSON.parse(localStorage.getItem("userData")).userId, otp);
+            if (response.status === 200) {
+                setIsVerify(false);
+                setIsVerified(true);
+                setDisableBtn(false);
+                showToast(response.message, true);
+            } else {
+                setIsVerify(true);
+                setIsVerified(false);
+                showToast(response.message, false);
+            }
+        } catch(err) {
+            setIsVerify(true);
+            setIsVerified(false);
+            showToast(err.message, false);
+        }
+    }
 
     //use for images manually upload and drop
     const onDrop = useCallback((acceptedFiles) => {
@@ -294,8 +342,8 @@ function AddEditMembershipMgmt() {
                                                                 fullWidth
                                                             >
                                                                 {branchList?.map((branch, index) => (
-                                                                    <MenuItem key={`branch_list_${index}`} value={branch.value}>
-                                                                        {branch.name}
+                                                                    <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
+                                                                        {branch.branchName}
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
@@ -327,7 +375,7 @@ function AddEditMembershipMgmt() {
                                                                         key={`membership_plan_list_${index}`}
                                                                         value={membershipPlan.membershipPlanId}
                                                                     >
-                                                                        {membershipPlan.planName} ({membershipPlan.minutes} Min)
+                                                                        {membershipPlan.planName} ({membershipPlan.hours} Hr)
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
@@ -337,6 +385,102 @@ function AddEditMembershipMgmt() {
                                                     rules={{
                                                         required: "Please select Membership Plan",
                                                     }}
+                                                />
+                                            </MDBox>
+                                            <MDBox mb={2}>
+                                                <Controller
+                                                name="hours"
+                                                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                    <MDBox display="flex">
+                                                        <MDTypography
+                                                            component="span"
+                                                            onClick={() => {
+                                                                setValue("hours", (parseInt(value) + 1))
+                                                                if((parseInt(value) + 1) !== 0){
+                                                                    setDisableBtn(true);
+                                                                    setIsVerified(false);
+                                                                }
+                                                            }}
+                                                            variant="caption"
+                                                            color="text"
+                                                            fontWeight="medium"
+                                                            style={{ padding: "0px 5px", cursor: "pointer", alignSelf: "center" }}
+                                                        >
+                                                          <Icon fontSize="medium">add</Icon>
+                                                        </MDTypography>
+                                                        <MDInput
+                                                            type="text"
+                                                            value={value}
+                                                            label="Extra Hours"
+                                                            onChange={onChange}
+                                                            disabled
+                                                            error={!!error}
+                                                            helperText={error?.message ? error.message : ""}
+                                                        />
+                                                        <MDTypography
+                                                            component="span"
+                                                            onClick={() => {
+                                                                if(parseInt(value) !== 0) {
+                                                                    setValue("hours", (parseInt(value) - 1))
+                                                                } else {
+                                                                    setIsVerified(false);
+                                                                }
+                                                                if(parseInt(getValues("hours")) === 0) {
+                                                                    setDisableBtn(false);
+                                                                }
+                                                            }}
+                                                            // onClick={() => navigate(`/membershipmgmt/edit/${data.membershipManagementId}`)}
+                                                            variant="caption"
+                                                            color="text"
+                                                            fontWeight="medium"
+                                                            style={{ padding: "0px 5px", cursor: "pointer", alignSelf: "center" }}
+                                                        >
+                                                          <Icon fontSize="medium">remove</Icon>
+                                                        </MDTypography>
+                                                        {!isVerified &&
+                                                        <MDBox>
+                                                        {(parseInt(getValues().hours) > 0 && !isVerify) &&
+                                                            <MDBox>
+                                                                <MDButton
+                                                                    component="button"
+                                                                    variant="gradient"
+                                                                    color="info"
+                                                                    onClick={() => sendOtpforExtraHours()}
+                                                                >
+                                                                    Get Verify
+                                                                </MDButton>
+                                                            </MDBox>
+                                                        }
+                                                        {isVerify &&
+                                                            <MDBox display="flex">
+                                                                <MDInput
+                                                                    type="text"
+                                                                    value={otp}
+                                                                    label="Enter OTP"
+                                                                    onChange={(e) => setOtp(e.target.value)}
+                                                                />
+                                                                <MDButton
+                                                                    component="button"
+                                                                    variant="gradient"
+                                                                    color="info"
+                                                                    onClick={() => verifyOtpforExtraHours()}
+                                                                >
+                                                                    Verify OTP
+                                                                </MDButton>
+                                                            </MDBox>
+                                                        }
+                                                        </MDBox>
+                                                        }
+                                                    </MDBox>
+                                                )}
+                                                control={control}
+                                                rules={{
+                                                    required: "Please Enter Hours",
+                                                    pattern: {
+                                                    value: /^[0-9]/,
+                                                    message: "Enter only digit",
+                                                    }
+                                                }}
                                                 />
                                             </MDBox>
                                             <MDBox mb={2}>
@@ -471,6 +615,7 @@ function AddEditMembershipMgmt() {
                                             color="info"
                                             onClick={handleSubmit(handleSave)}
                                             fullWidth
+                                            disabled={disableBtn}
                                         >
                                             Save
                                         </MDButton>

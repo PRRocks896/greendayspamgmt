@@ -196,6 +196,7 @@ function Basic() {
               <MDBox mt={4} mb={1} style={{ display: "flex" }}>
                 <MDButton
                   component="button"
+                  type="button"
                   variant="gradient"
                   color="info"
                   onClick={() => [setSentOtp(false), setValue("otp", "")]}
@@ -206,6 +207,7 @@ function Basic() {
                 </MDButton>
                 <MDButton
                   component="button"
+                  type="submit"
                   variant="gradient"
                   color="info"
                   onClick={handleSubmit(handleSentOtp)}
@@ -218,6 +220,7 @@ function Basic() {
               <MDBox mt={4} mb={1}>
                 <MDButton
                   component="button"
+                  type="submit"
                   variant="gradient"
                   color="info"
                   onClick={handleSubmit(handleLogin)}

@@ -16,17 +16,19 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
-import { fetchMembershipPlan } from "service/membership.service";
+import { fetchDailyReport } from "service/dailyReport.service";
 import { showToast } from "utils/helper";
 
-function MembershipPlan() {
+function DailyReport() {
   const [rows, setRows] = useState([]);
   const columns = [
-    { Header: "Id", accessor: "membershipPlanId", width: "15%", align: "left" },
-    { Header: "planName", accessor: "planName", align: "left" },
-    { Header: "hours", accessor: "hours", align: "center" },
-    { Header: "price", accessor: "price", align: "center" },
-    { Header: "validity", accessor: "validity", align: "center" },
+    { Header: "dailyReportId", accessor: "dailyReportId", align: "left" },
+    { Header: "dailyReportFormName", accessor: "dailyReportFormName", align: "left" },
+    { Header: "managerName", accessor: "managerName", align: "left" },
+    { Header: "totalStaffPresent", accessor: "totalStaffPresent", align: "left" },
+    { Header: "totalSales", accessor: "totalSales", align: "left" },
+    { Header: "totalCustomer", accessor: "totalCustomer", align: "left" },
+    { Header: "totalCash", accessor: "totalCash", align: "left" },
     { Header: "action", accessor: "action", align: "center" },
   ];
 
@@ -34,12 +36,12 @@ function MembershipPlan() {
 
   useEffect(() => {
     try {
-      async function getMembershipPlan() {
-        const response = await fetchMembershipPlan({
+      async function membershipMgmt() {
+        const response = await fetchDailyReport({
           searchText: "",
           isActive: true,
           page: 0,
-          size: 100,
+          size: 1000,
         });
         if (response.status === 200 && response.resultObject?.data?.length > 0) {
           const updatedData = response.resultObject.data?.map((data, index) => {
@@ -48,7 +50,7 @@ function MembershipPlan() {
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => navigate(`/membershipplan/edit/${data.membershipPlanId}`)}
+                  onClick={() => navigate(`/daily-report/edit/${data.dailyReportId}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -63,7 +65,7 @@ function MembershipPlan() {
           setRows(updatedData);
         }
       }
-      getMembershipPlan();
+      membershipMgmt();
     } catch (err) {
       showToast(err.message, false);
     }
@@ -89,12 +91,12 @@ function MembershipPlan() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Membership Plan
+                  Daily Report
                 </MDTypography>
                 <MDTypography
                   variant="h6"
                   component={Link}
-                  to="/membershipplan/add"
+                  to="/daily-report/add"
                   borderRadius="lg"
                   color="white"
                   textAlign="end"
@@ -120,4 +122,4 @@ function MembershipPlan() {
   );
 }
 
-export default MembershipPlan;
+export default DailyReport;

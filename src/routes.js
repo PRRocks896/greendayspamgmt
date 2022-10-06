@@ -1,6 +1,8 @@
 import { Suspense, lazy } from "react";
 
 // @mui icons
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Icon from "@mui/material/Icon";
 
 import SignIn from "layouts/authentication/sign-in";
@@ -11,6 +13,7 @@ const AddEditMembershipPlan = lazy(() => import("layouts/membershipplan/componen
 const AddEditMembershipMgmt = lazy(() => import("layouts/membership-mgmt/component/addEdit"));
 const AddEditPaidMode = lazy(() => import("layouts/paid/component/addEdit"));
 const AddEditEmployee = lazy(() => import("layouts/employee/component/addEdit"));
+const AddEditDailyReport = lazy(() => import("layouts/dailyReport/component/addEdit"));
 const Branch = lazy(() => import("layouts/branch"));
 const Dashboard = lazy(() => import("layouts/dashboard"));
 const Employee = lazy(() => import("layouts/employee"));
@@ -18,9 +21,21 @@ const MembershipPlan = lazy(() => import("layouts/membershipplan"));
 const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
 const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
-// const Profile = lazy(() => import("layouts/profile"));
-// const SignIn = lazy(() => import("layouts/authentication/sign-in"));
+const DailyReport = lazy(() => import("layouts/dailyReport"));
 
+export const Loading = () => (
+  <Box sx={{ 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'center', 
+    zIndex: 99,
+    position: "fixed",
+    left: "50%",
+    top: "50%"  
+  }}>
+    <CircularProgress color="inherit"/>
+  </Box>
+);
 
 export const routes = [
   {
@@ -30,7 +45,7 @@ export const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <Dashboard />
       </Suspense>
     ),
@@ -42,7 +57,7 @@ export const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/branch",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <Branch />
       </Suspense>
     ),
@@ -55,7 +70,7 @@ export const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/branch/:mode/:id",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditBranch />
       </Suspense>
     ),
@@ -68,20 +83,8 @@ export const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/branch/:mode",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditBranch />
-      </Suspense>
-    ),
-  },
-  {
-    type: "collapse",
-    name: "Membership Redeem",
-    key: "membershipRedeem",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/membership-redeem",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <MembershipRedeem />
       </Suspense>
     ),
   },
@@ -92,7 +95,7 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/employee",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <Employee />
       </Suspense>
     ),
@@ -104,7 +107,7 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/employee/:mode",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditEmployee />
       </Suspense>
     ),
@@ -116,46 +119,17 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/employee/:mode/:id",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditEmployee />
       </Suspense>
     ),
   },
   {
-    type: "collapse",
-    name: "Membership Management",
-    key: "membershipmgmt",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/membershipmgmt",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <MembershipMgmt />
-      </Suspense>
-    ),
+    type: "title",
+    title: "Membership"
   },
   {
-    type: "subComponent",
-    name: "Membership Management",
-    key: "membershipmgmt",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/membershipmgmt/:mode",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <AddEditMembershipMgmt />
-      </Suspense>
-    ),
-  },
-  {
-    type: "subComponent",
-    name: "Membership Management",
-    key: "membershipmgmt",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/membershipmgmt/:mode/:id",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <AddEditMembershipMgmt />
-      </Suspense>
-    ),
+    type: "divider",
   },
   {
     type: "collapse",
@@ -164,7 +138,7 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/membershipplan",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <MembershipPlan />
       </Suspense>
     ),
@@ -176,7 +150,7 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/membershipplan/:mode",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditMembershipPlan />
       </Suspense>
     ),
@@ -188,10 +162,100 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/membershipplan/:mode/:id",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditMembershipPlan />
       </Suspense>
     ),
+  },
+  {
+    type: "collapse",
+    name: "Membership Management",
+    key: "membershipmgmt",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/membershipmgmt",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <MembershipMgmt />
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Membership Management",
+    key: "membershipmgmt",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/membershipmgmt/:mode",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditMembershipMgmt />
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Membership Management",
+    key: "membershipmgmt",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/membershipmgmt/:mode/:id",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditMembershipMgmt />
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Membership Redeem",
+    key: "membershipRedeem",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/membership-redeem",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <MembershipRedeem />
+      </Suspense>
+    ),
+  },
+  {
+    type: "divider",
+  },
+  {
+    type: "collapse",
+    name: "Daily Report",
+    key: "dailyReport",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/daily-report",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <DailyReport />
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Daily Report",
+    key: "dailyReport",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/daily-report/:mode",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditDailyReport />
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Daily Report",
+    key: "dailyReport",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/daily-report/:mode/:id",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditDailyReport />
+      </Suspense>
+    ),
+  },
+  {
+    type: "divider",
   },
   {
     type: "collapse",
@@ -200,7 +264,7 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/paidmode",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <PaidMode />
       </Suspense>
     ),
@@ -212,22 +276,13 @@ export const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/paidmode/:mode",
     component: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading/>}>
         <AddEditPaidMode/>
       </Suspense>
     ),
   },
   {
-    type: "subComponent",
-    name: "Membership Plan",
-    key: "membershipplan",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/paidmode/:mode/:id",
-    component: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <AddEditPaidMode/>
-      </Suspense>
-    ),
+    type: "divider",
   },
   // {
   //   type: "collapse",
@@ -236,7 +291,7 @@ export const routes = [
   //   icon: <Icon fontSize="small">person</Icon>,
   //   route: "/profile",
   //   component: (
-  //     <Suspense fallback={<div>Loading...</div>}>
+  //     <Suspense fallback={<Loading/>}>
   //       <Profile />
   //     </Suspense>
   //   ),

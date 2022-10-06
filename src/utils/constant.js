@@ -19,6 +19,8 @@ export const api = {
   membershipMgmtList: "/v1/api/membershipManagement/get-membershipManagement-list",
   createMembershipMgmt: "/v1/api/membershipManagement",
   memberhsipMgmtId: "/v1/api/membershipManagement/{{id}}",
+  sendOtpToVerify: "/v1/api/membershipManagement/{{branchId}}",
+  verifyOtp: "/v1/api/membershipManagement/Verified-ExtraHour-OTP?branchId={{branchId}}&OTP={{otp}}",
   // Paid Mode
   fetchPaidMode: "/v1/api/paidMode/get-paidMode-list",
   createUpdatePaidMode: "/v1/api/paidMode/addUpdate-PaidMode",
@@ -35,5 +37,9 @@ export const api = {
   createEmployee: "/v1/api/employee",
   updateEmployee: "/v1/api/employee/Update-Employee",
   fetchEmployee: "/v1/api/employee/get-employee-list",
-  fetchEmployeeById: "/v1/api/employee/{{id}}"
+  fetchEmployeeById: "/v1/api/employee/{{id}}",
+  //Daily Report
+  fetchDailyReport: "/v1/api/dailyReport/get-dailyReport-list",
+  createUpdateDailyReport: "/v1/api/dailyReport",
+  fetchByIdDailyReport: "/v1/api/dailyReport/{{id}}"
 };

@@ -1,5 +1,13 @@
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // eslint-disable-next-line
+
+export const Loading = () => {
+  <Box sx={{ display: 'flex' }}>
+    <CircularProgress />
+  </Box>
+}
 
 export const getFormData = (object) => {
   const formData = new FormData();

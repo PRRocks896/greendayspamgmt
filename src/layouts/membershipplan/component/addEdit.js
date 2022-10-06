@@ -28,7 +28,10 @@ function AddEditMembershipPlan() {
     defaultValues: {
       membershipPlanId: 0,
       planName: "",
-      minutes: "",
+      // minutes: "",
+      hours: "",
+      price: "",
+      validity: "",
       type: 1,
       isActive: true,
     },
@@ -121,12 +124,12 @@ function AddEditMembershipPlan() {
                   </MDBox>
                   <MDBox mb={2}>
                     <Controller
-                      name="minutes"
+                      name="hours"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <MDInput
                           type="text"
                           value={value}
-                          label="Minutes"
+                          label="Hours"
                           onChange={onChange}
                           error={!!error}
                           helperText={error?.message ? error.message : ""}
@@ -135,13 +138,66 @@ function AddEditMembershipPlan() {
                       )}
                       control={control}
                       rules={{
-                        required: "Please Enter Minutes",
+                        required: "Please Enter Hours",
+                        pattern: {
+                          value: /^[0-9]/,
+                          message: "Enter only digit",
+                        }
+                      }}
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <Controller
+                      name="price"
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <MDInput
+                          type="text"
+                          value={value}
+                          label="Price"
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error?.message ? error.message : ""}
+                          fullWidth
+                        />
+                      )}
+                      control={control}
+                      rules={{
+                        required: "Please Enter Price",
+                        pattern: {
+                          value: /^[0-9]/,
+                          message: "Enter only digit",
+                        }
+                      }}
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <Controller
+                      name="validity"
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <MDInput
+                          type="text"
+                          value={value}
+                          label="Validity"
+                          onChange={onChange}
+                          error={!!error}
+                          helperText={error?.message ? error.message : ""}
+                          fullWidth
+                        />
+                      )}
+                      control={control}
+                      rules={{
+                        required: "Please Enter Validity",
+                        // pattern: {
+                        //   value: /^[0-9]/,
+                        //   message: "Enter only digit",
+                        // }
                       }}
                     />
                   </MDBox>
                   <MDBox mt={4} mb={1} style={{ display: "flex" }}>
                     <MDButton
                       component="button"
+                      type="button"
                       variant="gradient"
                       color="info"
                       onClick={() => navigate("/membershipplan")}
@@ -152,6 +208,7 @@ function AddEditMembershipPlan() {
                     </MDButton>
                     <MDButton
                       component="button"
+                      type="submit"
                       variant="gradient"
                       color="info"
                       onClick={handleSubmit(handleSave)}

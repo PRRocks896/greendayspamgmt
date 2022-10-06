@@ -8,3 +8,7 @@ export const createMembershipMgmt = (payload) => post(api.createMembershipMgmt, 
 
 export const fetchByIdMembershipMgmt = (id) =>
   get(`${replaceUrlVariable(api.memberhsipMgmtId, { id })}`);
+
+export const sendOtp = (branchId) => get(`${replaceUrlVariable(api.sendOtpToVerify, { branchId })}`);
+
+export const verifyOtp = (branchId, otp) => get(`${replaceUrlVariable(api.verifyOtp, {branchId, otp})}`);
