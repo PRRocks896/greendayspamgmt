@@ -48,8 +48,6 @@ function AddEditMembershipMgmt() {
     const [isVerify, setIsVerify] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
     const [disableBtn, setDisableBtn] = useState(false);
-
-    
     const { handleSubmit, control, reset, setValue, getValues } = useForm({
         defaultValues: {
             membershipManagementId: 0,

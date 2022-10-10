@@ -40,6 +40,7 @@ export const api = {
   fetchEmployeeById: "/v1/api/employee/{{id}}",
   //Daily Report
   fetchDailyReport: "/v1/api/dailyReport/get-dailyReport-list",
-  createUpdateDailyReport: "/v1/api/dailyReport",
-  fetchByIdDailyReport: "/v1/api/dailyReport/{{id}}"
+  createUpdateDailyReport: "/v1/api/dailyReport/AddUpdateDailyReport_Web",
+  fetchByIdDailyReport: "/v1/api/dailyReport/{{id}}",
+  fetchDailyReportGeneratePDF: "/v1/api/dailyReport/get-dailyReport-generatepdf?UserID={{userId}}&FromDate={{fromDate}}&ToDate={{toDate}}"
 };
