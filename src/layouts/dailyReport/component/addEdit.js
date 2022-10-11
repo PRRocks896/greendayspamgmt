@@ -66,7 +66,7 @@ function AddEditDailyReport() {
 
     const length = expenseListControls.fields.length;
     let totalExpense = 0;
-    getValues("expenseList").map((res) => { 
+    getValues("expenseList").forEach((res) => { 
         totalExpense += (parseInt(res.amount) || 0)
     });
 
@@ -77,7 +77,7 @@ function AddEditDailyReport() {
 
     const handleTotalCash = () => {
         let totalExpense = 0 ;
-        getValues("expenseList").map((res) => { 
+        getValues("expenseList").forEach((res) => { 
             totalExpense += (parseInt(res.amount) || 0)
         });
         const totalCash = ((parseInt(getValues("openingBalance")) || 0) + (parseInt(getValues("cashSale")) || 0));
