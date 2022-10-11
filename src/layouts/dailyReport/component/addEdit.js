@@ -41,7 +41,6 @@ function AddEditDailyReport() {
             dealsAppSale: "",
             expenseList: [
                 {
-                    // id: 0,
                     amount: 0,
                     description: ""
                 }
@@ -49,12 +48,10 @@ function AddEditDailyReport() {
             totalSales: "",
             tipsCard: "",
             totalCard: "",
-            extraAddCash: "",
             totalCash: "",
             cashInCover: "",
             nextDayCash: "",
             salonCustomerCash: "",
-            dailyReportFormName: "",
             userId: JSON.parse(localStorage.getItem("userData")).userId,
         }
     });
@@ -65,6 +62,11 @@ function AddEditDailyReport() {
     });
 
     const length = expenseListControls.fields.length;
+
+    let totalCashSalePlusOpeningBalance = 0;
+
+    totalCashSalePlusOpeningBalance = (parseInt(getValues("cashSale")) || 0) + (parseInt(getValues("openingBalance")) || 0);
+
     let totalExpense = 0;
     getValues("expenseList").forEach((res) => { 
         totalExpense += (parseInt(res.amount) || 0)
@@ -80,8 +82,7 @@ function AddEditDailyReport() {
         getValues("expenseList").forEach((res) => { 
             totalExpense += (parseInt(res.amount) || 0)
         });
-        const totalCash = ((parseInt(getValues("openingBalance")) || 0) + (parseInt(getValues("cashSale")) || 0));
-        const sum = totalCash - totalExpense;
+        const sum = totalCashSalePlusOpeningBalance - (totalExpense + (parseInt(getValues("nextDayCash")) || 0) + (parseInt(getValues("totalCard")) || 0));
         setValue("totalCash", sum);
         handleCashInCover();
     }
@@ -92,6 +93,12 @@ function AddEditDailyReport() {
                     (parseInt(getValues("upiPayment")) || 0) +
                     (parseInt(getValues("dealsAppSale")) || 0)
         setValue("totalSales", sum);
+    }
+
+    const handleTotalCard = () => {
+        const totalCard = (parseInt(getValues("tipsCard")) * 25) / 100;
+        setValue("totalCard", totalCard)
+        handleTotalCash();
     }
 
     useEffect(() => {
@@ -121,6 +128,7 @@ function AddEditDailyReport() {
 
     const removeExpenseField = (id) => {
         expenseListControls.remove(id);
+        handleTotalCash();
     }
 
     const handleSave = async (info) => {
@@ -414,6 +422,15 @@ function AddEditDailyReport() {
                                                 />
                                             </MDBox>
                                             <MDBox mb={2}>
+                                                <MDInput
+                                                    type="text"
+                                                    value={totalCashSalePlusOpeningBalance}
+                                                    label="Total Cash Sale + Opening Balance"
+                                                    fullWidth
+                                                    disabled
+                                                />
+                                            </MDBox>
+                                            <MDBox mb={2}>
                                                 <Controller
                                                     name="tipsCard"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -421,8 +438,8 @@ function AddEditDailyReport() {
                                                         <MDInput
                                                             type="text"
                                                             value={value}
-                                                            label="Tips Card"
-                                                            onChange={onChange}
+                                                            label="Tips Card Amount"
+                                                            onChange={(e) => [onChange(e.target.value), handleTotalCard()]}
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
@@ -446,11 +463,12 @@ function AddEditDailyReport() {
                                                         <MDInput
                                                             type="text"
                                                             value={value}
-                                                            label="Total Card"
+                                                            label="25% Paid to Therapist"
                                                             onChange={onChange}
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
+                                                            disabled
                                                         />
                                                     )}
                                                     control={control}
@@ -463,11 +481,10 @@ function AddEditDailyReport() {
                                                     }}
                                                 />
                                             </MDBox>
-                                            <MDBox mb={2}>
+                                            {/* <MDBox mb={2}>
                                                 <Controller
                                                     name="extraAddCash"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -487,7 +504,8 @@ function AddEditDailyReport() {
                                                         },
                                                     }}
                                                 />
-                                            </MDBox>
+                                            </MDBox> */}
+                                            
                                             <MDBox mb={2}>
                                                 <MDInput
                                                     type="text"
@@ -495,6 +513,31 @@ function AddEditDailyReport() {
                                                     label="Total Expense"
                                                     fullWidth
                                                     disabled
+                                                />
+                                            </MDBox>
+                                            <MDBox mb={2}>
+                                                <Controller
+                                                    name="nextDayCash"
+                                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
+                                                        <MDInput
+                                                            type="text"
+                                                            value={value}
+                                                            label="Next Day Cash"
+                                                            onChange={(e) => [onChange(e.target.value), handleTotalCash() /*handleCashInCover()*/]}
+                                                            error={!!error}
+                                                            helperText={error?.message ? error.message : ""}
+                                                            fullWidth
+                                                        />
+                                                    )}
+                                                    control={control}
+                                                    rules={{
+                                                        required: "Please add Next Day Cash",
+                                                        pattern: {
+                                                            value: /^[0-9]/,
+                                                            message: "Enter only digit",
+                                                        },
+                                                    }}
                                                 />
                                             </MDBox>
                                             <MDBox mb={2}>
@@ -516,31 +559,6 @@ function AddEditDailyReport() {
                                                     control={control}
                                                     rules={{
                                                         required: "Please add Total Cash",
-                                                        pattern: {
-                                                            value: /^[0-9]/,
-                                                            message: "Enter only digit",
-                                                        },
-                                                    }}
-                                                />
-                                            </MDBox>
-                                            <MDBox mb={2}>
-                                                <Controller
-                                                    name="nextDayCash"
-                                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        // eslint-disable-next-line
-                                                        <MDInput
-                                                            type="text"
-                                                            value={value}
-                                                            label="Next Day Cash"
-                                                            onChange={(e) => [onChange(e.target.value), handleCashInCover()]}
-                                                            error={!!error}
-                                                            helperText={error?.message ? error.message : ""}
-                                                            fullWidth
-                                                        />
-                                                    )}
-                                                    control={control}
-                                                    rules={{
-                                                        required: "Please add Next Day Cash",
                                                         pattern: {
                                                             value: /^[0-9]/,
                                                             message: "Enter only digit",
@@ -599,11 +617,10 @@ function AddEditDailyReport() {
                                                     }}
                                                 />
                                             </MDBox>
-                                            <MDBox mb={2}>
+                                            {/* <MDBox mb={2}>
                                                 <Controller
                                                     name="dailyReportFormName"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -619,7 +636,7 @@ function AddEditDailyReport() {
                                                         required: "Please add Daily Report Form Name"
                                                     }}
                                                 />
-                                            </MDBox>
+                                            </MDBox> */}
                                         </MDBox>
                                         <MDBox mb={2}>
                                             <InputLabel style={{ paddingLeft: "18px" }}>Expense List</InputLabel>
