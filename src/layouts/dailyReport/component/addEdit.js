@@ -72,10 +72,10 @@ function AddEditDailyReport() {
         totalExpense += (parseInt(res.amount) || 0)
     });
 
-    const handleCashInCover = () => {
-        const subtract = parseInt(getValues("totalCash") || 0) - parseInt(getValues("nextDayCash") || 0);
-        setValue("cashInCover", subtract);
-    }
+    // const handleCashInCover = () => {
+    //     const subtract = parseInt(getValues("totalCash") || 0) - parseInt(getValues("nextDayCash") || 0);
+    //     setValue("cashInCover", subtract);
+    // }
 
     const handleTotalCash = () => {
         let totalExpense = 0 ;
@@ -84,7 +84,8 @@ function AddEditDailyReport() {
         });
         const sum = totalCashSalePlusOpeningBalance - (totalExpense + (parseInt(getValues("nextDayCash")) || 0) + (parseInt(getValues("totalCard")) || 0));
         setValue("totalCash", sum);
-        handleCashInCover();
+        setValue("cashInCover", sum);
+        // handleCashInCover();
     }
     
     const handleTotalSales = () => {
@@ -524,7 +525,7 @@ function AddEditDailyReport() {
                                                             type="text"
                                                             value={value}
                                                             label="Next Day Cash"
-                                                            onChange={(e) => [onChange(e.target.value), handleTotalCash() /*handleCashInCover()*/]}
+                                                            onChange={(e) => [onChange(e.target.value), handleTotalCash()]}
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
