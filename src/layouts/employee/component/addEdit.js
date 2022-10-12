@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
 import Icon from "@mui/material/Icon";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -313,16 +314,17 @@ function AddEditEmployee() {
                                                 <Controller
                                                     name="cityId"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDBox>
+                                                        <FormControl fullWidth>
                                                             <InputLabel id="selectCity">Select City</InputLabel>
                                                             <Select
-                                                                style={{ padding: "15px 0px" }}
+                                                                style={{ padding: "10px 0px" }}
                                                                 labelId="selectCity"
+                                                                id="city-select"
+                                                                label="Select City"
                                                                 value={value}
                                                                 onChange={onChange}
                                                                 error={!!error}
                                                                 helperText={error?.message ? error.message : ""}
-                                                                fullWidth
                                                             >
                                                                 {cityList?.map((city, index) => (
                                                                     <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
@@ -330,7 +332,7 @@ function AddEditEmployee() {
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
-                                                        </MDBox>
+                                                        </FormControl>
                                                     )}
                                                     control={control}
                                                     rules={{
@@ -344,16 +346,16 @@ function AddEditEmployee() {
                                                 <Controller
                                                     name="branchId"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDBox>
-                                                            <InputLabel id="selectBrnach">Select Branch</InputLabel>
+                                                        <FormControl fullWidth>
+                                                            <InputLabel id="selectBranch">Select Branch</InputLabel>
                                                             <Select
-                                                                style={{ padding: "15px 0px" }}
-                                                                labelId="selectBrnach"
+                                                                style={{ padding: "10px 0px" }}
+                                                                labelId="selectBranch"
+                                                                label="Select Branch"
                                                                 value={value}
                                                                 onChange={onChange}
                                                                 error={!!error}
                                                                 helperText={error?.message ? error.message : ""}
-                                                                fullWidth
                                                             >
                                                                 {branchList?.map((branch, index) => (
                                                                     <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
@@ -361,7 +363,7 @@ function AddEditEmployee() {
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
-                                                        </MDBox>
+                                                        </FormControl>
                                                     )}
                                                     control={control}
                                                     rules={{

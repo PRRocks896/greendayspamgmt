@@ -405,7 +405,11 @@ function AddEditDailyReport() {
                                                             type="text"
                                                             value={value}
                                                             label="Total Sales"
+                                                            variant="outlined"
                                                             onChange={onChange}
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
@@ -428,6 +432,9 @@ function AddEditDailyReport() {
                                                     value={totalCashSalePlusOpeningBalance}
                                                     label="Total Cash Sale + Opening Balance"
                                                     fullWidth
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
                                                     disabled
                                                 />
                                             </MDBox>
@@ -469,6 +476,9 @@ function AddEditDailyReport() {
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
                                                             disabled
                                                         />
                                                     )}
@@ -513,6 +523,9 @@ function AddEditDailyReport() {
                                                     value={totalExpense}
                                                     label="Total Expense"
                                                     fullWidth
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
                                                     disabled
                                                 />
                                             </MDBox>
@@ -554,6 +567,9 @@ function AddEditDailyReport() {
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
                                                             disabled
                                                         />
                                                     )}
@@ -580,6 +596,9 @@ function AddEditDailyReport() {
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
                                                             fullWidth
+                                                            InputProps={{
+                                                                readOnly: true,
+                                                            }}
                                                             disabled
                                                         />
                                                     )}

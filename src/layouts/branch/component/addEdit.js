@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -143,16 +144,17 @@ function AddEditBranch() {
                     <Controller
                       name="cityId"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <MDBox>
+                        <FormControl fullWidth>
                           <InputLabel id="selectCity">Select City</InputLabel>
                           <Select
-                            style={{ padding: "15px 0px" }}
+                            style={{ padding: "10px 0px" }}
                             labelId="selectCity"
+                            id="city-select"
+                            label="Select City"
                             value={value}
                             onChange={onChange}
                             error={!!error}
                             helperText={error?.message ? error.message : ""}
-                            fullWidth
                           >
                             {cityList?.map((city, index) => (
                               <MenuItem key={`city_list_${index}`} value={city.value}>
@@ -160,7 +162,7 @@ function AddEditBranch() {
                               </MenuItem>
                             ))}
                           </Select>
-                        </MDBox>
+                        </FormControl>
                       )}
                       control={control}
                       rules={{

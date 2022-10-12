@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
 import Icon from "@mui/material/Icon";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -299,16 +300,17 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="cityId"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDBox>
+                                                        <FormControl fullWidth>
                                                             <InputLabel id="selectCity">Select City</InputLabel>
                                                             <Select
-                                                                style={{ padding: "15px 0px" }}
+                                                                style={{ padding: "10px 0px" }}
                                                                 labelId="selectCity"
+                                                                id="city-select"
+                                                                label="Select City"
                                                                 value={value}
                                                                 onChange={onChange}
                                                                 error={!!error}
                                                                 helperText={error?.message ? error.message : ""}
-                                                                fullWidth
                                                             >
                                                                 {cityList?.map((city, index) => (
                                                                     <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
@@ -316,7 +318,7 @@ function AddEditMembershipMgmt() {
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
-                                                        </MDBox>
+                                                        </FormControl>
                                                     )}
                                                     control={control}
                                                     rules={{
@@ -328,16 +330,16 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="branchId"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDBox>
+                                                        <FormControl fullWidth>
                                                             <InputLabel id="selectBrnach">Select Branch</InputLabel>
                                                             <Select
-                                                                style={{ padding: "15px 0px" }}
-                                                                labelId="selectBrnach"
+                                                                style={{ padding: "10px 0px" }}
+                                                                labelId="selectBranch"
+                                                                label="Select Branch"
                                                                 value={value}
                                                                 onChange={onChange}
                                                                 error={!!error}
                                                                 helperText={error?.message ? error.message : ""}
-                                                                fullWidth
                                                             >
                                                                 {branchList?.map((branch, index) => (
                                                                     <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
@@ -345,7 +347,7 @@ function AddEditMembershipMgmt() {
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
-                                                        </MDBox>
+                                                        </FormControl>
                                                     )}
                                                     control={control}
                                                     rules={{
@@ -357,11 +359,13 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="membershipPlanId"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDBox>
+                                                        <FormControl fullWidth>
                                                             <InputLabel id="selectMembershipPlan">Select Membership Plan</InputLabel>
                                                             <Select
-                                                                style={{ padding: "15px 0px" }}
+                                                                style={{ padding: "10px 0px" }}
                                                                 labelId="selectMembershipPlan"
+                                                                id="membership-plan"
+                                                                label="Select Membership Plan"
                                                                 value={value}
                                                                 onChange={onChange}
                                                                 error={!!error}
@@ -377,7 +381,7 @@ function AddEditMembershipMgmt() {
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
-                                                        </MDBox>
+                                                        </FormControl>
                                                     )}
                                                     control={control}
                                                     rules={{
@@ -485,16 +489,17 @@ function AddEditMembershipMgmt() {
                                                 <Controller
                                                     name="paidBy"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDBox>
+                                                        <FormControl fullWidth>
                                                             <InputLabel id="selectPaid">Select Paid By</InputLabel>
                                                             <Select
-                                                                style={{ padding: "15px 0px" }}
+                                                                style={{ padding: "10px 0px" }}
                                                                 labelId="selectPaid"
+                                                                id="paid-select"
+                                                                label="Select Paid By"
                                                                 value={value}
                                                                 onChange={onChange}
                                                                 error={!!error}
                                                                 helperText={error?.message ? error.message : ""}
-                                                                fullWidth
                                                             >
                                                                 {paidMode?.map((membershipPlan, index) => (
                                                                     <MenuItem key={`paid_list_${index}`} value={membershipPlan.value}>
@@ -502,7 +507,7 @@ function AddEditMembershipMgmt() {
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>
-                                                        </MDBox>
+                                                        </FormControl>
                                                     )}
                                                     control={control}
                                                     rules={{
