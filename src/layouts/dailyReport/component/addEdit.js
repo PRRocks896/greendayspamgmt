@@ -39,6 +39,13 @@ function AddEditDailyReport() {
             cardSale: "",
             upiPayment: "",
             dealsAppSale: "",
+            cashInCoverDetail: {
+                twoThousand: 0,
+                fiveHundred: 0,
+                twoHundred: 0,
+                oneHundred: 0,
+                fifty: 0,
+            },
             expenseList: [
                 {
                     amount: 0,
@@ -62,7 +69,6 @@ function AddEditDailyReport() {
     });
 
     const length = expenseListControls.fields.length;
-
     let totalCashSalePlusOpeningBalance = 0;
 
     totalCashSalePlusOpeningBalance = (parseInt(getValues("cashSale")) || 0) + (parseInt(getValues("openingBalance")) || 0);
@@ -139,7 +145,7 @@ function AddEditDailyReport() {
                 showToast(response.message, true);
                 navigate("/daily-report");
             } else {
-                showToast(response.message, false);
+                showToast(response.title, false);
             }
         } catch (err) {
             console.log(err);
@@ -637,26 +643,6 @@ function AddEditDailyReport() {
                                                     }}
                                                 />
                                             </MDBox>
-                                            {/* <MDBox mb={2}>
-                                                <Controller
-                                                    name="dailyReportFormName"
-                                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <MDInput
-                                                            type="text"
-                                                            value={value}
-                                                            label="Daily Report Form Name"
-                                                            onChange={onChange}
-                                                            error={!!error}
-                                                            helperText={error?.message ? error.message : ""}
-                                                            fullWidth
-                                                        />
-                                                    )}
-                                                    control={control}
-                                                    rules={{
-                                                        required: "Please add Daily Report Form Name"
-                                                    }}
-                                                />
-                                            </MDBox> */}
                                         </MDBox>
                                         <MDBox mb={2}>
                                             <InputLabel style={{ paddingLeft: "18px" }}>Expense List</InputLabel>
@@ -735,6 +721,272 @@ function AddEditDailyReport() {
                                                     }
                                                 </MDBox>
                                             ))}
+                                            </MDBox>
+                                            <br />
+                                            <InputLabel style={{ paddingLeft: "18px" }}>Cash Detail</InputLabel>
+                                            <br />
+                                            <MDBox mb={2} style={{ marginLeft: "20px" }}>
+                                                <MDBox mb={2} style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 2.5fr"}}>
+                                                    {/* eslint-disable-next-line */}
+                                                    <MDInput
+                                                        type="text"
+                                                        defaultValue="2000"
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
+                                                        disabled
+                                                    />
+                                                    <span style={{textAlign: "center"}}>X</span>
+                                                    <Controller
+                                                        name="cashInCoverDetail.twoThousand"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <MDBox style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 1fr"}}>
+                                                                {/* // eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    value={value}
+                                                                    label="Qty"
+                                                                    variant="outlined"
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                    fullWidth
+                                                                />
+                                                                <span style={{textAlign: "center"}}>=</span>
+                                                                {/* eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    variant="outlined"
+                                                                    value={2000 * (parseInt(value) || 0)}
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                    }}
+                                                                    fullWidth
+                                                                    disabled
+                                                                />
+                                                            </MDBox>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please add Quantity",
+                                                            pattern: {
+                                                                value: /^[0-9]/,
+                                                                message: "Enter only digit",
+                                                            },
+                                                        }}
+                                                    />
+                                                    
+                                                </MDBox>
+                                                <MDBox mb={2} style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 2.5fr"}}>
+                                                    {/* eslint-disable-next-line */}
+                                                    <MDInput
+                                                        type="text"
+                                                        defaultValue="500"
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
+                                                        disabled
+                                                    />
+                                                    <span style={{textAlign: "center"}}>X</span>
+                                                    <Controller
+                                                        name="cashInCoverDetail.fiveHundred"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <MDBox style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 1fr"}}>
+                                                                {/* // eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    value={value}
+                                                                    label="Qty"
+                                                                    variant="outlined"
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                    fullWidth
+                                                                />
+                                                                <span style={{textAlign: "center"}}>=</span>
+                                                                {/* eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    variant="outlined"
+                                                                    value={500 * (parseInt(value) || 0)}
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                    }}
+                                                                    fullWidth
+                                                                    disabled
+                                                                />
+                                                            </MDBox>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please add Quantity",
+                                                            pattern: {
+                                                                value: /^[0-9]/,
+                                                                message: "Enter only digit",
+                                                            },
+                                                        }}
+                                                    />
+                                                </MDBox>
+                                                <MDBox mb={2} style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 2.5fr"}}>
+                                                    {/* eslint-disable-next-line */}
+                                                    <MDInput
+                                                        type="text"
+                                                        defaultValue="200"
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
+                                                        disabled
+                                                    />
+                                                    <span style={{textAlign: "center"}}>X</span>
+                                                    <Controller
+                                                        name="cashInCoverDetail.twoHundred"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <MDBox style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 1fr"}}>
+                                                                {/* // eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    value={value}
+                                                                    label="Qty"
+                                                                    variant="outlined"
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                    fullWidth
+                                                                />
+                                                                <span style={{textAlign: "center"}}>=</span>
+                                                                {/* eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    variant="outlined"
+                                                                    value={200 * (parseInt(value) || 0)}
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                    }}
+                                                                    fullWidth
+                                                                    disabled
+                                                                />
+                                                            </MDBox>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please add Quantity",
+                                                            pattern: {
+                                                                value: /^[0-9]/,
+                                                                message: "Enter only digit",
+                                                            },
+                                                        }}
+                                                    />
+                                                </MDBox>
+                                                <MDBox mb={2} style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 2.5fr"}}>
+                                                    {/* eslint-disable-next-line */}
+                                                    <MDInput
+                                                        type="text"
+                                                        defaultValue="100"
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
+                                                        disabled
+                                                    />
+                                                    <span style={{textAlign: "center"}}>X</span>
+                                                    <Controller
+                                                        name="cashInCoverDetail.oneHundred"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <MDBox style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 1fr"}}>
+                                                                {/* // eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    value={value}
+                                                                    label="Qty"
+                                                                    variant="outlined"
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                    fullWidth
+                                                                />
+                                                                <span style={{textAlign: "center"}}>=</span>
+                                                                {/* eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    variant="outlined"
+                                                                    value={100 * (parseInt(value) || 0)}
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                    }}
+                                                                    fullWidth
+                                                                    disabled
+                                                                />
+                                                            </MDBox>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please add Quantity",
+                                                            pattern: {
+                                                                value: /^[0-9]/,
+                                                                message: "Enter only digit",
+                                                            },
+                                                        }}
+                                                    />
+                                                </MDBox>
+                                                <MDBox mb={2} style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 2.5fr"}}>
+                                                    {/* eslint-disable-next-line */}
+                                                    <MDInput
+                                                        type="text"
+                                                        defaultValue="50"
+                                                        variant="outlined"
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                        fullWidth
+                                                        disabled
+                                                    />
+                                                    <span style={{textAlign: "center"}}>X</span>
+                                                    <Controller
+                                                        name="cashInCoverDetail.fifty"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <MDBox style={{display: "grid", gridTemplateColumns: "1fr 0.5fr 1fr"}}>
+                                                                {/* // eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    value={value}
+                                                                    label="Qty"
+                                                                    variant="outlined"
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                    fullWidth
+                                                                />
+                                                                <span style={{textAlign: "center"}}>=</span>
+                                                                {/* eslint-disable-next-line */}
+                                                                <MDInput
+                                                                    type="text"
+                                                                    variant="outlined"
+                                                                    value={50 * (parseInt(value) || 0)}
+                                                                    InputProps={{
+                                                                        readOnly: true,
+                                                                    }}
+                                                                    fullWidth
+                                                                    disabled
+                                                                />
+                                                            </MDBox>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please add Quantity",
+                                                            pattern: {
+                                                                value: /^[0-9]/,
+                                                                message: "Enter only digit",
+                                                            },
+                                                        }}
+                                                    />
+                                                </MDBox>
                                             </MDBox>
                                         </MDBox>
                                     </MDBox>
