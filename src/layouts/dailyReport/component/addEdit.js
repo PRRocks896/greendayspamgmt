@@ -661,9 +661,7 @@ function AddEditDailyReport() {
                                         <MDBox mb={2}>
                                             <InputLabel style={{ paddingLeft: "18px" }}>Expense List</InputLabel>
                                             <br />
-                                            <MDBox mb={2} style={{
-                                                marginLeft: "20px",
-                                            }}>
+                                            <MDBox mb={2} style={{ marginLeft: "20px", maxHeight: "500px", overflowY: "scroll" }}>
                                             {expenseListControls.fields?.map((res, index) => (
                                                 <MDBox key={res.id} mb={2} style={{display: "grid", gridTemplateColumns: "1fr 14fr 1fr"}}>
                                                     <MDTypography
