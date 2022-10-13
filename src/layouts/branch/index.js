@@ -13,8 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -31,56 +30,10 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
-import { fetchBranchList } from "service/branch.service";
-import { showToast } from "utils/helper";
+import { useBranch } from "./useBranch.hook";
 
 function Branch() {
-  const [rows, setRows] = useState([]);
-  const columns = [
-    { Header: "Id", accessor: "branchId", width: "15%", align: "left" },
-    { Header: "branchName", accessor: "branchName", align: "left" },
-    { Header: "cityName", accessor: "cityName", align: "center" },
-    { Header: "action", accessor: "action", align: "center" },
-  ];
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    try {
-      async function fetchBranch() {
-        const response = await fetchBranchList({
-          cityId: 0,
-          searchText: "",
-          isActive: true,
-          page: 0,
-          size: 100,
-        });
-        if (response.status === 200 && response.resultObject?.data?.length > 0) {
-          const updatedData = response.resultObject.data?.map((data, index) => {
-            return {
-              ...data,
-              action: (
-                <MDTypography
-                  component="span"
-                  onClick={() => navigate(`/branch/edit/${data.branchId}`)}
-                  variant="caption"
-                  color="text"
-                  fontWeight="medium"
-                  style={{ cursor: "pointer" }}
-                >
-                  <Icon fontSize="medium">edit</Icon>
-                  {/* Edit */}
-                </MDTypography>
-              ),
-            };
-          });
-          setRows(updatedData);
-        }
-      }
-      fetchBranch();
-    } catch (error) {
-      showToast(error.message, false);
-    }
-  }, [navigate]);
+  const { rows, columns } = useBranch();
 
   return (
     <DashboardLayout>
