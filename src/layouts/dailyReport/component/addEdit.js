@@ -68,6 +68,34 @@ function AddEditDailyReport() {
         name: "expenseList"
     });
 
+    const cashCounts = Object.entries(getValues("cashInCoverDetail")).map(([key, value]) => ({key,value}));
+
+    useEffect(() => {
+        let sum = 0;
+        cashCounts.forEach(res => {
+            switch(res.key) {
+                case "twoThousand": 
+                    sum = sum + (2000 * parseInt(res.value));
+                    break;
+                case "fiveHundred": 
+                    sum = sum + (500 * parseInt(res.value));
+                    break;
+                case "twoHundred": 
+                    sum = sum + (200 * parseInt(res.value));
+                    break;
+                case "oneHundred": 
+                    sum = sum + (100 * parseInt(res.value));
+                    break;
+                case "fifty": 
+                    sum = sum + (50 * parseInt(res.value));
+                    break;
+                default:
+                    break;
+            }
+        });
+        setValue("cashInCover", sum);
+    }, [cashCounts, setValue])
+
     const length = expenseListControls.fields.length;
     let totalCashSalePlusOpeningBalance = 0;
 
@@ -90,7 +118,7 @@ function AddEditDailyReport() {
         });
         const sum = totalCashSalePlusOpeningBalance - (totalExpense + (parseInt(getValues("nextDayCash")) || 0) + (parseInt(getValues("totalCard")) || 0));
         setValue("totalCash", sum);
-        setValue("cashInCover", sum);
+        // setValue("cashInCover", sum);
         // handleCashInCover();
     }
     
