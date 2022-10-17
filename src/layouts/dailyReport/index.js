@@ -1,4 +1,4 @@
-// import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 // react-hook-form components
@@ -7,7 +7,11 @@ import { useForm, Controller } from "react-hook-form";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import FormControl from "@mui/material/FormControl";
 import Icon from "@mui/material/Icon";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 import moment from "moment";
 
@@ -21,31 +25,64 @@ import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-// import DataTable from "examples/Tables/DataTable";
 
 import { downloadDailyReport } from "service/dailyReport.service";
+import { fetchCityList } from "service/city.service";
+import { fetchBranchList } from "service/branch.service";
 import { showToast } from "utils/helper";
+import { reportTemplate } from "utils/template";
 
 function DailyReport() {
+  const [cityList, setCityList] = useState([]);
+  const [branchList, setBranchList] = useState([]);
+  const [showReport, setShowReport] = useState(false);
   const { handleSubmit, control } = useForm({
     defaultValues: {
+      cityId: "",
+      branchId: "",
       userId: JSON.parse(localStorage.getItem("userData")).userId,
       fromDate: moment().format("yyyy-MM-DD"),
       toDate: moment().format("yyyy-MM-DD")
     }
   });
 
-  const handleDownloadPDF = async (info) => {
-    console.log(info);
+  useEffect(() => {
     try {
-      const response = await downloadDailyReport(info);
-      console.log(response);
+      async function fetchCity() {
+        const resCity = await fetchCityList();
+        setCityList(resCity.resultObject);
+      }
+      fetchCity();
     } catch (err) {
+      console.error(err);
       showToast(err.message, false);
     }
+  }, []);
+
+  const fetchBranchViaCityID = useCallback(async (cityId) => {
+    const resBranch = await fetchBranchList({
+      cityId: cityId,
+      searchText: "",
+      isActive: true,
+      page: 0,
+      size: 0
+    });
+    if(resBranch.status === 200) {
+      setBranchList(resBranch.resultObject?.data);
+    }
+  }, [setBranchList]);
+
+  const handleDownloadPDF = async (info) => {
+    console.log(info);
+    setShowReport(true);
+    // try {
+    //   const response = await downloadDailyReport(info);
+    //   console.log(response);
+    // } catch (err) {
+    //   showToast(err.message, false);
+    // }
   }
 
-  
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -81,8 +118,67 @@ function DailyReport() {
               </MDBox>
               <MDBox pt={3}>
               <MDBox component="form" role="form" padding="0px 20px">
-                <MDBox display="grid" gridTemplateColumns="1fr 1fr 1fr 1fr">
+                <MDBox display="grid" gridTemplateColumns="0.5fr 0.5fr 0.5fr 0.5fr 1fr">
                   <MDBox mb={2}>
+                      <Controller
+                          name="cityId"
+                          render={({ field: { onChange, value }, fieldState: { error } }) => (
+                            <FormControl fullWidth>
+                              <InputLabel id="selectCity">Select City</InputLabel>
+                              <Select
+                                style={{ padding: "10px 0px" }}
+                                labelId="selectCity"
+                                id="city-select"
+                                label="Select City"
+                                value={value}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error?.message ? error.message : ""}
+                              >
+                                  {cityList?.map((city, index) => (
+                                    <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
+                                        {city.name}
+                                    </MenuItem>
+                                  ))}
+                              </Select>
+                            </FormControl>
+                          )}
+                          control={control}
+                          rules={{
+                            required: "Please select City",
+                          }}
+                      />
+                  </MDBox>
+                  <MDBox mb={2} pl={1}>
+                    <Controller
+                      name="branchId"
+                      render={({ field: { onChange, value }, fieldState: { error } }) => (
+                          <FormControl fullWidth>
+                              <InputLabel id="selectBranch">Select Branch</InputLabel>
+                              <Select
+                                  style={{ padding: "10px 0px" }}
+                                  labelId="selectBranch"
+                                  label="Select Branch"
+                                  value={value}
+                                  onChange={onChange}
+                                  error={!!error}
+                                  helperText={error?.message ? error.message : ""}
+                              >
+                                  {branchList?.map((branch, index) => (
+                                      <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
+                                          {branch.branchName}
+                                      </MenuItem>
+                                  ))}
+                              </Select>
+                          </FormControl>
+                      )}
+                      control={control}
+                      rules={{
+                          required: "Please select Branch",
+                      }}
+                    />
+                  </MDBox>
+                  <MDBox mb={2} pl={1}>
                     <Controller
                       name="fromDate"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -131,16 +227,14 @@ function DailyReport() {
                     color="info"
                     onClick={handleSubmit(handleDownloadPDF)}
                   >
-                    Download Report
+                    View Report
                   </MDButton>
                 </MDBox>
-                {/* <DataTable
-                  table={{ columns, rows }}
-                  isSorted={true}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                /> */}
+                {showReport &&
+                  <MDBox mb={2}>
+                    <div dangerouslySetInnerHTML={{__html: reportTemplate()}}/>
+                  </MDBox>
+                }
               </MDBox>
               </MDBox>
             </Card>

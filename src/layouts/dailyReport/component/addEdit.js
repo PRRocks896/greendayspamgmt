@@ -94,7 +94,7 @@ function AddEditDailyReport() {
             }
         });
         setValue("cashInCover", sum);
-    }, [cashCounts, setValue])
+    }, [cashCounts, setValue]);
 
     const length = expenseListControls.fields.length;
     let totalCashSalePlusOpeningBalance = 0;
