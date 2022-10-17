@@ -26,7 +26,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-import { downloadDailyReport } from "service/dailyReport.service";
+// import { downloadDailyReport } from "service/dailyReport.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
 import { showToast } from "utils/helper";
