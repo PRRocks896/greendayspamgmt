@@ -21,6 +21,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import { fetchByIdDailyReport, createUpdateDailyReport } from "service/dailyReport.service";
 import { showToast } from "utils/helper";
+import moment from "moment";
 
 function AddEditDailyReport() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function AddEditDailyReport() {
     const { handleSubmit, control, reset, getValues, setValue } = useForm({
         defaultValues: {
             dailyReportId: 0,
-            dailyReportDate: new Date(),
+            dailyReportDate: moment().format("yyyy-MM-DD"), //new Date(),
             managerName: "",
             totalStaffPresent: "",
             totalCustomer: "",
@@ -167,8 +168,15 @@ function AddEditDailyReport() {
     }
 
     const handleSave = async (info) => {
+        let totalExpense = 0;
+        getValues("expenseList").forEach((res) => { 
+            totalExpense += (parseInt(res.amount) || 0)
+        });
         try {
-            const response = await createUpdateDailyReport(info);
+            const response = await createUpdateDailyReport({
+                ...info,
+                totalExpenses: totalExpense
+            });
             if (response.status === 200) {
                 showToast(response.message, true);
                 navigate("/daily-report");
@@ -206,6 +214,27 @@ function AddEditDailyReport() {
                                 <MDBox component="form" role="form" padding="0px 20px">
                                     <MDBox display="grid" gridTemplateColumns="1fr 1fr">
                                         <MDBox>
+                                            <MDBox mb={2}>
+                                                <Controller
+                                                    name="dailyReportDate"
+                                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        // eslint-disable-next-line
+                                                        <MDInput
+                                                            type="date"
+                                                            value={value}
+                                                            label="Daily Report Date"
+                                                            onChange={onChange}
+                                                            error={!!error}
+                                                            helperText={error?.message ? error.message : ""}
+                                                            fullWidth
+                                                        />
+                                                    )}
+                                                    control={control}
+                                                    // rules={{
+                                                    //     required: "Please Select Report Date",
+                                                    // }}
+                                                />
+                                            </MDBox>
                                             <MDBox mb={2}>
                                                 <Controller
                                                     name="managerName"

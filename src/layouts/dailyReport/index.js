@@ -26,23 +26,23 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-// import { downloadDailyReport } from "service/dailyReport.service";
+import { downloadDailyReport } from "service/dailyReport.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
 import { showToast } from "utils/helper";
-import { reportTemplate } from "utils/template";
 
 function DailyReport() {
   const [cityList, setCityList] = useState([]);
   const [branchList, setBranchList] = useState([]);
   const [showReport, setShowReport] = useState(false);
+  const [reportData, setReportData] = useState(null);
   const { handleSubmit, control } = useForm({
     defaultValues: {
       cityId: "",
       branchId: "",
       userId: JSON.parse(localStorage.getItem("userData")).userId,
       fromDate: moment().format("yyyy-MM-DD"),
-      toDate: moment().format("yyyy-MM-DD")
+      // toDate: moment().format("yyyy-MM-DD")
     }
   });
 
@@ -74,13 +74,23 @@ function DailyReport() {
 
   const handleDownloadPDF = async (info) => {
     console.log(info);
+    let body = {
+      branchId: info.branchId,
+      date: info.fromDate
+    }
+    setReportData(null);
     setShowReport(true);
-    // try {
-    //   const response = await downloadDailyReport(info);
-    //   console.log(response);
-    // } catch (err) {
-    //   showToast(err.message, false);
-    // }
+    try {
+      const response = await downloadDailyReport(body);
+      console.log(response);
+      if(response) {
+        setReportData(response);
+        const iframe = document.querySelector("iframe");
+        if (iframe?.src) iframe.src = response;
+      }
+    } catch (err) {
+      showToast(err.message, false);
+    }
   }
 
   return (
@@ -186,7 +196,7 @@ function DailyReport() {
                         <MDInput
                           type="date"
                           value={value}
-                          label="From Date"
+                          label="Date"
                           onChange={onChange}
                           error={!!error}
                           helperText={error?.message ? error.message : ""}
@@ -200,7 +210,7 @@ function DailyReport() {
                     />
                   </MDBox>
                   <MDBox mb={2} pl={1}>
-                    <Controller
+                    {/* <Controller
                       name="toDate"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         // eslint-disable-next-line
@@ -215,10 +225,7 @@ function DailyReport() {
                         />
                       )}
                       control={control}
-                      // rules={{
-                      //   required: "Please Enter From Date",
-                      // }}
-                    />
+                    /> */}
                   </MDBox>
                   <MDButton
                     style={{ marginLeft: "8px", marginBottom: "16px" }}
@@ -230,10 +237,16 @@ function DailyReport() {
                     View Report
                   </MDButton>
                 </MDBox>
-                {showReport &&
+                {/* {showReport &&
+                  <iframe src={reportData} width="100%" style={{height: 'calc(100vh - 100px)'}} title="reportData"></iframe>
+                } */}
+                {(showReport && reportData === null) ?
                   <MDBox mb={2}>
-                    <div dangerouslySetInnerHTML={{__html: reportTemplate()}}/>
+                    <h3>No Record Found</h3>
+                    {/* <div dangerouslySetInnerHTML={{__html: reportTemplate()}}/>  */}
                   </MDBox>
+                  :
+                  <iframe src={reportData} width="100%" style={{height: 'calc(100vh - 100px)'}} title="reportData"></iframe>
                 }
               </MDBox>
               </MDBox>

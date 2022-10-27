@@ -1,4 +1,4 @@
-import { get, post } from "./web.request";
+import { get, post, getPDF } from "./web.request";
 import { api } from "../utils/constant";
 import { replaceUrlVariable } from "../utils/helper";
 
@@ -9,5 +9,6 @@ export const createUpdateDailyReport = (payload) => post(api.createUpdateDailyRe
 export const fetchByIdDailyReport = (id) => get(`${replaceUrlVariable(api.fetchByIdDailyReport, {id})}`);
 
 export const downloadDailyReport = (body) => {
-    return get(`${replaceUrlVariable(api.fetchDailyReportGeneratePDF, {userId: body.userId, fromDate: body.fromDate, toDate: body.toDate})}`);
+    return getPDF(`${replaceUrlVariable(api.fetchDailyReportGeneratePDF, {branchId: body.branchId, date: body.date})}`);
+    // return get(`${replaceUrlVariable(api.fetchDailyReportGeneratePDF, {branchId: body.branchId, date: body.date})}`);
 }

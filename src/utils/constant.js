@@ -42,5 +42,5 @@ export const api = {
   fetchDailyReport: "/v1/api/dailyReport/get-dailyReport-list",
   createUpdateDailyReport: "/v1/api/dailyReport/AddUpdateDailyReport_Web",
   fetchByIdDailyReport: "/v1/api/dailyReport/{{id}}",
-  fetchDailyReportGeneratePDF: "/v1/api/dailyReport/get-dailyReport-generatepdf?UserID={{userId}}&FromDate={{fromDate}}&ToDate={{toDate}}"
+  fetchDailyReportGeneratePDF: "/v1/api/dailyReport/get-dailyReport-generatepdf?BranchId={{branchId}}&Date={{date}}" //"/v1/api/dailyReport/get-dailyReport-generatepdf?UserID={{userId}}&FromDate={{fromDate}}&ToDate={{toDate}}"
 };

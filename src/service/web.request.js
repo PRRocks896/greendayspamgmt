@@ -14,7 +14,31 @@ export const authHeader = () => {
     return {};
   }
 };
+
+
 // **************************************
+
+export const getPDF = async (url) => {
+  return axios(`${endpoint}${url}`, {
+    method: 'GET',
+    responseType: 'blob' //Force to receive data in a Blob Format
+  })
+  .then(response => {
+    //Create a Blob from the PDF Stream
+    const file = new Blob(
+      [response.data], 
+      {type: 'application/pdf'}
+    );
+    return URL.createObjectURL(file);
+    //Build a URL from the file
+    // const fileURL = URL.createObjectURL(file);
+    //Open the URL on new Window
+    // window.open(fileURL);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+};
 
 export const get = async (url) => {
   const response = await axios
