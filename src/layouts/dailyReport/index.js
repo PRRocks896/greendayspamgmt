@@ -73,7 +73,6 @@ function DailyReport() {
   }, [setBranchList]);
 
   const handleDownloadPDF = async (info) => {
-    console.log(info);
     let body = {
       branchId: info.branchId,
       date: info.fromDate
@@ -82,11 +81,10 @@ function DailyReport() {
     setShowReport(true);
     try {
       const response = await downloadDailyReport(body);
-      console.log(response);
       if(response) {
         setReportData(response);
-        const iframe = document.querySelector("iframe");
-        if (iframe?.src) iframe.src = response;
+        // const iframe = document.querySelector("iframe");
+        // if (iframe?.src) iframe.src = response;
       }
     } catch (err) {
       showToast(err.message, false);
@@ -240,13 +238,22 @@ function DailyReport() {
                 {/* {showReport &&
                   <iframe src={reportData} width="100%" style={{height: 'calc(100vh - 100px)'}} title="reportData"></iframe>
                 } */}
+                {!showReport ? 
+                  <MDBox mb={2}>
+                  </MDBox>
+                  : null
+                }
                 {(showReport && reportData === null) ?
                   <MDBox mb={2}>
                     <h3>No Record Found</h3>
                     {/* <div dangerouslySetInnerHTML={{__html: reportTemplate()}}/>  */}
                   </MDBox>
                   :
+                  null
+                }  
+                {(showReport && reportData !== null) ? 
                   <iframe src={reportData} width="100%" style={{height: 'calc(100vh - 100px)'}} title="reportData"></iframe>
+                  : null
                 }
               </MDBox>
               </MDBox>
