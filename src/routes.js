@@ -22,6 +22,7 @@ const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
 const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
 const DailyReport = lazy(() => import("layouts/dailyReport"));
+const Report = lazy(() => import("layouts/report"));
 
 export const Loading = () => (
   <Box sx={{ 
@@ -206,7 +207,7 @@ export const routes = [
   {
     type: "collapse",
     name: "Membership Redeem",
-    key: "membershipRedeem",
+    key: "membership-redeem",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/membership-redeem",
     component: (
@@ -221,7 +222,7 @@ export const routes = [
   {
     type: "collapse",
     name: "Daily Report",
-    key: "dailyReport",
+    key: "daily-report",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/daily-report",
     component: (
@@ -233,7 +234,7 @@ export const routes = [
   {
     type: "subComponent",
     name: "Daily Report",
-    key: "dailyReport",
+    key: "daily-report",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/daily-report/:mode",
     component: (
@@ -245,12 +246,24 @@ export const routes = [
   {
     type: "subComponent",
     name: "Daily Report",
-    key: "dailyReport",
+    key: "daily-report",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/daily-report/:mode/:id",
     component: (
       <Suspense fallback={<Loading/>}>
         <AddEditDailyReport />
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Report",
+    key: "report",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/report",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <Report />
       </Suspense>
     ),
   },

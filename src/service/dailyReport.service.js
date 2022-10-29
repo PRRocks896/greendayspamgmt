@@ -9,6 +9,5 @@ export const createUpdateDailyReport = (payload) => post(api.createUpdateDailyRe
 export const fetchByIdDailyReport = (id) => get(`${replaceUrlVariable(api.fetchByIdDailyReport, {id})}`);
 
 export const downloadDailyReport = (body) => {
-    return getPDF(`${replaceUrlVariable(api.fetchDailyReportGeneratePDF, {branchId: body.branchId, date: body.date})}`);
-    // return get(`${replaceUrlVariable(api.fetchDailyReportGeneratePDF, {branchId: body.branchId, date: body.date})}`);
+    return getPDF(`${replaceUrlVariable(api.fetchDailyReportGeneratePDF, body)}`);
 }

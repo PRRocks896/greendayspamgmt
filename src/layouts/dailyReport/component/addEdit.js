@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 // react-router-dom components
 import { useNavigate, useParams} from "react-router-dom";
 // react-hook-form components
@@ -8,6 +8,9 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -20,15 +23,20 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import { fetchByIdDailyReport, createUpdateDailyReport } from "service/dailyReport.service";
-import { showToast } from "utils/helper";
+import { fetchCityList } from "service/city.service";
+import { fetchBranchList } from "service/branch.service";
+import { showToast, isAdmin, getUserData } from "utils/helper";
 import moment from "moment";
 
 function AddEditDailyReport() {
     const navigate = useNavigate();
     const { id } = useParams();
-    
+
+    const [cityList, setCityList] = useState([]);
+    const [branchList, setBranchList] = useState([]);
     const { handleSubmit, control, reset, getValues, setValue } = useForm({
         defaultValues: {
+            cityId: null,
             dailyReportId: 0,
             dailyReportDate: moment().format("yyyy-MM-DD"), //new Date(),
             managerName: "",
@@ -60,7 +68,7 @@ function AddEditDailyReport() {
             cashInCover: "",
             nextDayCash: "",
             salonCustomerCash: "",
-            userId: JSON.parse(localStorage.getItem("userData")).userId,
+            userId: isAdmin() ? null : getUserData().userId,
         }
     });
 
@@ -68,6 +76,32 @@ function AddEditDailyReport() {
         control: control,
         name: "expenseList"
     });
+
+    useEffect(() => {
+        try {
+          async function fetchCity() {
+            const resCity = await fetchCityList();
+            setCityList(resCity.resultObject);
+          }
+          fetchCity();
+        } catch (err) {
+          console.error(err);
+          showToast(err.message, false);
+        }
+    }, []);
+
+    const fetchBranchViaCityID = useCallback(async (cityId) => {
+        const resBranch = await fetchBranchList({
+          cityId: cityId,
+          searchText: "",
+          isActive: true,
+          page: 0,
+          size: 0
+        });
+        if(resBranch.status === 200) {
+          setBranchList(resBranch.resultObject?.data);
+        }
+    }, [setBranchList]);
 
     const cashCounts = Object.entries(getValues("cashInCoverDetail")).map(([key, value]) => ({key,value}));
 
@@ -172,6 +206,10 @@ function AddEditDailyReport() {
         getValues("expenseList").forEach((res) => { 
             totalExpense += (parseInt(res.amount) || 0)
         });
+        if(isAdmin()) {
+            delete info["branchId"];
+            delete info["cityId"];
+        }
         try {
             const response = await createUpdateDailyReport({
                 ...info,
@@ -214,6 +252,71 @@ function AddEditDailyReport() {
                                 <MDBox component="form" role="form" padding="0px 20px">
                                     <MDBox display="grid" gridTemplateColumns="1fr 1fr">
                                         <MDBox>
+                                            {isAdmin() ?
+                                                <>
+                                                    <MDBox mb={2}>
+                                                        <Controller
+                                                            name="cityId"
+                                                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                                <FormControl fullWidth>
+                                                                <InputLabel id="selectCity">Select City</InputLabel>
+                                                                <Select
+                                                                    style={{ padding: "10px 0px" }}
+                                                                    labelId="selectCity"
+                                                                    id="city-select"
+                                                                    label="Select City"
+                                                                    value={value}
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                >
+                                                                    {cityList?.map((city, index) => (
+                                                                        <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
+                                                                            {city.name}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                                </FormControl>
+                                                            )}
+                                                            control={control}
+                                                            rules={{
+                                                                required: "Please select City",
+                                                            }}
+                                                        />
+                                                    </MDBox>
+                                                    <MDBox mb={2}>
+                                                        <Controller
+                                                        name="userId"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <FormControl fullWidth>
+                                                                <InputLabel id="selectBranch">Select Branch</InputLabel>
+                                                                <Select
+                                                                    style={{ padding: "10px 0px" }}
+                                                                    labelId="selectBranch"
+                                                                    label="Select Branch"
+                                                                    value={value}
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                >
+                                                                    {branchList?.map((branch, index) => (
+                                                                        <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
+                                                                            {branch.branchName}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                            </FormControl>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please select Branch",
+                                                        }}
+                                                        />
+                                                    </MDBox>
+                                                </>
+                                            : 
+                                                null
+                                            }
                                             <MDBox mb={2}>
                                                 <Controller
                                                     name="dailyReportDate"

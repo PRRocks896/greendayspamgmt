@@ -9,6 +9,20 @@ export const Loading = () => {
   </Box>
 }
 
+export const getRoleId = () => {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  return userData.roleID || null;
+}
+
+export const getUserData = () => {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  return userData;
+}
+
+export const isAdmin = () => {
+  return getRoleId() === 1 ? true : false;
+}
+
 export const getFormData = (object) => {
   const formData = new FormData();
   Object.keys(object).forEach(key => formData.append(key, object[key]));

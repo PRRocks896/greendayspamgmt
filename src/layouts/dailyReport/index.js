@@ -40,9 +40,7 @@ function DailyReport() {
     defaultValues: {
       cityId: "",
       branchId: "",
-      userId: JSON.parse(localStorage.getItem("userData")).userId,
-      fromDate: moment().format("yyyy-MM-DD"),
-      // toDate: moment().format("yyyy-MM-DD")
+      date: moment().format("yyyy-MM-DD"),
     }
   });
 
@@ -73,18 +71,13 @@ function DailyReport() {
   }, [setBranchList]);
 
   const handleDownloadPDF = async (info) => {
-    let body = {
-      branchId: info.branchId,
-      date: info.fromDate
-    }
+    delete info["cityId"];
     setReportData(null);
     setShowReport(true);
     try {
-      const response = await downloadDailyReport(body);
+      const response = await downloadDailyReport(info);
       if(response) {
         setReportData(response);
-        // const iframe = document.querySelector("iframe");
-        // if (iframe?.src) iframe.src = response;
       }
     } catch (err) {
       showToast(err.message, false);
@@ -188,7 +181,7 @@ function DailyReport() {
                   </MDBox>
                   <MDBox mb={2} pl={1}>
                     <Controller
-                      name="fromDate"
+                      name="date"
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         // eslint-disable-next-line
                         <MDInput
@@ -202,28 +195,9 @@ function DailyReport() {
                         />
                       )}
                       control={control}
-                      // rules={{
-                      //   required: "Please Enter From Date",
-                      // }}
                     />
                   </MDBox>
                   <MDBox mb={2} pl={1}>
-                    {/* <Controller
-                      name="toDate"
-                      render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        // eslint-disable-next-line
-                        <MDInput
-                          type="date"
-                          value={value}
-                          label="To Date"
-                          onChange={onChange}
-                          error={!!error}
-                          helperText={error?.message ? error.message : ""}
-                          fullWidth
-                        />
-                      )}
-                      control={control}
-                    /> */}
                   </MDBox>
                   <MDButton
                     style={{ marginLeft: "8px", marginBottom: "16px" }}
@@ -235,9 +209,6 @@ function DailyReport() {
                     View Report
                   </MDButton>
                 </MDBox>
-                {/* {showReport &&
-                  <iframe src={reportData} width="100%" style={{height: 'calc(100vh - 100px)'}} title="reportData"></iframe>
-                } */}
                 {!showReport ? 
                   <MDBox mb={2}>
                   </MDBox>
@@ -246,7 +217,6 @@ function DailyReport() {
                 {(showReport && reportData === null) ?
                   <MDBox mb={2}>
                     <h3>No Record Found</h3>
-                    {/* <div dangerouslySetInnerHTML={{__html: reportTemplate()}}/>  */}
                   </MDBox>
                   :
                   null
