@@ -11,7 +11,7 @@ export const Loading = () => {
 
 export const getRoleId = () => {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  return userData.roleID || null;
+  return userData?.roleID || null;
 }
 
 export const getUserData = () => {

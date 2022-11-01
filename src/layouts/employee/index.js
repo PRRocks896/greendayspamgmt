@@ -17,12 +17,12 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 import { fetchEmployee } from "service/employee.service";
-import { showToast } from "utils/helper";
+import { showToast, isAdmin, getUserData } from "utils/helper";
 
 function Employee() {
   const [rows, setRows] = useState([]);
   const columns = [
-    { Header: "employeeId", accessor: "employeeId", width: "15%", align: "left" },
+    { Header: "index", accessor: "index", width: "15%", align: "left" },
     { Header: "firstName", accessor: "firstName", align: "left" },
     { Header: "fatherName", accessor: "fatherName", align: "center" },
     { Header: "mobileNumber", accessor: "mobileNumber", align: "center" },
@@ -36,16 +36,25 @@ function Employee() {
   useEffect(() => {
     try {
       async function getEmployee() {
-        const response = await fetchEmployee({
-          searchText: "",
-          isActive: true,
-          page: 0,
-          size: 1000,
-        });
+        const response = await fetchEmployee(
+          isAdmin() ? {
+            searchText: "",
+            isActive: true,
+            page: 0,
+            size: 1000,
+          } : {
+            searchText: "",
+            isActive: true,
+            page: 0,
+            size: 1000,
+            cityId: getUserData().cityId,
+            branchId: getUserData().userId
+          });
         if (response.status === 200 && response.resultObject?.data?.length > 0) {
           const updatedData = response.resultObject.data?.map((data, index) => {
             return {
               ...data,
+              index: (index + 1),
               action: (
                 <MDTypography
                   component="span"

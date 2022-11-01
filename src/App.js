@@ -55,6 +55,8 @@ import { useMaterialUIController, setMiniSidenav } from "context"; //setOpenConf
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
+import { isAdmin, getUserData } from "utils/helper";
+
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -76,7 +78,7 @@ export default function App() {
     if (localStorage.getItem("token") === null) {
       localStorage.removeItem("token");
       localStorage.removeItem("userData");
-      navigate("/");
+      getUserData() ? navigate("/dashboard") : navigate("/");
     }
   }
 
@@ -125,6 +127,9 @@ export default function App() {
     allRoutes.map((route) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
+      }
+      if(!isAdmin() && ['branch', 'report', 'membershipplan', 'paidmode'].includes(route.key)) {
+        return null;
       }
       if (route.route) {
         return <Route exact path={route.route} element={route.component} key={route.key} />;
@@ -175,7 +180,7 @@ export default function App() {
       )}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to={getUserData() ? "/dashboard" : "/"} />} />
       </Routes>
     </ThemeProvider>
   )

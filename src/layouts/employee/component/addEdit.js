@@ -26,7 +26,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { createEmployee, updateEmployee, fetchByIdEmployee } from "service/employee.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
-import { getFormData, showToast } from "utils/helper";
+import { getFormData, showToast, isAdmin, getUserData } from "utils/helper";
 import { endpoint } from "utils/constant";
 
 function AddEditEmployee() {
@@ -45,13 +45,14 @@ function AddEditEmployee() {
             mobileNumber: "",
             fatherName: "",
             fatherMobileNumber: "",
-            cityId: "",
-            branchId: "",
+            cityId: isAdmin() ? null : getUserData().cityId ,
+            branchId: isAdmin() ? null :  getUserData().userId,
             livePhoto: "",
+            salary: "",
             idProof: "",
             addressPhoto: "",
             isActive: true,
-            userId: JSON.parse(localStorage.getItem("userData")).userId,
+            userId: getUserData().userId,
         },
     });
 
@@ -83,7 +84,6 @@ function AddEditEmployee() {
             try {
                 async function employeeByID(id) {
                     const response = await fetchByIdEmployee(id);
-                    console.log(response);
                     if (response.status === 200) {
                         reset(response.resultObject);
                         setLivePhoto(`${endpoint}/${response.resultObject?.livePhotoPath}`);
@@ -141,6 +141,10 @@ function AddEditEmployee() {
     const handleSave = async (info) => {
         try {
             // console.log(info);
+            // if(isAdmin()) {
+            //     delete info["cityId"];
+            //     delete info["branchId"];
+            // }
             if(id === null) {
                 const response = await createEmployee(getFormData(info));
                 if (response.status === 200) {
@@ -309,65 +313,103 @@ function AddEditEmployee() {
                                                 />
                                             </MDBox>
                                         </MDBox>
+                                        {isAdmin() ?
+                                        <MDBox>
+                                            <MDBox>
+                                                <MDBox mb={2}>
+                                                    <Controller
+                                                        name="cityId"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <FormControl fullWidth>
+                                                                <InputLabel id="selectCity">Select City</InputLabel>
+                                                                <Select
+                                                                    style={{ padding: "10px 0px" }}
+                                                                    labelId="selectCity"
+                                                                    id="city-select"
+                                                                    label="Select City"
+                                                                    value={value}
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                >
+                                                                    {cityList?.map((city, index) => (
+                                                                        <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
+                                                                            {city.name}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                            </FormControl>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please select City",
+                                                        }}
+                                                    />
+                                                </MDBox>
+                                            </MDBox>
+                                            <MDBox pl={2}>
+                                                <MDBox mb={2}>
+                                                    <Controller
+                                                        name="branchId"
+                                                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                            <FormControl fullWidth>
+                                                                <InputLabel id="selectBranch">Select Branch</InputLabel>
+                                                                <Select
+                                                                    style={{ padding: "10px 0px" }}
+                                                                    labelId="selectBranch"
+                                                                    label="Select Branch"
+                                                                    value={value}
+                                                                    onChange={onChange}
+                                                                    error={!!error}
+                                                                    helperText={error?.message ? error.message : ""}
+                                                                >
+                                                                    {branchList?.map((branch, index) => (
+                                                                        <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
+                                                                            {branch.branchName}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                            </FormControl>
+                                                        )}
+                                                        control={control}
+                                                        rules={{
+                                                            required: "Please select Branch",
+                                                        }}
+                                                    />
+                                                </MDBox>
+                                            </MDBox>
+                                        </MDBox>
+                                        : null }
                                         <MDBox>
                                             <MDBox mb={2}>
                                                 <Controller
-                                                    name="cityId"
+                                                    name="salary"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <FormControl fullWidth>
-                                                            <InputLabel id="selectCity">Select City</InputLabel>
-                                                            <Select
-                                                                style={{ padding: "10px 0px" }}
-                                                                labelId="selectCity"
-                                                                id="city-select"
-                                                                label="Select City"
-                                                                value={value}
-                                                                onChange={onChange}
-                                                                error={!!error}
-                                                                helperText={error?.message ? error.message : ""}
-                                                            >
-                                                                {cityList?.map((city, index) => (
-                                                                    <MenuItem key={`city_list_${index}`} onClick={() => fetchBranchViaCityID(city.value)} value={city.value}>
-                                                                        {city.name}
-                                                                    </MenuItem>
-                                                                ))}
-                                                            </Select>
-                                                        </FormControl>
+                                                        <MDInput
+                                                            type="text"
+                                                            value={value}
+                                                            label="Salary"
+                                                            onChange={onChange}
+                                                            error={!!error}
+                                                            helperText={error?.message ? error.message : ""}
+                                                            fullWidth
+                                                        />
                                                     )}
                                                     control={control}
                                                     rules={{
-                                                        required: "Please select City",
-                                                    }}
-                                                />
-                                            </MDBox>
-                                        </MDBox>
-                                        <MDBox pl={2}>
-                                            <MDBox mb={2}>
-                                                <Controller
-                                                    name="branchId"
-                                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        <FormControl fullWidth>
-                                                            <InputLabel id="selectBranch">Select Branch</InputLabel>
-                                                            <Select
-                                                                style={{ padding: "10px 0px" }}
-                                                                labelId="selectBranch"
-                                                                label="Select Branch"
-                                                                value={value}
-                                                                onChange={onChange}
-                                                                error={!!error}
-                                                                helperText={error?.message ? error.message : ""}
-                                                            >
-                                                                {branchList?.map((branch, index) => (
-                                                                    <MenuItem key={`branch_list_${index}`} value={branch.branchId}>
-                                                                        {branch.branchName}
-                                                                    </MenuItem>
-                                                                ))}
-                                                            </Select>
-                                                        </FormControl>
-                                                    )}
-                                                    control={control}
-                                                    rules={{
-                                                        required: "Please select Branch",
+                                                        required: "Please add Salary",
+                                                        // minLength: {
+                                                        //     value: 6,
+                                                        //     message: "Cannot be smaller than 6 characters",
+                                                        // },
+                                                        maxLength: {
+                                                            value: 6,
+                                                            message: "Cannot be longer than 6 characters",
+                                                        },
+                                                        pattern: {
+                                                            value: /^[0-9]/,
+                                                            message: "Enter only digit",
+                                                        },
                                                     }}
                                                 />
                                             </MDBox>

@@ -17,7 +17,7 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 import { fetchMembershipMgmt } from "service/membership-mgmt.service";
-import { showToast } from "utils/helper";
+import { showToast, isAdmin, getUserData } from "utils/helper";
 
 function MembershipMgmt() {
   const [rows, setRows] = useState([]);
@@ -43,8 +43,8 @@ function MembershipMgmt() {
           isActive: true,
           page: 0,
           size: 1000,
-          cityId: 0,
-          branchId: 0,
+          cityId: isAdmin() ? 0 : getUserData().cityId,
+          branchId: isAdmin() ? 0 : getUserData().userId,
         });
         if (response.status === 200 && response.resultObject?.data?.length > 0) {
           const updatedData = response.resultObject.data?.map((data, index) => {

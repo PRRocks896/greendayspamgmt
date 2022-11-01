@@ -27,7 +27,7 @@ import Footer from "examples/Footer";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
 import { downloadReport } from "service/report.service";
-import { showToast } from "utils/helper";
+import { showToast, isAdmin, getUserData } from "utils/helper";
 
 function Report() {
     const [cityList, setCityList] = useState([]);
@@ -36,8 +36,8 @@ function Report() {
     const [reportData, setReportData] = useState(null);
     const { handleSubmit, control } = useForm({
         defaultValues: {
-            cityId: "",
-            branchId: "",
+            cityId: isAdmin() ? "" : getUserData().cityId,
+            branchId: isAdmin() ? "" : getUserData().userId,
             fromDate: moment().format("yyyy-MM-DD"),
             toDate: moment().format("yyyy-MM-DD"),
         },
@@ -115,6 +115,8 @@ function Report() {
                                         display="grid"
                                         gridTemplateColumns="0.5fr 0.5fr 0.5fr 0.5fr 1fr"
                                     >
+                                        {isAdmin() ?
+                                        <>
                                         <MDBox mb={2}>
                                             <Controller
                                                 name="cityId"
@@ -191,6 +193,8 @@ function Report() {
                                                 }}
                                             />
                                         </MDBox>
+                                        </>
+                                        : null }
                                         <MDBox mb={2} pl={1}>
                                             <Controller
                                                 name="fromDate"

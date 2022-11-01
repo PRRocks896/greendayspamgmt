@@ -29,7 +29,7 @@ import Footer from "examples/Footer";
 import { downloadDailyReport } from "service/dailyReport.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
-import { showToast } from "utils/helper";
+import { showToast, isAdmin, getUserData } from "utils/helper";
 
 function DailyReport() {
   const [cityList, setCityList] = useState([]);
@@ -38,8 +38,8 @@ function DailyReport() {
   const [reportData, setReportData] = useState(null);
   const { handleSubmit, control } = useForm({
     defaultValues: {
-      cityId: "",
-      branchId: "",
+      cityId: isAdmin() ? "" : getUserData().cityId,
+      branchId: isAdmin() ? "" : getUserData().userId,
       date: moment().format("yyyy-MM-DD"),
     }
   });
@@ -120,6 +120,8 @@ function DailyReport() {
               <MDBox pt={3}>
               <MDBox component="form" role="form" padding="0px 20px">
                 <MDBox display="grid" gridTemplateColumns="0.5fr 0.5fr 0.5fr 0.5fr 1fr">
+                  {isAdmin() ?
+                  <>
                   <MDBox mb={2}>
                       <Controller
                           name="cityId"
@@ -179,6 +181,8 @@ function DailyReport() {
                       }}
                     />
                   </MDBox>
+                  </>
+                  : null}
                   <MDBox mb={2} pl={1}>
                     <Controller
                       name="date"

@@ -1,18 +1,4 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
+import { useEffect, useState } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -25,7 +11,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 // import Footer from "examples/Footer";
 // import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
 // import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-// import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
+import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Data
 // import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
@@ -35,55 +21,77 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 // import Projects from "layouts/dashboard/components/Projects";
 // import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
+import { fetchDashboard } from "service/user.service";
+import { showToast, isAdmin } from "utils/helper";
+
 function Dashboard() {
+  const [ dashboardDetail, setDashboardDetail ] = useState(null);
   // const { sales, tasks } = reportsLineChartData;
+
+  useEffect(() => {
+    try {
+      async function getDashboard() {
+        const response = await fetchDashboard();
+        if (response.status === 200 && response.resultObject) {
+          setDashboardDetail(response.resultObject);
+        } else {
+          showToast(response.message);
+        }
+      }
+      getDashboard();
+    } catch (err) {
+      showToast(err.message, false);
+    }
+  }, []);
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox py={3}>
-        <h3>Coming Soon...!!!</h3>
-        {/* <Grid container spacing={3}>
+        <Grid container spacing={3}>
+          {isAdmin() ?
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
+                icon="store"
+                title="Branch"
+                count={dashboardDetail?.branchTotal || 0}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
+                  amount: "",
+                  label: "Just updated",
                 }}
               />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
-                percentage={{
-                  color: "success",
-                  amount: "+3%",
-                  label: "than last month",
-                }}
-              />
-            </MDBox>
-          </Grid>
+          : null
+          }
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
+                icon="person"
+                title="Staff"
+                count={dashboardDetail?.staffTotal || 0}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  amount: "",
+                  label: "Just updated",
+                }}
+              />
+            </MDBox>
+          </Grid>
+          <Grid item xs={12} md={6} lg={3}>
+            <MDBox mb={1.5}>
+              <ComplexStatisticsCard
+                icon="people"
+                title="Total Members"
+                count={dashboardDetail?.membershipTotal || 0}
+                percentage={{
+                  color: "success",
+                  amount: "",
+                  label: "Just updated",
                 }}
               />
             </MDBox>
@@ -93,8 +101,8 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Followers"
-                count="+91"
+                title="Membership Redeem"
+                count={dashboardDetail?.membershipRedeemTotal || 0}
                 percentage={{
                   color: "success",
                   amount: "",
@@ -103,7 +111,7 @@ function Dashboard() {
               />
             </MDBox>
           </Grid>
-        </Grid> */}
+        </Grid>
         <MDBox mt={4.5}>
           {/* <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>

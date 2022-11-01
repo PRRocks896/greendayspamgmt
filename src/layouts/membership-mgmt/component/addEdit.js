@@ -33,7 +33,7 @@ import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
 import { fetchMembershipPlanDropdown } from "service/membership.service";
 import { fetchPaidModeDropDown } from "service/paid.service";
-import { getFormData, showToast } from "utils/helper";
+import { getFormData, showToast, isAdmin, getUserData } from "utils/helper";
 import { endpoint } from "utils/constant";
 
 function AddEditMembershipMgmt() {
@@ -56,14 +56,14 @@ function AddEditMembershipMgmt() {
             phoneNumber: "",
             emailId: "",
             hours: 0,
-            cityId: "",
-            branchId: "",
+            cityId: isAdmin() ? null : getUserData().cityId,
+            branchId: isAdmin() ? null :  getUserData().userId,
             membershipPlanId: "",
             paidBy: "",
             managerName: "",
             billNo: "",
             customerPhoto: "",
-            userId: JSON.parse(localStorage.getItem("userData")).userId,
+            userId: getUserData().userId,
         },
     });
 
@@ -296,6 +296,8 @@ function AddEditMembershipMgmt() {
                                                     }}
                                                 />
                                             </MDBox>
+                                            {isAdmin() ?
+                                            <>
                                             <MDBox mb={2}>
                                                 <Controller
                                                     name="cityId"
@@ -355,6 +357,9 @@ function AddEditMembershipMgmt() {
                                                     }}
                                                 />
                                             </MDBox>
+                                            </>
+                                            : null
+                                            }
                                             <MDBox mb={2}>
                                                 <Controller
                                                     name="membershipPlanId"

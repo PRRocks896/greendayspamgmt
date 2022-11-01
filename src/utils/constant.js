@@ -4,6 +4,8 @@ export const api = {
   login: "/v1/api/user/login",
   loginOtpSend: "/v1/api/user/Login-otp-send?phone={{phone}}",
   cityList: "/v1/api/user/get-city-list-dropdown",
+  // User
+  dashboard: "/v1/api/user/Dashboard-Details?BranchId={{branchId}}",
   // Branch
   branchList: "/v1/api/user/get-branch-list",
   createBranch: "/v1/api/user/create-User",
@@ -34,7 +36,7 @@ export const api = {
   fetchMembershipRedeemByPhoneNumber: "/v1/api/membershipRedeem?PhoneNumber={{phoneNumber}}&OTP={{otp}}",
   sendOtpForMembershipRedeem: "/v1/api/membershipRedeem/MembershipRedeem-otp-send?phone={{phone}}",
   // Employee
-  createEmployee: "/v1/api/employee",
+  createEmployee: "/v1/api/employee/AddUpdate-Employee-Web", //"/v1/api/employee",
   updateEmployee: "/v1/api/employee/Update-Employee",
   fetchEmployee: "/v1/api/employee/get-employee-list",
   fetchEmployeeById: "/v1/api/employee/{{id}}",
