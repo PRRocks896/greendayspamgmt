@@ -3,6 +3,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // eslint-disable-next-line
 
+export const confirmationBox = (msg) => {
+  return window.confirm(msg);
+}
+
 export const Loading = () => {
   <Box sx={{ display: 'flex' }}>
     <CircularProgress />

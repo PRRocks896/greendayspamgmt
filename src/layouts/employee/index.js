@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
+import Switch from "@mui/material/Switch";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -17,7 +18,8 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 import { fetchEmployee } from "service/employee.service";
-import { showToast, isAdmin, getUserData } from "utils/helper";
+import { statusChange, deleteRecord } from "service/user.service";
+import { showToast, isAdmin, getUserData, confirmationBox } from "utils/helper";
 
 function Employee() {
   const [rows, setRows] = useState([]);
@@ -28,10 +30,68 @@ function Employee() {
     { Header: "mobileNumber", accessor: "mobileNumber", align: "center" },
     { Header: "branchName", accessor: "branchName", align: "center" },
     { Header: "cityName", accessor: "cityName", align: "center" },
+    { Header: "status", accessor: "isActive", align: "center"},
     { Header: "action", accessor: "action", align: "center" },
   ];
 
   const navigate = useNavigate();
+
+  const handleChangeStatus = useCallback(async (value, id) => {
+    const response = await statusChange({
+      moduleName: "Employee",
+      id,
+      isActive: value
+    });
+    if(response.status === 200) {
+      const response = await fetchEmployee(
+        isAdmin() ? {
+          searchText: "",
+          // isActive: true,
+          page: 0,
+          size: 1000,
+        } : {
+          searchText: "",
+          // isActive: true,
+          page: 0,
+          size: 1000,
+          cityId: getUserData().cityId,
+          branchId: getUserData().userId
+        }
+      );
+      if (response.status === 200 && response.resultObject?.data?.length > 0) {  
+        setRows(response.resultObject?.data);
+      }
+    }
+  }, []);
+
+  const handleDelete = useCallback(async (id) => {
+    if(confirmationBox("Are You Sure...?")) {
+      const response = await deleteRecord({
+        moduleName: "Employee",
+        id
+      });
+      if(response.status === 200) {
+        const response = await fetchEmployee(
+          isAdmin() ? {
+            searchText: "",
+            // isActive: true,
+            page: 0,
+            size: 1000,
+          } : {
+            searchText: "",
+            // isActive: true,
+            page: 0,
+            size: 1000,
+            cityId: getUserData().cityId,
+            branchId: getUserData().userId
+          }
+        );
+        if (response.status === 200 && response.resultObject?.data?.length > 0) {
+          setRows(response.resultObject?.data);
+        }
+      }
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -39,45 +99,27 @@ function Employee() {
         const response = await fetchEmployee(
           isAdmin() ? {
             searchText: "",
-            isActive: true,
+            // isActive: true,
             page: 0,
             size: 1000,
           } : {
             searchText: "",
-            isActive: true,
+            // isActive: true,
             page: 0,
             size: 1000,
             cityId: getUserData().cityId,
             branchId: getUserData().userId
           });
         if (response.status === 200 && response.resultObject?.data?.length > 0) {
-          const updatedData = response.resultObject.data?.map((data, index) => {
-            return {
-              ...data,
-              index: (index + 1),
-              action: (
-                <MDTypography
-                  component="span"
-                  onClick={() => navigate(`/employee/edit/${data.employeeId}`)}
-                  variant="caption"
-                  color="text"
-                  fontWeight="medium"
-                  style={{ cursor: "pointer" }}
-                >
-                  <Icon fontSize="medium">edit</Icon>
-                  {/* Edit */}
-                </MDTypography>
-              ),
-            };
-          });
-          setRows(updatedData);
+          setRows(response.resultObject?.data);
         }
       }
       getEmployee();
     } catch (err) {
       showToast(err.message, false);
     }
-  }, [navigate]);
+    return () => false;
+  }, []);
 
   return (
     <DashboardLayout>
@@ -114,7 +156,39 @@ function Employee() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns, rows }}
+                  table={{ columns, rows: rows?.map((data, index) => {
+                    return {
+                      ...data,
+                      index: (index + 1),
+                      isActive: (
+                        <Switch checked={data?.isActive} onChange={(e) => handleChangeStatus(e.target.checked, data.employeeId)} />
+                      ),
+                      action: (
+                        <>
+                        <MDTypography
+                          component="span"
+                          onClick={() => navigate(`/employee/edit/${data.employeeId}`)}
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Icon fontSize="medium">edit</Icon>
+                        </MDTypography>
+                        <MDTypography
+                          component="span"
+                          onClick={() => handleDelete(data.employeeId)}
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Icon fontSize="medium">delete</Icon>
+                        </MDTypography>
+                        </>
+                      ),
+                    };}) 
+                  }}
                   isSorted={true}
                   entriesPerPage={false}
                   showTotalEntries={false}

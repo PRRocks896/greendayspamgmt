@@ -314,7 +314,6 @@ function AddEditEmployee() {
                                             </MDBox>
                                         </MDBox>
                                         {isAdmin() ?
-                                        <MDBox>
                                             <MDBox>
                                                 <MDBox mb={2}>
                                                     <Controller
@@ -346,8 +345,6 @@ function AddEditEmployee() {
                                                         }}
                                                     />
                                                 </MDBox>
-                                            </MDBox>
-                                            <MDBox pl={2}>
                                                 <MDBox mb={2}>
                                                     <Controller
                                                         name="branchId"
@@ -378,9 +375,8 @@ function AddEditEmployee() {
                                                     />
                                                 </MDBox>
                                             </MDBox>
-                                        </MDBox>
                                         : null }
-                                        <MDBox>
+                                        <MDBox pl={isAdmin() ? 2 : 0}>
                                             <MDBox mb={2}>
                                                 <Controller
                                                     name="salary"
@@ -398,13 +394,9 @@ function AddEditEmployee() {
                                                     control={control}
                                                     rules={{
                                                         required: "Please add Salary",
-                                                        // minLength: {
-                                                        //     value: 6,
-                                                        //     message: "Cannot be smaller than 6 characters",
-                                                        // },
-                                                        maxLength: {
+                                                        minLength: {
                                                             value: 6,
-                                                            message: "Cannot be longer than 6 characters",
+                                                            message: "Cannot be smaller than 6 characters",
                                                         },
                                                         pattern: {
                                                             value: /^[0-9]/,

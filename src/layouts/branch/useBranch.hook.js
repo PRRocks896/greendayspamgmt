@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Icon from "@mui/material/Icon";
+// import Icon from "@mui/material/Icon";
 
-import MDTypography from "components/MDTypography";
+// import MDTypography from "components/MDTypography";
 
 import { fetchBranchList } from "service/branch.service";
-import { showToast } from "utils/helper";
+import { statusChange, deleteRecord } from "service/user.service";
+import { showToast, confirmationBox } from "utils/helper";
 
 export const useBranch = () => {
     const [rows, setRows] = useState([]);
@@ -25,30 +26,12 @@ export const useBranch = () => {
             const response = await fetchBranchList({
               cityId: 0,
               searchText: "",
-              isActive: true,
+              // isActive: true,
               page: 0,
               size: 100,
             });
             if (response.status === 200 && response.resultObject?.data?.length > 0) {
-              const updatedData = response.resultObject.data?.map((data, index) => {
-                return {
-                  ...data,
-                  action: (
-                    <MDTypography
-                      component="span"
-                      onClick={() => navigate(`/branch/edit/${data.branchId}`)}
-                      variant="caption"
-                      color="text"
-                      fontWeight="medium"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Icon fontSize="medium">edit</Icon>
-                      {/* Edit */}
-                    </MDTypography>
-                  ),
-                };
-              });
-              setRows(updatedData);
+              setRows(response.resultObject.data);
             }
           }
           fetchBranch();
@@ -57,10 +40,60 @@ export const useBranch = () => {
         }
       }, [navigate]);
 
+    const handleDelete = async (id) => {
+      if(confirmationBox("Are You Sure...?")) {
+        try {
+          const response = await deleteRecord({
+            moduleName: "Branch",
+            id
+          });
+          if(response.status === 200) {
+            const response = await fetchBranchList({
+              cityId: 0,
+              searchText: "",
+              // isActive: true,
+              page: 0,
+              size: 100,
+            });
+            if (response.status === 200 && response.resultObject?.data?.length > 0) {
+              setRows(response.resultObject.data);
+            }
+          }
+        } catch (error) {
+          showToast(error.message, false);
+        }
+      }
+    }
+
+    const handleChangeStatus = async (value, id) => {
+      try {
+        const response = await statusChange({
+          moduleName: "Branch",
+          id,
+          isActive: value
+        });
+        if(response.status === 200) {
+          const response = await fetchBranchList({
+            cityId: 0,
+            searchText: "",
+            // isActive: true,
+            page: 0,
+            size: 100,
+          });
+          if (response.status === 200 && response.resultObject?.data?.length > 0) {
+            setRows(response.resultObject.data);
+          }
+        }
+      } catch (error) {
+        showToast(error.message, false);
+      }
+    }
     return {
         rows,
         columns,
         navigate,
-        setRows
+        setRows,
+        handleDelete,
+        handleChangeStatus
     }
 }

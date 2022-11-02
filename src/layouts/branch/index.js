@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
+import Switch from "@mui/material/Switch";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -33,7 +34,7 @@ import DataTable from "examples/Tables/DataTable";
 import { useBranch } from "./useBranch.hook";
 
 function Branch() {
-  const { rows, columns } = useBranch();
+  const { rows, columns, navigate, handleDelete, handleChangeStatus } = useBranch();
 
   return (
     <DashboardLayout>
@@ -70,7 +71,38 @@ function Branch() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns, rows }}
+                  table={{ columns, rows: rows?.map((data, index) => {
+                    return {
+                      ...data,
+                      isActive: (
+                        <Switch checked={data?.isActive} onChange={(e) => handleChangeStatus(e.target.checked, data.employeeId)} />
+                      ),
+                      action: (
+                        <>
+                        <MDTypography
+                          component="span"
+                          onClick={() => navigate(`/branch/edit/${data.branchId}`)}
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Icon fontSize="medium">edit</Icon>
+                        </MDTypography>
+                        <MDTypography
+                          component="span"
+                          onClick={() => handleDelete(data.branchId)}
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <Icon fontSize="medium">delete</Icon>
+                        </MDTypography>
+                        </>
+                      ),
+                    };
+                  }) }}
                   isSorted={true}
                   entriesPerPage={false}
                   showTotalEntries={false}

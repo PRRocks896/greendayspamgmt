@@ -4,6 +4,8 @@ export const api = {
   login: "/v1/api/user/login",
   loginOtpSend: "/v1/api/user/Login-otp-send?phone={{phone}}",
   cityList: "/v1/api/user/get-city-list-dropdown",
+  delete: "/v1/api/delete?ModuleName={{moduleName}}&id={{id}}",
+  statusChange: "/v1/api/status",
   // User
   dashboard: "/v1/api/user/Dashboard-Details?BranchId={{branchId}}",
   // Branch
