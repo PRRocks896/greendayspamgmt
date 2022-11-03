@@ -15,6 +15,7 @@ export const useBranch = () => {
         { Header: "Id", accessor: "branchId", width: "15%", align: "left" },
         { Header: "branchName", accessor: "branchName", align: "left" },
         { Header: "cityName", accessor: "cityName", align: "center" },
+        { Header: "status", accessor: "isActive", align: "center"},
         { Header: "action", accessor: "action", align: "center" },
     ];
     
@@ -83,6 +84,8 @@ export const useBranch = () => {
           if (response.status === 200 && response.resultObject?.data?.length > 0) {
             setRows(response.resultObject.data);
           }
+        } else {
+          showToast(response.message, false);
         }
       } catch (error) {
         showToast(error.message, false);

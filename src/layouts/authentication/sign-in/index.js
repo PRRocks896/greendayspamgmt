@@ -83,6 +83,7 @@ function Basic() {
       }
     } catch (error) {
       console.error(error);
+      showToast(error.message, false);
     }
   };
 
