@@ -75,7 +75,7 @@ function Branch() {
                     return {
                       ...data,
                       isActive: (
-                        <Switch checked={data?.isActive} onChange={(e) => handleChangeStatus(e.target.checked, data.employeeId)} />
+                        <Switch checked={data?.isActive} onChange={(e) => handleChangeStatus(e.target.checked, data.branchId)} />
                       ),
                       action: (
                         <>
