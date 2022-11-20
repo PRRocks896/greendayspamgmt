@@ -34,9 +34,11 @@ export const api = {
   fetchMembershipRedeemList: "/v1/api/membershipRedeem/get-membershipRedeem-list",
   fetchMembershipMembershipMgmtList: "/v1/api/membershipRedeem/get-membershipManagement-list?otp={{otp}}",
   fetchByIdMembershipRedeem: "/v1/api/membershipRedeem/{{id}}",
-  createEditMembershipRedeem: "/v1/api/membershipRedeem",
+  createEditMembershipRedeem: "/v1/api/membershipRedeem/AddUpdate-MembershipRedeem-Web",
   fetchMembershipRedeemByPhoneNumber: "/v1/api/membershipRedeem/Detail-By-Phone?Phone={{phone}}",
   sendOtpForMembershipRedeem: "/v1/api/membershipRedeem/MembershipRedeem-otp-send?phone={{phone}}",
+  membershipOtpSend: "/v1/api/membershipRedeem/MembershipRedeem-otp-send?phone={{phone}}&Minutes={{Minutes}}&ServiceDetail={{ServiceDetail}}",
+  verifyOtpForMembershipRedee: "/v1/api/membershipRedeem?PhoneNumber={{PhoneNumber}}&OTP={{OTP}}",
   // Employee
   createEmployee: "/v1/api/employee/AddUpdate-Employee-Web", //"/v1/api/employee",
   updateEmployee: "/v1/api/employee/Update-Employee",

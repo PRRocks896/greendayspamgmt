@@ -20,15 +20,20 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import MDDragdrop from "components/MDDragdrop";
 
-import { createUpdateMembershipRedeem } from "service/membership-redeem.service";
+import { 
+    createUpdateMembershipRedeem,
+    getVerifyToRedeemMembership,
+    verifyOtpForRedeemMembership
+} from "service/membership-redeem.service";
 
 import { getFormData, showToast } from "utils/helper";
 
 function Redeem(props) {
-    const {detail, closeRedeemForm} = props;
+    const { detail, customerDetail, closeRedeemForm, handleAfterRedeemSuccess } = props;
     const [selectedImage, setSelectedImage] = useState(null);
     const [sentOtp, setSentOtp] = useState(false);
-    const { handleSubmit, control, setValue } = useForm({
+    const [otp, setOtp] = useState("");
+    const { handleSubmit, control, setValue, getValues } = useForm({
         defaultValues: {
             membershipRedeemId: 0,
             userId: JSON.parse(localStorage.getItem("userData")).userId,
@@ -44,7 +49,9 @@ function Redeem(props) {
     });
 
     useEffect(() => {
-        setValue("membershipManagementId", detail.membershipManagementId);
+        if(detail?.membershipManagementId) {
+            setValue("membershipManagementId", detail?.membershipManagementId);
+        }
     }, [detail, setValue])
 
     //use for images manually upload and drop
@@ -60,12 +67,44 @@ function Redeem(props) {
         });
     }, [setValue]);
 
+    const handleGetVerify = async (info) => {
+        try {
+            if(!sentOtp) {
+                const response = await getVerifyToRedeemMembership({
+                    phone: customerDetail?.phoneNumber,
+                    Minutes: info?.minutes,
+                    ServiceDetail: info?.serviceDetail
+                });
+                if (response.status === 200) {
+                    setSentOtp(true);
+                } else {
+                    showToast(response.message, false);
+                }
+            } else {
+                const response = await verifyOtpForRedeemMembership({
+                    PhoneNumber: customerDetail?.phoneNumber,
+                    OTP: otp
+                });
+                if (response.status === 200) {
+                    handleSave(getValues());
+                    setSentOtp(false);
+                } else {
+                    showToast(response.message, false);
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            showToast(err.message, false);
+        }
+    }
+
     const handleSave = async (info) => {
         try {
-            const response = await createUpdateMembershipRedeem(getFormData(info));
+            const response = await createUpdateMembershipRedeem(getFormData({...info, managerName: info.membershipRedeemFormName}));
             if (response.status === 200) {
                 showToast(response.message, true);
-                closeRedeemForm(false)
+                // closeRedeemForm(false);
+                handleAfterRedeemSuccess();
             } else {
                 showToast(response.message, false);
             }
@@ -91,6 +130,38 @@ function Redeem(props) {
                 </MDTypography>
             </MDBox>
             <MDBox pt={3} px={2}>
+                {sentOtp ? 
+                    <MDBox display="block">
+                        <MDInput
+                            type="text"
+                            value={otp}
+                            label="Enter OTP"
+                            minLength={6}
+                            maxLength={6}
+                            onChange={(e) => setOtp(e.target.value)}
+                        />
+                        <br/>
+                        <br/>
+                        <MDButton
+                            component="button"
+                            variant="gradient"
+                            color="info"
+                            onClick={() => setSentOtp(false)}
+                        >
+                           Back
+                        </MDButton>
+                        &nbsp;&nbsp;
+                        <MDButton
+                            component="button"
+                            variant="gradient"
+                            color="info"
+                            disabled={otp.length !== 6}
+                            onClick={handleSubmit(handleGetVerify)}
+                        >
+                            Verify OTP
+                        </MDButton>
+                    </MDBox>
+                :
                 <MDBox component="form" role="form" padding="0px 20px">
                     <MDBox >
                         <MDBox>
@@ -152,21 +223,12 @@ function Redeem(props) {
                                                 error={!!error}
                                                 helperText={error?.message ? error.message : ""}
                                             >
-                                                <MenuItem value="60">60</MenuItem>
-                                                <MenuItem value="90">90</MenuItem>
-                                                <MenuItem value="120">120</MenuItem>
+                                                {parseInt(detail?.remainingMinutes) < 60 ? <MenuItem value={detail?.remainingMinutes}>{detail?.remainingMinutes}</MenuItem> : null}
+                                                {parseInt(detail?.remainingMinutes) >= 60 ? <MenuItem value="60">60</MenuItem> : null}
+                                                {parseInt(detail?.remainingMinutes) >= 90 ? <MenuItem value="90">90</MenuItem> : null }
+                                                {parseInt(detail?.remainingMinutes) >= 120 ? <MenuItem value="120">120</MenuItem> : null }
                                             </Select>
                                         </FormControl>
-                                        // eslint-disable-next-line
-                                        // <MDInput
-                                        //     type="text"
-                                        //     value={value}
-                                        //     label="Minutes"
-                                        //     onChange={onChange}
-                                        //     error={!!error}
-                                        //     helperText={error?.message ? error.message : ""}
-                                        //     fullWidth
-                                        // />
                                     )}
                                     control={control}
                                     rules={{
@@ -250,12 +312,14 @@ function Redeem(props) {
                                     <MDBox style={{
                                         border: "1px solid #344767",
                                         borderRadius: "5px",
-                                        display: "flex",
-                                        flexDirection: "row-reverse",
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr 1fr",
+                                        // display: "flex",
+                                        // flexDirection: "row-reverse",
                                         cursor: "pointer",
                                     }}>
+                                        <img style={{ height: "calc(100vh - 500px)", width: "250px" }} src={selectedImage} alt="customer" />
                                         <Icon fontSize="large" onClick={() => setSelectedImage(null)}> delete</Icon>
-                                        <img style={{ height: "calc(100vh - 100px)" }} src={selectedImage} alt="customer" />
                                     </MDBox>
                                 }
                             </MDBox>
@@ -266,7 +330,7 @@ function Redeem(props) {
                             component="button"
                             variant="gradient"
                             color="info"
-                            // onClick={() => navigate("/membershipplan")}
+                            onClick={() => closeRedeemForm(false)}
                             style={{ marginRight: "8px" }}
                             fullWidth
                         >
@@ -285,13 +349,14 @@ function Redeem(props) {
                             component="button"
                             variant="gradient"
                             color="info"
-                            onClick={() => setSentOtp(true)}
+                            onClick={handleSubmit(handleGetVerify)}
                             fullWidth
                         >
                             Get Verify
                         </MDButton>
                     </MDBox>
                 </MDBox>
+                }
             </MDBox>
         </MDBox>
     );
@@ -300,6 +365,8 @@ function Redeem(props) {
 Redeem.propTypes = {
     detail: PropTypes.object.isRequired,
     closeRedeemForm: PropTypes.func.isRequired,
+    customerDetail: PropTypes.object.isRequired,
+    handleAfterRedeemSuccess: PropTypes.func.isRequired
 };
 
 export default Redeem;

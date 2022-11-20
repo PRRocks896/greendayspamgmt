@@ -7,3 +7,7 @@ export const sendMembershipRedeemOtpSend = (phone) => get(`${replaceUrlVariable(
 export const fetchMembershipRedeem = (phone) => get(`${replaceUrlVariable(api.fetchMembershipRedeemByPhoneNumber, { phone })}`);
 
 export const createUpdateMembershipRedeem = (payload) => post(api.createEditMembershipRedeem, payload);
+
+export const getVerifyToRedeemMembership = (payload) => get(`${replaceUrlVariable(api.membershipOtpSend, payload)}`);
+
+export const verifyOtpForRedeemMembership = (payload) => get(`${replaceUrlVariable(api.verifyOtpForMembershipRedee, payload)}`);

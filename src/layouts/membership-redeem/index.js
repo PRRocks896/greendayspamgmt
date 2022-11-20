@@ -23,13 +23,12 @@ import Redeem from "layouts/membership-redeem/component/redeem";
 
 import { fetchMembershipRedeem } from "service/membership-redeem.service";
 import { showToast } from "utils/helper";
-import { endpoint } from "utils/constant";
 
 function MembershipRedeem() {
   const [redeemDetail, setRedeemDetail] = useState(null);
   const [redeemFormShow, setRedeemFormShow] = useState(false);
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, getValues } = useForm({
     defaultValues: {
       phoneNumber: "",
       otp: "",
@@ -47,6 +46,11 @@ function MembershipRedeem() {
     } catch (error) {
       showToast(error.message, false);
     }
+  }
+
+  const handleAfterRedeemSuccess = () => {
+    setRedeemDetail(null);
+    setRedeemFormShow(false);
   }
 
   return (
@@ -136,6 +140,10 @@ function MembershipRedeem() {
                         </MDTypography>
                         <br />
                         <MDTypography variant="span">
+                          Date: {m(redeemDetail?.customerJoinDate).format('DD/MM/yyyy hh:mm a')}
+                        </MDTypography>
+                        <br/>
+                        <MDTypography variant="span">
                           Bill No: {redeemDetail?.customerBillNo}
                         </MDTypography>
                         <br/>
@@ -156,10 +164,16 @@ function MembershipRedeem() {
                         </MDTypography>
                         <br/>
                         <br/>
-                        <MDButton variant="gradient" color="info" onClick={() => setRedeemFormShow(true)}>Redeem</MDButton>
+                        {parseInt(redeemDetail?.remainingMinutes) > 0 ?
+                          <MDButton variant="gradient" color="info" onClick={() => setRedeemFormShow(true)}>Redeem</MDButton>
+                        : 
+                          <MDTypography variant="h4" style={{color: "red"}}>
+                            Customer Don't have Minutes
+                          </MDTypography> 
+                        }
                       </MDBox>
                       <MDBox>
-                        <img style={{ height: "calc(100vh - 450px)" }} src={`${endpoint}/${redeemDetail.customerPhotoPath}`} alt="customer" />
+                        {/* <img style={{ height: "calc(100vh - 450px)" }} src={`${endpoint}/${redeemDetail.customerPhotoPath}`} alt="customer" /> */}
                       </MDBox>
                     </MDBox>
                     {redeemDetail?.redeemHistoryList.length > 0 ?
@@ -191,7 +205,7 @@ function MembershipRedeem() {
                 : null}
                 {redeemFormShow &&
                   <MDBox mb={2}>
-                    <Redeem detail={redeemDetail} closeRedeemForm={setRedeemFormShow}/>
+                    <Redeem detail={redeemDetail} customerDetail={getValues()} closeRedeemForm={setRedeemFormShow} handleAfterRedeemSuccess={handleAfterRedeemSuccess}/>
                   </MDBox>
                 }
               </MDBox>
