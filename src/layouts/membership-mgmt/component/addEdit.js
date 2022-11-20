@@ -116,7 +116,7 @@ function AddEditMembershipMgmt() {
 
     const sendOtpforExtraHours = async () => {
         try {
-            const response = await sendOtp(JSON.parse(localStorage.getItem("userData")).userId);
+            const response = await sendOtp(JSON.parse(localStorage.getItem("userData")).userId, getValues().hours);
             if (response.status === 200) {
                 setIsVerify(true);
                 showToast(response.message, true);
@@ -382,7 +382,8 @@ function AddEditMembershipMgmt() {
                                                                         key={`membership_plan_list_${index}`}
                                                                         value={membershipPlan.membershipPlanId}
                                                                     >
-                                                                        {membershipPlan.planName} ({membershipPlan.hours} Hr)
+                                                                        {membershipPlan.fullPlanName}
+                                                                        {/* {membershipPlan.planName} ({membershipPlan.hours} Hr) */}
                                                                     </MenuItem>
                                                                 ))}
                                                             </Select>

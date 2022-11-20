@@ -106,7 +106,10 @@ function AddEditBranch() {
                           type="text"
                           value={value}
                           label="Mobile Number"
-                          onChange={onChange}
+                          onChange={(e) => {
+                            onChange(e.target.value.replace(/\D/g, ""))
+                          }}
+                          pattern="[1-9]{1}[0-9]{9}"
                           error={!!error}
                           helperText={error?.message ? error.message : ""}
                           fullWidth

@@ -9,6 +9,9 @@ import { useForm, Controller } from "react-hook-form";
 // @mui material components
 import Icon from "@mui/material/Icon";
 import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -24,11 +27,13 @@ import { getFormData, showToast } from "utils/helper";
 function Redeem(props) {
     const {detail, closeRedeemForm} = props;
     const [selectedImage, setSelectedImage] = useState(null);
+    const [sentOtp, setSentOtp] = useState(false);
     const { handleSubmit, control, setValue } = useForm({
         defaultValues: {
             membershipRedeemId: 0,
             userId: JSON.parse(localStorage.getItem("userData")).userId,
             membershipManagementId: "",
+            billNo: "",
             serviceDetail: "",
             minutes: "",
             therapistName: "",
@@ -56,8 +61,6 @@ function Redeem(props) {
     }, [setValue]);
 
     const handleSave = async (info) => {
-        console.log(info);
-        console.log(getFormData(info));
         try {
             const response = await createUpdateMembershipRedeem(getFormData(info));
             if (response.status === 200) {
@@ -93,6 +96,27 @@ function Redeem(props) {
                         <MDBox>
                             <MDBox mb={2}>
                                 <Controller
+                                    name="billNo"
+                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                        // eslint-disable-next-line
+                                        <MDInput
+                                            type="text"
+                                            value={value}
+                                            label="Bill No"
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={error?.message ? error.message : ""}
+                                            fullWidth
+                                        />
+                                    )}
+                                    control={control}
+                                    rules={{
+                                        required: "Please add Bill No",
+                                    }}
+                                />
+                            </MDBox>
+                            <MDBox mb={2}>
+                                <Controller
                                     name="serviceDetail"
                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                                         // eslint-disable-next-line
@@ -116,16 +140,33 @@ function Redeem(props) {
                                 <Controller
                                     name="minutes"
                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                        <FormControl fullWidth>
+                                            <InputLabel id="selectMinutes">Select Minutes</InputLabel>
+                                            <Select
+                                                style={{ padding: "10px 0px" }}
+                                                labelId="selectMinutes"
+                                                id="minute-select"
+                                                label="Select Minutes"
+                                                value={value}
+                                                onChange={onChange}
+                                                error={!!error}
+                                                helperText={error?.message ? error.message : ""}
+                                            >
+                                                <MenuItem value="60">60</MenuItem>
+                                                <MenuItem value="90">90</MenuItem>
+                                                <MenuItem value="120">120</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                         // eslint-disable-next-line
-                                        <MDInput
-                                            type="text"
-                                            value={value}
-                                            label="Minutes"
-                                            onChange={onChange}
-                                            error={!!error}
-                                            helperText={error?.message ? error.message : ""}
-                                            fullWidth
-                                        />
+                                        // <MDInput
+                                        //     type="text"
+                                        //     value={value}
+                                        //     label="Minutes"
+                                        //     onChange={onChange}
+                                        //     error={!!error}
+                                        //     helperText={error?.message ? error.message : ""}
+                                        //     fullWidth
+                                        // />
                                     )}
                                     control={control}
                                     rules={{
@@ -231,7 +272,7 @@ function Redeem(props) {
                         >
                             Back
                         </MDButton>
-                        <MDButton
+                        {/* <MDButton
                             component="button"
                             variant="gradient"
                             color="info"
@@ -239,6 +280,15 @@ function Redeem(props) {
                             fullWidth
                         >
                             Save
+                        </MDButton> */}
+                        <MDButton
+                            component="button"
+                            variant="gradient"
+                            color="info"
+                            onClick={() => setSentOtp(true)}
+                            fullWidth
+                        >
+                            Get Verify
                         </MDButton>
                     </MDBox>
                 </MDBox>

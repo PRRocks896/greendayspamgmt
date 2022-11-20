@@ -23,7 +23,7 @@ export const api = {
   membershipMgmtList: "/v1/api/membershipManagement/get-membershipManagement-list",
   createMembershipMgmt: "/v1/api/membershipManagement",
   memberhsipMgmtId: "/v1/api/membershipManagement/{{id}}",
-  sendOtpToVerify: "/v1/api/membershipManagement/{{branchId}}",
+  sendOtpToVerify: "/v1/api/membershipManagement//Send-ExtraHour-OTP?branchId={{branchId}}&extraHours={{extraHours}}",
   verifyOtp: "/v1/api/membershipManagement/Verified-ExtraHour-OTP?branchId={{branchId}}&OTP={{otp}}",
   // Paid Mode
   fetchPaidMode: "/v1/api/paidMode/get-paidMode-list",
@@ -35,7 +35,7 @@ export const api = {
   fetchMembershipMembershipMgmtList: "/v1/api/membershipRedeem/get-membershipManagement-list?otp={{otp}}",
   fetchByIdMembershipRedeem: "/v1/api/membershipRedeem/{{id}}",
   createEditMembershipRedeem: "/v1/api/membershipRedeem",
-  fetchMembershipRedeemByPhoneNumber: "/v1/api/membershipRedeem?PhoneNumber={{phoneNumber}}&OTP={{otp}}",
+  fetchMembershipRedeemByPhoneNumber: "/v1/api/membershipRedeem/Detail-By-Phone?Phone={{phone}}",
   sendOtpForMembershipRedeem: "/v1/api/membershipRedeem/MembershipRedeem-otp-send?phone={{phone}}",
   // Employee
   createEmployee: "/v1/api/employee/AddUpdate-Employee-Web", //"/v1/api/employee",
