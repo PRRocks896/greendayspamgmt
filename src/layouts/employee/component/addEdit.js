@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 // Material Dashboard 2 React components
+import MDAvatar from "components/MDAvatar";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
@@ -29,6 +30,11 @@ import { fetchBranchList } from "service/branch.service";
 import { getFormData, showToast, isAdmin, getUserData } from "utils/helper";
 import { endpoint } from "utils/constant";
 
+// Images
+import fingerDefult from "assets/images/svg/fingerprint.svg";
+import fingerSuccess from "assets/images/svg/fingerprintsuccess.svg";
+import fingerFail from "assets/images/svg/fingerprintfail.svg";
+
 function AddEditEmployee() {
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -38,7 +44,8 @@ function AddEditEmployee() {
     const [livePhoto, setLivePhoto] = useState(null);
     const [idProof, setIdProof] = useState(null);
     const [addressPhoto, setAddressPhoto] = useState(null);
-    const { handleSubmit, control, reset, setValue } = useForm({
+    const [ fingerPrintScanned, setFingerPrintScanned ] = useState(false);
+    const { handleSubmit, control, reset, setValue, getValues } = useForm({
         defaultValues: {
             employeeId: 0,
             firstName: "",
@@ -51,6 +58,7 @@ function AddEditEmployee() {
             salary: "",
             idProof: "",
             addressPhoto: "",
+            touchId: "",
             isActive: true,
             userId: getUserData().userId,
         },
@@ -138,9 +146,51 @@ function AddEditEmployee() {
         });
     }, [setValue, setAddressPhoto]);
 
+    const handleTouchId = () => {
+        try {
+            setFingerPrintScanned(false);
+            setValue("touchId", "");
+            const res = window["CaptureFinger"](70, 10);
+            console.log(res);
+            if (res.httpStaus) {
+                if (res.data.ErrorCode === "0") {
+                    setFingerPrintScanned(true);
+                    setValue("touchId", res.data.IsoTemplate);
+                } else {
+                    setFingerPrintScanned(false);
+                    setValue("touchId", "");
+                    alert(res.data.ErrorDescription)
+                }
+            } else {
+                setFingerPrintScanned(false);
+                setValue("touchId", "");
+                alert(res.err);
+            }
+            
+            // For Match finger print
+            // const res = window["MatchFinger"](60, 10, "Rk1SACAyMAAAAADkAAABPAFiAMUAxQEAAAAoIUBpAL+SAEBhAJmFAEBAAOCmAEChAHLzAEDPAM5rAEAvAQe2AEBWAR00AEBLATFBAEBUAD2CAED+AJXsAECOACd5AEBmALICAECQAO1/AEA4AKEIAEAkAKmUAEAcAOOjAEDfAKzjAECPAFV5AECCAED2AEBAATu5AEDzAQBjAEDjAENuAEBSALaUAEBCAK6OAECKAQaTAEAkALkQAEBLARbBAECEASbaAEDpALtkAEBaAT/SAEBOAUHJAED9AHltAEA9ACCAAAAA")
+            // if (res.httpStaus) {
+            //     if (res.data.Status) {
+            //         alert("Finger matched");
+            //     }
+            //     else {
+            //         if (res.data.ErrorCode !== "0") {
+            //             alert(res.data.ErrorDescription);
+            //         }
+            //         else {
+            //             alert("Finger not matched");
+            //         }
+            //     }
+            // }
+        } catch(err) {
+            console.error(err);
+            showToast(err.message, false);
+        }
+    }
+    
     const handleSave = async (info) => {
         try {
-            // console.log(info);
+            console.log(info);
             // if(isAdmin()) {
             //     delete info["cityId"];
             //     delete info["branchId"];
@@ -407,7 +457,7 @@ function AddEditEmployee() {
                                             </MDBox>
                                         </MDBox>
                                     </MDBox>
-                                    <MDBox mb={2} display="grid" gridTemplateColumns="1fr 1fr 1fr" style={{gridGap: "20px"}}>
+                                    <MDBox mb={2} display="grid" gridTemplateColumns="1fr 1fr" style={{gridGap: "20px"}}>
                                         <MDBox>
                                             <InputLabel>Upload Employee Photo</InputLabel>
                                             <br />
@@ -525,6 +575,25 @@ function AddEditEmployee() {
                                                         <img style={{width: "100%", height: "calc(100vh - 250px)" }} src={addressPhoto} alt="customer" />
                                                     </MDBox>
                                                 }
+                                            </MDBox>
+                                        </MDBox>
+                                        <MDBox>
+                                            <InputLabel>Upload Finger Print</InputLabel>
+                                            <br />
+                                            <MDBox mb={2}>
+                                                <MDBox style={{cursor: 'pointer', paddingLeft: '150px'}} onClick={handleTouchId}>
+                                                    {/* {(getValues("touchId") === "") ?
+                                                        <MDAvatar src={fingerDefult} size="xxl"/>
+                                                    : } */}
+                                                    {(getValues("touchId") !== "" && fingerPrintScanned) ?
+                                                        <MDAvatar src={fingerSuccess} size="xxl"/>
+                                                    : (getValues("touchId") !== "" && !fingerPrintScanned) ?
+                                                        <MDAvatar src={fingerFail} size="xxl"/>
+                                                    : <MDAvatar src={fingerDefult} size="xxl"/>}
+                                                    {/* <MDAvatar src={fingerDefult} size="xxl"/> */}
+                                                    {/* <MDAvatar src={fingerSuccess} size="xxl"/> */}
+                                                    {/* <MDAvatar src={fingerFail} size="xxl"/> */}
+                                                </MDBox>
                                             </MDBox>
                                         </MDBox>
                                     </MDBox>
