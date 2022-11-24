@@ -50,5 +50,8 @@ export const api = {
   fetchByIdDailyReport: "/v1/api/dailyReport/{{id}}",
   fetchDailyReportGeneratePDF: "/v1/api/dailyReport/get-dailyReport-generatepdf?BranchId={{branchId}}&Date={{date}}", 
   // Report
-  fetchReportGeneratePDF: "/api/Report/Generate-Report-PDF?BranchId={{branchId}}&FromDate={{fromDate}}&ToDate={{toDate}}"
+  fetchReportGeneratePDF: "/api/Report/Generate-Report-PDF?BranchId={{branchId}}&FromDate={{fromDate}}&ToDate={{toDate}}",
+  // Attendance
+  fetchAttendanceList: "/v1/api/attendance/get-employee-attendance-list",
+  approveAttendance: "/v1/api/attendance"
 };

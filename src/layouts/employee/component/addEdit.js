@@ -151,7 +151,6 @@ function AddEditEmployee() {
             setFingerPrintScanned(false);
             setValue("touchId", "");
             const res = window["CaptureFinger"](70, 10);
-            console.log(res);
             if (res.httpStaus) {
                 if (res.data.ErrorCode === "0") {
                     setFingerPrintScanned(true);
@@ -159,12 +158,12 @@ function AddEditEmployee() {
                 } else {
                     setFingerPrintScanned(false);
                     setValue("touchId", "");
-                    alert(res.data.ErrorDescription)
+                    showToast(res.data.ErrorDescription, false)
                 }
             } else {
                 setFingerPrintScanned(false);
                 setValue("touchId", "");
-                alert(res.err);
+                showToast(res.err, false);
             }
             
             // For Match finger print

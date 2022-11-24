@@ -3,6 +3,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // eslint-disable-next-line
 
+export const convertDate = (passingDate) => {
+  const formattedDate = new Date(passingDate);
+  const fullYear = formattedDate.getFullYear();
+  const month = formattedDate.getMonth() + 1;
+  const date = formattedDate.getDate();
+  const hour = formattedDate.getHours() > 9 ? formattedDate.getHours() : '0' +formattedDate.getHours();
+  const minutes = formattedDate.getMinutes() > 9 ? formattedDate.getMinutes() : '0' + formattedDate.getMinutes();
+  const seconds = formattedDate.getSeconds() > 9 ? formattedDate.getSeconds() : '0' + formattedDate.getSeconds();
+  return `${fullYear}-${month}-${date}T${hour}:${minutes}:${seconds}.000Z`
+}
 export const confirmationBox = (msg) => {
   return window.confirm(msg);
 }

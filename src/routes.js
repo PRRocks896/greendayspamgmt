@@ -23,6 +23,7 @@ const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
 const DailyReport = lazy(() => import("layouts/dailyReport"));
 const Report = lazy(() => import("layouts/report"));
+const Attendance = lazy(() => import("layouts/attendance"));
 
 export const Loading = () => (
   <Box sx={{ 
@@ -122,6 +123,18 @@ export const routes = [
     component: (
       <Suspense fallback={<Loading/>}>
         <AddEditEmployee />
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Attendance",
+    key: "attendance",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/attendance",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <Attendance />
       </Suspense>
     ),
   },
