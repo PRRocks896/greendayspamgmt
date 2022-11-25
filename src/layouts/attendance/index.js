@@ -26,20 +26,22 @@ import {
     fetchAttendanceList,
     approveAttendance
 } from "service/attendance.service";
-
+import { endpoint } from "utils/constant";
 import { showToast, getUserData, convertDate } from "utils/helper";
 
 // Images
 import fingerDefult from "assets/images/svg/fingerprint.svg";
 import fingerSuccess from "assets/images/svg/fingerprintsuccess.svg";
 import fingerFail from "assets/images/svg/fingerprintfail.svg";
+import * as m from "moment";
 
 function Attendance() {
     const [branchData, setBranchData] = useState([]);
     const [scanned, setScanned] = useState(0);
     const [matchData, setMatchData] = useState(null);
-    const [openModal, setOpenModal] = useState(false);
-    const [totalCustomerAttend, setTotalCustomerAttend] = useState();
+    const [openDetailModal, setOpenDetailModal] = useState(false);
+    const [isShowCustomerAttend, setIsShowCustomerAttend] = useState(false);
+    const [totalCustomerAttend, setTotalCustomerAttend] = useState(0);
 
     useEffect(() => {
         try {
@@ -67,10 +69,9 @@ function Attendance() {
                 captureData = captureData.data.IsoTemplate
             }
         }
-        let matchedData;
+        let matchedData = null;
         branchData.forEach((data) => {
             const res = window["VerifyFinger"](captureData, data?.touchId) //window["MatchFinger"](70, 10, data?.touchId);
-            console.log(res)
             if (res.httpStaus) {
                 if (res.data.Status) {
                     matchedData = data;
@@ -78,10 +79,15 @@ function Attendance() {
                 }
             }
         });
-        console.log(matchedData)
         if(matchedData !== null) {
             setScanned(1);
+            setOpenDetailModal(true);
             if(!matchedData.isTimeIn) {
+                // TODO Remove after complete
+                setTimeout(() => {
+                    setOpenDetailModal(false);
+                    setScanned(0)
+                }, 7000);
                 const payload = {
                     employeeId: matchedData?.employeeId,
                     time: convertDate(new Date())
@@ -108,8 +114,7 @@ function Attendance() {
                     showToast(err.message, false);
                 }
             } else {
-                setOpenModal(true);
-                // showToast("", false);
+                setIsShowCustomerAttend(true)
             }
         } else {
             setScanned(2);
@@ -127,8 +132,7 @@ function Attendance() {
             const response = await approveAttendance(payload);
             if (response.status === 200) {
                 showToast(response.message, true);
-                setOpenModal(false)
-                setTotalCustomerAttend(null)
+                
                 const resData = await fetchAttendanceList({
                     isActive: true,
                     searchText: "",
@@ -147,6 +151,10 @@ function Attendance() {
             showToast(err.message, false);
         } finally {
             setScanned(0)
+            setIsShowCustomerAttend(false);
+            setTotalCustomerAttend(null);
+            setOpenDetailModal(false);
+            setMatchData(null)
         }
     }
 
@@ -175,7 +183,7 @@ function Attendance() {
                             </MDBox>
                             <MDBox pt={3} pb={6}>
                                 <MDBox pl={4}>
-                                    <InputLabel>Take Attendance</InputLabel>
+                                    <InputLabel>Take Attendance <b>(Click on Finger Print Image)</b></InputLabel>
                                     <br />
                                     <MDBox style={{cursor: 'pointer', paddingLeft: '150px'}} onClick={handleAttendance}>
                                         {scanned === 0 && <MDAvatar src={fingerDefult} size="xxl"/>}
@@ -183,46 +191,56 @@ function Attendance() {
                                         {scanned === 2 && <MDAvatar src={fingerFail} size="xxl"/>}
                                     </MDBox>
                                 </MDBox>
-                                {/* <DataTable
-                                    table={{ columns, rows: rows?.map((data, index) => {
-                                       return {
-                                        ...data,
-                                        action: (
-                                            <MDBox>
-                                                <MDTypography
-                                                    component="span"
-                                                    onClick={() => handleAttendance(data)}
-                                                    variant="caption"
-                                                    color="text"
-                                                    fontWeight="medium"
-                                                    style={{ cursor: "pointer" }}
-                                                >
-                                                    <Icon fontSize="medium">create</Icon>
-                                                </MDTypography>
-                                            </MDBox>
-                                        )
-                                       } 
-                                    }) }}
-                                    isSorted={true}
-                                    entriesPerPage={false}
-                                    showTotalEntries={false}
-                                    noEndBorder
-                                /> */}
+                                
                             </MDBox>
-                            <Dialog onClose={() => setOpenModal(false)} open={openModal}>
-                                <DialogTitle>How many Customer Attend..?</DialogTitle>
-                                <DialogContent>
-                                <MDInput
-                                    type="text"
-                                    value={totalCustomerAttend}
-                                    label=""
-                                    onChange={(e) => setTotalCustomerAttend(e.target.value)}
-                                    fullWidth
-                                />
+                            {/* Show Employee Detail */}
+                            <Dialog disableEscapeKeyDown open={openDetailModal}>
+                                <DialogTitle>
+                                    <MDTypography variant="h4" style={{textAlign: 'center'}}>
+                                        Employee Detail
+                                    </MDTypography>
+                                </DialogTitle>
+                                <DialogContent style={{textAlign: 'center'}}>
+                                    <Card style={{padding: '0px 100px 30px 100px'}}>
+                                        <MDBox>
+                                            <img style={{borderRadius: '25px', width: '200px', height: 'auto'}} src={`${endpoint}/${matchData?.livePhotoPath}`} alt="Employee"/>
+                                        </MDBox>
+                                        <MDBox>
+                                            <b>Name:</b> {matchData?.firstName} 
+                                        </MDBox>
+                                        <MDBox>
+                                            <b>Phone Number:</b> {matchData?.mobileNumber}
+                                        </MDBox>
+                                        <MDBox>
+                                            <b>Employee Type:</b> {matchData?.employeeTypeName}
+                                        </MDBox>
+                                        <MDBox>
+                                            <b>Date:</b> {m(new Date()).format('yyyy-MM-DD hh:mm a')}
+                                        </MDBox>
+                                        {isShowCustomerAttend &&
+                                            <>
+                                            <MDTypography variant="p">
+                                                <b>How many Customer Attend:</b>
+                                            </MDTypography>
+                                            <MDInput
+                                                type="text"
+                                                value={totalCustomerAttend}
+                                                label=""
+                                                onChange={(e) => setTotalCustomerAttend(e.target.value)}
+                                                fullWidth
+                                            />
+                                            </>
+                                        }
+                                        <MDBox>
+
+                                        </MDBox>
+                                    </Card>
                                 </DialogContent>
                                 <DialogActions>
-                                    <MDButton onClick={() => setOpenModal(false)}>Cancel</MDButton>
-                                    <MDButton onClick={handleCustomerAttend}>Submit</MDButton>
+                                    {/* <MDButton onClick={() => setOpenDetailModal(false)}>Cancel</MDButton> */}
+                                    {isShowCustomerAttend &&
+                                        <MDButton onClick={handleCustomerAttend}>Submit</MDButton>
+                                    }
                                 </DialogActions>
                             </Dialog>
                         </Card>

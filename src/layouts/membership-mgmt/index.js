@@ -169,9 +169,10 @@ function MembershipMgmt() {
                       ),
                     };}) 
                   }}
+                  canSearch={true}
                   isSorted={true}
                   entriesPerPage={false}
-                  showTotalEntries={false}
+                  showTotalEntries={true}
                   noEndBorder
                 />
               </MDBox>

@@ -91,10 +91,11 @@ function Projects() {
       <MDBox>
         <DataTable
           table={{ columns, rows }}
-          showTotalEntries={false}
-          isSorted={false}
-          noEndBorder
+          canSearch={true}
+          isSorted={true}
           entriesPerPage={false}
+          showTotalEntries={true}
+          noEndBorder
         />
       </MDBox>
     </Card>

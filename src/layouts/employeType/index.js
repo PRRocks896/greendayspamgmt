@@ -16,14 +16,14 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
-import { fetchPaidMode } from "service/paid.service";
+import { fetchEmployeeTypeList } from "service/employeeType.service";
 import { showToast } from "utils/helper";
 
-function Paid() {
+function EmployeeType() {
   const [rows, setRows] = useState([]);
   const columns = [
-    { Header: "Id", accessor: "paidModeId", width: "15%", align: "left" },
-    { Header: "mode", accessor: "mode", align: "left" },
+    { Header: "Sr No", accessor: "index", width: "15%", align: "left" },
+    { Header: "Name", accessor: "typeName", align: "left" },
     { Header: "action", accessor: "action", align: "center" },
   ];
 
@@ -31,8 +31,8 @@ function Paid() {
 
   useEffect(() => {
     try {
-      async function getPaidMode() {
-        const response = await fetchPaidMode({
+      async function getEmployeeTypeList() {
+        const response = await fetchEmployeeTypeList({
           searchText: "",
           isActive: true,
           page: 0,
@@ -42,10 +42,11 @@ function Paid() {
           const updatedData = response.resultObject.data?.map((data, index) => {
             return {
               ...data,
+              index: (index+1),
               action: (
                 <MDTypography
                   component="span"
-                  onClick={() => navigate(`/paidmode/edit/${data.paidModeId}`)}
+                  onClick={() => navigate(`/employeetype/edit/${data.id}`)}
                   variant="caption"
                   color="text"
                   fontWeight="medium"
@@ -60,7 +61,7 @@ function Paid() {
           setRows(updatedData);
         }
       }
-      getPaidMode();
+      getEmployeeTypeList();
     } catch (err) {
       showToast(err.message, false);
     }
@@ -91,7 +92,7 @@ function Paid() {
                 <MDTypography
                   variant="h6"
                   component={Link}
-                  to="/paidmode/add"
+                  to="/employeetype/add"
                   borderRadius="lg"
                   color="white"
                   textAlign="end"
@@ -118,4 +119,4 @@ function Paid() {
   );
 }
 
-export default Paid;
+export default EmployeeType;

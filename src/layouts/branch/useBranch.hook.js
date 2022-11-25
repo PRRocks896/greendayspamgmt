@@ -12,7 +12,7 @@ import { showToast, confirmationBox } from "utils/helper";
 export const useBranch = () => {
     const [rows, setRows] = useState([]);
     const columns = [
-        { Header: "Id", accessor: "branchId", width: "15%", align: "left" },
+        { Header: "Sr No", accessor: "branchId", width: "15%", align: "left" },
         { Header: "branchName", accessor: "branchName", align: "left" },
         { Header: "cityName", accessor: "cityName", align: "center" },
         { Header: "status", accessor: "isActive", align: "center"},

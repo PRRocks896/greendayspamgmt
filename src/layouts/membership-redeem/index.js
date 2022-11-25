@@ -192,9 +192,10 @@ function MembershipRedeem() {
                               { Header: "managerName", accessor: "managerName", align: "center" },
                               { Header: "date", accessor: "date", align:"center"}
                             ], rows: redeemDetail?.redeemHistoryList?.map((res) => ({...res, date: m(res.date).format("DD/MM/yyyy hh:mm a")})) }}
-                            isSorted={false}
+                            canSearch={true}
+                            isSorted={true}
                             entriesPerPage={false}
-                            showTotalEntries={false}
+                            showTotalEntries={true}
                             noEndBorder
                           />
                         </MDBox>

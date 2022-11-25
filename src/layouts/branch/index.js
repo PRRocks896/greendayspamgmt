@@ -74,6 +74,7 @@ function Branch() {
                   table={{ columns, rows: rows?.map((data, index) => {
                     return {
                       ...data,
+                      branchId: (index + 1),
                       isActive: (
                         <Switch checked={data?.isActive} onChange={(e) => handleChangeStatus(e.target.checked, data.branchId)} />
                       ),
@@ -103,9 +104,10 @@ function Branch() {
                       ),
                     };
                   }) }}
+                  canSearch={true}
                   isSorted={true}
                   entriesPerPage={false}
-                  showTotalEntries={false}
+                  showTotalEntries={true}
                   noEndBorder
                 />
               </MDBox>

@@ -105,9 +105,10 @@ function MembershipPlan() {
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
+                  canSearch={true}
                   isSorted={true}
                   entriesPerPage={false}
-                  showTotalEntries={false}
+                  showTotalEntries={true}
                   noEndBorder
                 />
               </MDBox>

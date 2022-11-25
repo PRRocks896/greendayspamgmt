@@ -27,6 +27,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { createEmployee, updateEmployee, fetchByIdEmployee } from "service/employee.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
+import { fetchEmployeeTypeDropDown } from "service/employeeType.service";
 import { getFormData, showToast, isAdmin, getUserData } from "utils/helper";
 import { endpoint } from "utils/constant";
 
@@ -39,6 +40,7 @@ function AddEditEmployee() {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const [id, setId] = useState(null);
+    const [employeeTypeList, setEmployeeList] = useState([]);
     const [cityList, setCityList] = useState([]);
     const [branchList, setBranchList] = useState([]);
     const [livePhoto, setLivePhoto] = useState(null);
@@ -52,6 +54,7 @@ function AddEditEmployee() {
             mobileNumber: "",
             fatherName: "",
             fatherMobileNumber: "",
+            employeeTypeId: null,
             cityId: isAdmin() ? null : getUserData().cityId ,
             branchId: isAdmin() ? null :  getUserData().userId,
             livePhoto: "",
@@ -67,8 +70,9 @@ function AddEditEmployee() {
     useEffect(() => {
         try {
             async function fetchCity() {
-                const resCity = await fetchCityList();
+                const [resCity, resEmployeeType] = await Promise.all([fetchCityList(), fetchEmployeeTypeDropDown()])
                 setCityList(resCity.resultObject);
+                setEmployeeList(resEmployeeType.resultObject);
                 // setBranchList(resBranch.resultObject);
             }
             fetchCity();
@@ -165,22 +169,6 @@ function AddEditEmployee() {
                 setValue("touchId", "");
                 showToast(res.err, false);
             }
-            
-            // For Match finger print
-            // const res = window["MatchFinger"](60, 10, "Rk1SACAyMAAAAADkAAABPAFiAMUAxQEAAAAoIUBpAL+SAEBhAJmFAEBAAOCmAEChAHLzAEDPAM5rAEAvAQe2AEBWAR00AEBLATFBAEBUAD2CAED+AJXsAECOACd5AEBmALICAECQAO1/AEA4AKEIAEAkAKmUAEAcAOOjAEDfAKzjAECPAFV5AECCAED2AEBAATu5AEDzAQBjAEDjAENuAEBSALaUAEBCAK6OAECKAQaTAEAkALkQAEBLARbBAECEASbaAEDpALtkAEBaAT/SAEBOAUHJAED9AHltAEA9ACCAAAAA")
-            // if (res.httpStaus) {
-            //     if (res.data.Status) {
-            //         alert("Finger matched");
-            //     }
-            //     else {
-            //         if (res.data.ErrorCode !== "0") {
-            //             alert(res.data.ErrorDescription);
-            //         }
-            //         else {
-            //             alert("Finger not matched");
-            //         }
-            //     }
-            // }
         } catch(err) {
             console.error(err);
             showToast(err.message, false);
@@ -253,6 +241,36 @@ function AddEditEmployee() {
                             </MDBox>
                             <MDBox pt={3}>
                                 <MDBox component="form" role="form" padding="0px 20px">
+                                    <MDBox mb={2}>
+                                        <Controller
+                                            name="employeeTypeId"
+                                            render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                <FormControl fullWidth>
+                                                    <InputLabel id="selectEmployeeType">Select Employee Type</InputLabel>
+                                                    <Select
+                                                        style={{ padding: "10px 0px" }}
+                                                        labelId="selectEmployeeType"
+                                                        id="Employee-type-select"
+                                                        label="Select Employee Type"
+                                                        value={value}
+                                                        onChange={onChange}
+                                                        error={!!error}
+                                                        helperText={error?.message ? error.message : ""}
+                                                    >
+                                                        {employeeTypeList?.map((type, index) => (
+                                                            <MenuItem key={`employee_type_list_${index}`} value={type.value}>
+                                                                {type.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            )}
+                                            control={control}
+                                            rules={{
+                                                required: "Please select Employee Type",
+                                            }}
+                                        />
+                                    </MDBox>
                                     <MDBox display="grid" gridTemplateColumns="1fr 1fr">
                                         <MDBox>
                                             <MDBox mb={2}>

@@ -53,5 +53,10 @@ export const api = {
   fetchReportGeneratePDF: "/api/Report/Generate-Report-PDF?BranchId={{branchId}}&FromDate={{fromDate}}&ToDate={{toDate}}",
   // Attendance
   fetchAttendanceList: "/v1/api/attendance/get-employee-attendance-list",
-  approveAttendance: "/v1/api/attendance"
+  approveAttendance: "/v1/api/attendance",
+  // Employee Type
+  fetchEmployeeTypeList: "/v1/api/employeeType/get-employeeType-list",
+  createUpdateEmployeeType: "/v1/api/employeeType",
+  fetchByIdEmployeeType: "/v1/api/employeeType/{{id}}",
+  fetchEmployeeTypeDropDown: "/v1/api/employeeType/get-employeeType-list-dropdown"
 };

@@ -17,6 +17,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
+
 import { fetchEmployee } from "service/employee.service";
 import { statusChange, deleteRecord } from "service/user.service";
 import { showToast, isAdmin, getUserData, confirmationBox } from "utils/helper";
@@ -189,9 +190,10 @@ function Employee() {
                       ),
                     };}) 
                   }}
+                  canSearch={true}
                   isSorted={true}
                   entriesPerPage={false}
-                  showTotalEntries={false}
+                  showTotalEntries={true}
                   noEndBorder
                 />
               </MDBox>

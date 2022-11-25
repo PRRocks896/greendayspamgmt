@@ -12,6 +12,7 @@ const AddEditBranch = lazy(() => import("layouts/branch/component/addEdit"));
 const AddEditMembershipPlan = lazy(() => import("layouts/membershipplan/component/addEdit"));
 const AddEditMembershipMgmt = lazy(() => import("layouts/membership-mgmt/component/addEdit"));
 const AddEditPaidMode = lazy(() => import("layouts/paid/component/addEdit"));
+const AddEditEmployeeType = lazy(() => import("layouts/employeType/component/addEdit"));
 const AddEditEmployee = lazy(() => import("layouts/employee/component/addEdit"));
 const AddEditDailyReport = lazy(() => import("layouts/dailyReport/component/addEdit"));
 const Branch = lazy(() => import("layouts/branch"));
@@ -21,6 +22,7 @@ const MembershipPlan = lazy(() => import("layouts/membershipplan"));
 const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
 const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
+const EmployeeType = lazy(() => import("layouts/employeType"));
 const DailyReport = lazy(() => import("layouts/dailyReport"));
 const Report = lazy(() => import("layouts/report"));
 const Attendance = lazy(() => import("layouts/attendance"));
@@ -304,6 +306,54 @@ export const routes = [
     component: (
       <Suspense fallback={<Loading/>}>
         <AddEditPaidMode/>
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Paid Mode",
+    key: "paidmode",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/paidmode/:mode/:id",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditPaidMode/>
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Employee Type",
+    key: "employeetype",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/employeetype",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <EmployeeType />
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Employee Type",
+    key: "employeetype",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/employeetype/:mode",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditEmployeeType/>
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Employee Type",
+    key: "employeetype",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/employeetype/:mode/:id",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditEmployeeType/>
       </Suspense>
     ),
   },
