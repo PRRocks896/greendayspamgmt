@@ -58,7 +58,7 @@ function AddEditEmployee() {
             cityId: isAdmin() ? null : getUserData().cityId ,
             branchId: isAdmin() ? null :  getUserData().userId,
             livePhoto: "",
-            salary: "",
+            salary: 0,
             idProof: "",
             addressPhoto: "",
             touchId: "",
@@ -461,10 +461,6 @@ function AddEditEmployee() {
                                                     control={control}
                                                     rules={{
                                                         required: "Please add Salary",
-                                                        minLength: {
-                                                            value: 6,
-                                                            message: "Cannot be smaller than 6 characters",
-                                                        },
                                                         pattern: {
                                                             value: /^[0-9]/,
                                                             message: "Enter only digit",
