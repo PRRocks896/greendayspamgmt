@@ -58,5 +58,8 @@ export const api = {
   fetchEmployeeTypeList: "/v1/api/employeeType/get-employeeType-list",
   createUpdateEmployeeType: "/v1/api/employeeType",
   fetchByIdEmployeeType: "/v1/api/employeeType/{{id}}",
-  fetchEmployeeTypeDropDown: "/v1/api/employeeType/get-employeeType-list-dropdown"
+  fetchEmployeeTypeDropDown: "/v1/api/employeeType/get-employeeType-list-dropdown",
+  // Advance Salary
+  fetchAdvanceSalaryList: "/v1/api/advanceSalary/get-advanceSalary-list",
+  createAdvanceSalary: "/v1/api/advanceSalary"
 };

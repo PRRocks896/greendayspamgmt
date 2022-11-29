@@ -15,6 +15,7 @@ const AddEditPaidMode = lazy(() => import("layouts/paid/component/addEdit"));
 const AddEditEmployeeType = lazy(() => import("layouts/employeType/component/addEdit"));
 const AddEditEmployee = lazy(() => import("layouts/employee/component/addEdit"));
 const AddEditDailyReport = lazy(() => import("layouts/dailyReport/component/addEdit"));
+const AddAdvanceSalary = lazy(() => import("layouts/advanceSalary/components/add"));
 const Branch = lazy(() => import("layouts/branch"));
 const Dashboard = lazy(() => import("layouts/dashboard"));
 const Employee = lazy(() => import("layouts/employee"));
@@ -26,6 +27,7 @@ const EmployeeType = lazy(() => import("layouts/employeType"));
 const DailyReport = lazy(() => import("layouts/dailyReport"));
 const Report = lazy(() => import("layouts/report"));
 const Attendance = lazy(() => import("layouts/attendance"));
+const AdvanceSalary = lazy(() => import("layouts/advanceSalary"));
 
 export const Loading = () => (
   <Box sx={{ 
@@ -137,6 +139,30 @@ export const routes = [
     component: (
       <Suspense fallback={<Loading/>}>
         <Attendance />
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Advance Salary",
+    key: "advanceSalary",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/advanceSalary",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AdvanceSalary/>
+      </Suspense>
+    ),
+  },
+  {
+    type: "subComponent",
+    name: "Advance Salary",
+    key: "advanceSalary",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/advanceSalary/:mode",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddAdvanceSalary />
       </Suspense>
     ),
   },
