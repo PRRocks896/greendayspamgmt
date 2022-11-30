@@ -43,11 +43,11 @@ function AddEditDailyReport() {
             totalStaffPresent: "",
             totalCustomer: "",
             totalMemberGuest: "",
-            openingBalance: "",
-            cashSale: "",
-            cardSale: "",
-            upiPayment: "",
-            dealsAppSale: "",
+            openingBalance: "0",
+            cashSale: "0",
+            cardSale: "0",
+            upiPayment: "0",
+            dealsAppSale: "0",
             cashInCoverDetail: {
                 twoThousand: 0,
                 fiveHundred: 0,
@@ -57,17 +57,17 @@ function AddEditDailyReport() {
             },
             expenseList: [
                 {
-                    amount: 0,
+                    amount: "0",
                     description: ""
                 }
             ],
-            totalSales: "",
-            tipsCard: "",
-            totalCard: "",
-            totalCash: "",
-            cashInCover: "",
-            nextDayCash: "",
-            salonCustomerCash: "",
+            totalSales: "0",
+            tipsCard: "0",
+            totalCard: "0",
+            totalCash: "0",
+            cashInCover: "0",
+            nextDayCash: "0",
+            salonCustomerCash: "0",
             userId: isAdmin() ? null : getUserData().userId,
         }
     });
@@ -103,9 +103,10 @@ function AddEditDailyReport() {
         }
     }, [setBranchList]);
 
-    const cashCounts = Object.entries(getValues("cashInCoverDetail")).map(([key, value]) => ({key,value}));
-
-    useEffect(() => {
+    // const cashCounts = Object.entries(getValues("cashInCoverDetail")).map(([key, value]) => ({key,value}));
+    
+    const cashInCoverCallback = () => {
+        const cashCounts = Object.entries(getValues("cashInCoverDetail")).map(([key, value]) => ({key,value}));
         let sum = 0;
         cashCounts.forEach(res => {
             switch(res.key) {
@@ -129,7 +130,38 @@ function AddEditDailyReport() {
             }
         });
         setValue("cashInCover", sum);
-    }, [cashCounts, setValue]);
+        return sum;
+    }
+
+    // const cashInCoverCallback = useCallback(() => {
+
+    // }, [getValues('cashInCoverDetail')])
+
+    // useEffect(() => {
+    //     let sum = 0;
+    //     cashCounts.forEach(res => {
+    //         switch(res.key) {
+    //             case "twoThousand": 
+    //                 sum = sum + (2000 * parseInt(res.value));
+    //                 break;
+    //             case "fiveHundred": 
+    //                 sum = sum + (500 * parseInt(res.value));
+    //                 break;
+    //             case "twoHundred": 
+    //                 sum = sum + (200 * parseInt(res.value));
+    //                 break;
+    //             case "oneHundred": 
+    //                 sum = sum + (100 * parseInt(res.value));
+    //                 break;
+    //             case "fifty": 
+    //                 sum = sum + (50 * parseInt(res.value));
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //     });
+    //     setValue("cashInCover", sum);
+    // }, [cashCounts, setValue]);
 
     const length = expenseListControls.fields.length;
     let totalCashSalePlusOpeningBalance = 0;
@@ -166,7 +198,7 @@ function AddEditDailyReport() {
     }
 
     const handleTotalCard = () => {
-        const totalCard = (parseInt(getValues("tipsCard")) * 25) / 100;
+        const totalCard = parseInt(getValues("tipsCard")) - ((parseInt(getValues("tipsCard")) * 25) / 100);
         setValue("totalCard", totalCard)
         handleTotalCash();
     }
@@ -191,7 +223,7 @@ function AddEditDailyReport() {
 
     const addExpenseField = () => {
         expenseListControls.append({
-            amount: "",
+            amount: 0,
             description: ""
         });
     }
@@ -637,7 +669,7 @@ function AddEditDailyReport() {
                                                         <MDInput
                                                             type="text"
                                                             value={value}
-                                                            label="25% Paid to Therapist"
+                                                            label="After 25% Paid to Therapist"
                                                             onChange={onChange}
                                                             error={!!error}
                                                             helperText={error?.message ? error.message : ""}
@@ -750,10 +782,21 @@ function AddEditDailyReport() {
                                                 />
                                             </MDBox>
                                             <MDBox mb={2}>
+                                                <MDInput
+                                                    type="text"
+                                                    value={cashInCoverCallback()}
+                                                    label="Cash In Cover"
+                                                    fullWidth
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    disabled
+                                                />
+                                            </MDBox>
+                                            {/* <MDBox mb={2}>
                                                 <Controller
                                                     name="cashInCover"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                                        // eslint-disable-next-line
                                                         <MDInput
                                                             type="text"
                                                             value={value}
@@ -777,7 +820,7 @@ function AddEditDailyReport() {
                                                         },
                                                     }}
                                                 />
-                                            </MDBox>
+                                            </MDBox> */}
                                             <MDBox mb={2}>
                                                 <Controller
                                                     name="salonCustomerCash"
@@ -838,9 +881,9 @@ function AddEditDailyReport() {
                                                                 />
                                                             )}
                                                             control={control}
-                                                            rules={{
-                                                                required: "Please Add Description",
-                                                            }}
+                                                            // rules={{
+                                                            //     required: "Please Add Description",
+                                                            // }}
                                                         />
                                                         <Controller
                                                             name={`expenseList.${index}.amount`}
@@ -858,7 +901,7 @@ function AddEditDailyReport() {
                                                             )}
                                                             control={control}
                                                             rules={{
-                                                                required: "Please Add Amount",
+                                                                // required: "Please Add Amount",
                                                                 pattern: {
                                                                     value: /^[0-9]/,
                                                                     message: "Enter only digit",

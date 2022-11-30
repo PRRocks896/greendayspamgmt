@@ -258,6 +258,10 @@ export const routes = [
     ),
   },
   {
+    type: "title",
+    title: "Reports"
+  },
+  {
     type: "divider",
   },
   {
