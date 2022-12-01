@@ -63,7 +63,6 @@ function Attendance() {
 
     const handleAttendance = async () => {
         const isAtteched = window["GetMFS100Info"]();
-        console.log(isAtteched);
         if(isAtteched.httpStaus && isAtteched.data.ErrorCode === "0") {
             setScanned(0);
             let captureData = window["CaptureFinger"](70, 10);
@@ -107,10 +106,10 @@ function Attendance() {
                             if (resData.status === 200 && resData.resultObject?.data?.length > 0) {
                                 setBranchData(resData.resultObject.data);
                             } else {
-                                setOpenDetailModal(false);
                                 showToast(resData.message, false);
                             }
                         } else {
+                            setOpenDetailModal(false);
                             showToast(response.message, false);
                         }
                     } catch(err) {

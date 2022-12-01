@@ -153,7 +153,7 @@ function AddEditEmployee() {
     const handleTouchId = () => {
         try {
             const isAtteched = window["GetMFS100Info"]();
-            if(isAtteched.httpStaus) {
+            if(isAtteched.httpStaus && isAtteched.data.ErrorCode === "0") {
                 setFingerPrintScanned(false);
                 setValue("touchId", "");
                 const res = window["CaptureFinger"](70, 10);
