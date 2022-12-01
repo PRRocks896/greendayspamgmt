@@ -58,7 +58,7 @@ function AddEditEmployee() {
             cityId: isAdmin() ? null : getUserData().cityId ,
             branchId: isAdmin() ? null :  getUserData().userId,
             livePhoto: "",
-            salary: 0,
+            salary: null,
             idProof: "",
             addressPhoto: "",
             touchId: "",
@@ -177,11 +177,6 @@ function AddEditEmployee() {
     
     const handleSave = async (info) => {
         try {
-            console.log(info);
-            // if(isAdmin()) {
-            //     delete info["cityId"];
-            //     delete info["branchId"];
-            // }
             if(id === null) {
                 const response = await createEmployee(getFormData(info));
                 if (response.status === 200) {

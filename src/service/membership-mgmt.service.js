@@ -12,3 +12,7 @@ export const fetchByIdMembershipMgmt = (id) =>
 export const sendOtp = (branchId, extraHours) => get(`${replaceUrlVariable(api.sendOtpToVerify, { branchId, extraHours })}`);
 
 export const verifyOtp = (branchId, otp) => get(`${replaceUrlVariable(api.verifyOtp, {branchId, otp})}`);
+
+export const sendOtpSave = (payload) => get(`${replaceUrlVariable(api.sendOtpToSave, payload)}`);
+
+export const verifyOtpSave = (payload) => get(`${replaceUrlVariable(api.verifyOtpSave, payload)}`);

@@ -25,6 +25,8 @@ export const api = {
   memberhsipMgmtId: "/v1/api/membershipManagement/{{id}}",
   sendOtpToVerify: "/v1/api/membershipManagement//Send-ExtraHour-OTP?branchId={{branchId}}&extraHours={{extraHours}}",
   verifyOtp: "/v1/api/membershipManagement/Verified-ExtraHour-OTP?branchId={{branchId}}&OTP={{otp}}",
+  sendOtpToSave: "/v1/api/membershipManagement/Send-Membership-OTP?PhoneNumber={{phoneNumber}}&branchId={{branchId}}",
+  verifyOtpSave: "/v1/api/membershipManagement/Verified-Membership-OTP?PhoneNumber={{phoneNumber}}&OTP={{otp}}",
   // Paid Mode
   fetchPaidMode: "/v1/api/paidMode/get-paidMode-list",
   createUpdatePaidMode: "/v1/api/paidMode/addUpdate-PaidMode",

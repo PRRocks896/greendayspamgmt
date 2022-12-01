@@ -27,7 +27,9 @@ import {
     createMembershipMgmt, 
     fetchByIdMembershipMgmt, 
     sendOtp,
-    verifyOtp
+    verifyOtp,
+    sendOtpSave,
+    verifyOtpSave
 } from "service/membership-mgmt.service";
 import { fetchCityList } from "service/city.service";
 import { fetchBranchList } from "service/branch.service";
@@ -46,6 +48,8 @@ function AddEditMembershipMgmt() {
     const [paidMode, setPaidMode] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const [otp, setOtp] = useState(null);
+    const [isSaveVerify, setIsSaveVerify] = useState(false);
+    // const [isSaveVerified, setIsSaveVerified] = useState(false);
     const [isVerify, setIsVerify] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
     const [disableBtn, setDisableBtn] = useState(false);
@@ -63,6 +67,7 @@ function AddEditMembershipMgmt() {
             managerName: "",
             billNo: "",
             customerPhoto: "",
+            validity: null,
             userId: getUserData().userId,
         },
     });
@@ -114,9 +119,47 @@ function AddEditMembershipMgmt() {
         }
     }, [id, reset]);
 
+    const sendOtpForSave = async (info) => {
+        try {
+            const response = await sendOtpSave({phoneNumber: info.phoneNumber, branchId: getUserData().userId});
+            if(response.status === 200) {
+                setIsSaveVerify(true);
+                showToast(response.message, true);
+            } else {
+                setIsSaveVerify(false);
+                showToast(response.message, false);
+            }
+        } catch(err) {
+            setIsSaveVerify(false);
+            showToast(err.message, false);
+        }
+    }
+
+    const verifyOtpForSave = async (info) => {
+        try {
+            const response = await verifyOtpSave({phoneNumber: info.phoneNumber, otp: otp});
+            if(response.status === 200) {
+                setIsSaveVerify(false);
+                // setIsSaveVerified(true);
+                // showToast(response.message, true);
+                handleSave(info);
+            } else {
+                setIsSaveVerify(true);
+                // setIsSaveVerified(false);
+                showToast(response.message, false);
+            }
+        } catch(err) {
+            setIsSaveVerify(true);
+            // setIsSaveVerified(false);
+            showToast(err.message, false);
+        } finally {
+            setOtp(null);
+        }
+    }
+
     const sendOtpforExtraHours = async () => {
         try {
-            const response = await sendOtp(JSON.parse(localStorage.getItem("userData")).userId, getValues().hours);
+            const response = await sendOtp(getUserData().userId, getValues().hours);
             if (response.status === 200) {
                 setIsVerify(true);
                 showToast(response.message, true);
@@ -147,6 +190,8 @@ function AddEditMembershipMgmt() {
             setIsVerify(true);
             setIsVerified(false);
             showToast(err.message, false);
+        } finally {
+            setOtp(null);
         }
     }
 
@@ -213,6 +258,42 @@ function AddEditMembershipMgmt() {
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={3}>
+                                {isSaveVerify ? 
+                                <MDBox px={2}>  
+                                    <MDBox display="block">
+                                        <MDInput
+                                            type="text"
+                                            value={otp}
+                                            label="Enter OTP"
+                                            minLength={6}
+                                            maxLength={6}
+                                            onChange={(e) => setOtp(e.target.value)}
+                                        />
+                                    </MDBox>
+                                    <MDBox mt={4} mb={1} style={{ display: "flex" }}>
+                                        <MDButton
+                                            component="button"
+                                            variant="gradient"
+                                            color="info"
+                                            onClick={() => setIsSaveVerify(false)}
+                                            style={{ marginRight: "8px" }}
+                                            fullWidth
+                                        >
+                                            Back
+                                        </MDButton>
+                                        <MDButton
+                                            component="button"
+                                            variant="gradient"
+                                            color="info"
+                                            onClick={handleSubmit(verifyOtpForSave)}
+                                            fullWidth
+                                            disabled={disableBtn}
+                                        >
+                                            Verify OTP
+                                        </MDButton>
+                                    </MDBox>
+                                </MDBox>
+                                :
                                 <MDBox component="form" role="form" padding="0px 20px">
                                     <MDBox display="grid" gridTemplateColumns="2fr 1fr">
                                         <MDBox>
@@ -493,6 +574,33 @@ function AddEditMembershipMgmt() {
                                             </MDBox>
                                             <MDBox mb={2}>
                                                 <Controller
+                                                    name="validity"
+                                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                                        <FormControl fullWidth>
+                                                            <InputLabel id="selectValidity">Select Validity</InputLabel>
+                                                            <Select
+                                                                style={{ padding: "10px 0px" }}
+                                                                labelId="selectValidity"
+                                                                id="validity-select"
+                                                                label="Select Validity"
+                                                                value={value}
+                                                                onChange={onChange}
+                                                                error={!!error}
+                                                                helperText={error?.message ? error.message : ""}
+                                                            >
+                                                                <MenuItem value={6}>6 Months</MenuItem>
+                                                                <MenuItem value={12}>1 Year</MenuItem>
+                                                            </Select>
+                                                        </FormControl>
+                                                    )}
+                                                    control={control}
+                                                    rules={{
+                                                        required: "Please select Validity",
+                                                    }}
+                                                />
+                                            </MDBox>
+                                            <MDBox mb={2}>
+                                                <Controller
                                                     name="paidBy"
                                                     render={({ field: { onChange, value }, fieldState: { error } }) => (
                                                         <FormControl fullWidth>
@@ -565,7 +673,7 @@ function AddEditMembershipMgmt() {
                                             </MDBox>
                                         </MDBox>
                                         <MDBox mb={2}>
-                                            <InputLabel style={{ paddingLeft: "18px" }}>Upload Customer Photo</InputLabel>
+                                            <InputLabel style={{ paddingLeft: "18px" }}>Upload Bill Photo</InputLabel>
                                             <br />
                                             <MDBox mb={2} style={{
                                                 marginLeft: "20px",
@@ -601,7 +709,7 @@ function AddEditMembershipMgmt() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setSelectedImage(null)}> delete</Icon>}
-                                                        <img style={{ height: "calc(100vh - 100px)" }} src={selectedImage} alt="customer" />
+                                                        <img style={{ height: "calc(100vh - 300px)", width: "250px" }} src={selectedImage} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -622,7 +730,7 @@ function AddEditMembershipMgmt() {
                                             component="button"
                                             variant="gradient"
                                             color="info"
-                                            onClick={handleSubmit(handleSave)}
+                                            onClick={handleSubmit(sendOtpForSave)}
                                             fullWidth
                                             disabled={disableBtn}
                                         >
@@ -630,6 +738,7 @@ function AddEditMembershipMgmt() {
                                         </MDButton>
                                     </MDBox>
                                 </MDBox>
+                                }
                             </MDBox>
                         </Card>
                     </Grid>

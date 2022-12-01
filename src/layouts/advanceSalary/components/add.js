@@ -37,7 +37,7 @@ function AddAdvanceSalary() {
         defaultValues: {
             userId: getUserData().userId,
             employeeId: null,
-            salary: 0,
+            salary: null,
             salaryGivenDate: m().format("yyy-MM-DD")
         },
     });

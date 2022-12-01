@@ -7,7 +7,7 @@ export const convertDate = (passingDate) => {
   const formattedDate = new Date(passingDate);
   const fullYear = formattedDate.getFullYear();
   const month = formattedDate.getMonth() + 1;
-  const date = formattedDate.getDate();
+  const date = formattedDate.getDate() > 9 ? formattedDate.getDate() : '0' +formattedDate.getDate() ;
   const hour = formattedDate.getHours() > 9 ? formattedDate.getHours() : '0' +formattedDate.getHours();
   const minutes = formattedDate.getMinutes() > 9 ? formattedDate.getMinutes() : '0' + formattedDate.getMinutes();
   const seconds = formattedDate.getSeconds() > 9 ? formattedDate.getSeconds() : '0' + formattedDate.getSeconds();
