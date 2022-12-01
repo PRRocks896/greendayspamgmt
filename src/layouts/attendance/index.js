@@ -62,63 +62,69 @@ function Attendance() {
     }, []);
 
     const handleAttendance = async () => {
-        setScanned(0);
-        let captureData = window["CaptureFinger"](70, 10);
-        if (captureData.httpStaus) {
-            if (captureData.data.ErrorCode === "0") {
-                captureData = captureData.data.IsoTemplate
-            }
-        }
-        let matchedData = null;
-        branchData.forEach((data) => {
-            const res = window["VerifyFinger"](captureData, data?.touchId) //window["MatchFinger"](70, 10, data?.touchId);
-            if (res.httpStaus) {
-                if (res.data.Status) {
-                    matchedData = data;
-                    setMatchData(data)
+        const isAtteched = window["GetMFS100Info"]();
+        if(isAtteched.httpStaus) {
+            setScanned(0);
+            let captureData = window["CaptureFinger"](70, 10);
+            if (captureData.httpStaus) {
+                if (captureData.data.ErrorCode === "0") {
+                    captureData = captureData.data.IsoTemplate
                 }
             }
-        });
-        if(matchedData !== null) {
-            setScanned(1);
-            setOpenDetailModal(true);
-            if(!matchedData.isTimeIn) {
-                // TODO Remove after complete
-                setTimeout(() => {
-                    setOpenDetailModal(false);
-                    setScanned(0)
-                }, 7000);
-                const payload = {
-                    employeeId: matchedData?.employeeId,
-                    time: convertDate(new Date())
-                }
-                try {
-                    const response = await approveAttendance(payload);
-                    if (response.status === 200) {
-                        showToast(response.message, true);
-                        const resData = await fetchAttendanceList({
-                            isActive: true,
-                            searchText: "",
-                            branchId: getUserData()?.userId
-                        });
-                        if (resData.status === 200 && resData.resultObject?.data?.length > 0) {
-                            setBranchData(resData.resultObject.data);
-                        } else {
-                            showToast(resData.message, false);
-                        }
-                    } else {
-                        showToast(response.message, false);
+            let matchedData = null;
+            branchData.forEach((data) => {
+                const res = window["VerifyFinger"](captureData, data?.touchId) //window["MatchFinger"](70, 10, data?.touchId);
+                if (res.httpStaus) {
+                    if (res.data.Status) {
+                        matchedData = data;
+                        setMatchData(data)
                     }
-                } catch(err) {
-                    console.error(err);
-                    showToast(err.message, false);
+                }
+            });
+            if(matchedData !== null) {
+                setScanned(1);
+                setOpenDetailModal(true);
+                if(!matchedData.isTimeIn) {
+                    // TODO Remove after complete
+                    setTimeout(() => {
+                        setOpenDetailModal(false);
+                        setScanned(0)
+                    }, 7000);
+                    const payload = {
+                        employeeId: matchedData?.employeeId,
+                        time: convertDate(new Date())
+                    }
+                    try {
+                        const response = await approveAttendance(payload);
+                        if (response.status === 200) {
+                            showToast(response.message, true);
+                            const resData = await fetchAttendanceList({
+                                isActive: true,
+                                searchText: "",
+                                branchId: getUserData()?.userId
+                            });
+                            if (resData.status === 200 && resData.resultObject?.data?.length > 0) {
+                                setBranchData(resData.resultObject.data);
+                            } else {
+                                setOpenDetailModal(false);
+                                showToast(resData.message, false);
+                            }
+                        } else {
+                            showToast(response.message, false);
+                        }
+                    } catch(err) {
+                        console.error(err);
+                        showToast(err.message, false);
+                    }
+                } else {
+                    setIsShowCustomerAttend(true)
                 }
             } else {
-                setIsShowCustomerAttend(true)
+                setScanned(2);
+                showToast("Finger Print not Match", false);
             }
         } else {
-            setScanned(2);
-            showToast("Finger Print not Match", false);
+            showToast("Finger Scanner Not Attached", false);
         }
     }
 
@@ -154,7 +160,7 @@ function Attendance() {
             setIsShowCustomerAttend(false);
             setTotalCustomerAttend(null);
             setOpenDetailModal(false);
-            setMatchData(null)
+            setMatchData(null);
         }
     }
 

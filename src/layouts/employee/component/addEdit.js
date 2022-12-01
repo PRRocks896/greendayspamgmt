@@ -152,22 +152,27 @@ function AddEditEmployee() {
 
     const handleTouchId = () => {
         try {
-            setFingerPrintScanned(false);
-            setValue("touchId", "");
-            const res = window["CaptureFinger"](70, 10);
-            if (res.httpStaus) {
-                if (res.data.ErrorCode === "0") {
-                    setFingerPrintScanned(true);
-                    setValue("touchId", res.data.IsoTemplate);
+            const isAtteched = window["GetMFS100Info"]();
+            if(isAtteched.httpStaus) {
+                setFingerPrintScanned(false);
+                setValue("touchId", "");
+                const res = window["CaptureFinger"](70, 10);
+                if (res.httpStaus) {
+                    if (res.data.ErrorCode === "0") {
+                        setFingerPrintScanned(true);
+                        setValue("touchId", res.data.IsoTemplate);
+                    } else {
+                        setFingerPrintScanned(false);
+                        setValue("touchId", "");
+                        showToast(res.data.ErrorDescription, false)
+                    }
                 } else {
                     setFingerPrintScanned(false);
                     setValue("touchId", "");
-                    showToast(res.data.ErrorDescription, false)
+                    showToast(res.err, false);
                 }
             } else {
-                setFingerPrintScanned(false);
-                setValue("touchId", "");
-                showToast(res.err, false);
+                showToast("Finger Scanner Not Attached", false);
             }
         } catch(err) {
             console.error(err);
@@ -477,7 +482,7 @@ function AddEditEmployee() {
                                                             <MDBox style={{
                                                                 textAlign: "center",
                                                                 cursor: "pointer",
-                                                                border: "1px solid #344767",
+                                                                border: `1px solid ${error?.message ? 'red' : '#344767'}`,
                                                                 borderRadius: "5px",
                                                                 opacity: "0.3",
                                                             }}>
@@ -517,7 +522,7 @@ function AddEditEmployee() {
                                                             <MDBox style={{
                                                                 textAlign: "center",
                                                                 cursor: "pointer",
-                                                                border: "1px solid #344767",
+                                                                border: `1px solid ${error?.message ? 'red' : '#344767'}`,
                                                                 borderRadius: "5px",
                                                                 opacity: "0.3",
                                                             }}>
@@ -556,7 +561,7 @@ function AddEditEmployee() {
                                                             <MDBox style={{
                                                                 textAlign: "center",
                                                                 cursor: "pointer",
-                                                                border: "1px solid #344767",
+                                                                border: `1px solid ${error?.message ? 'red' : '#344767'}`,
                                                                 borderRadius: "5px",
                                                                 opacity: "0.3",
                                                             }}>

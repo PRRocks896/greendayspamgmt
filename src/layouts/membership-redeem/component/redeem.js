@@ -294,7 +294,7 @@ function Redeem(props) {
                                             <MDBox style={{
                                                 textAlign: "center",
                                                 cursor: "pointer",
-                                                border: "1px solid #344767",
+                                                border: `1px solid ${error?.message ? 'red' : '#344767'}`,
                                                 borderRadius: "5px",
                                                 opacity: "0.3",
                                             }}>
