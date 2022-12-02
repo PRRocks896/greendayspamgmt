@@ -506,7 +506,7 @@ function AddEditEmployee() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setLivePhoto(null)}> delete</Icon>}
-                                                        <img style={{ height: "calc(100vh - 250px)" }} src={livePhoto} alt="customer" />
+                                                        <img style={{ width: "250px", height: "auto" }} src={livePhoto} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -545,7 +545,7 @@ function AddEditEmployee() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setIdProof(null)}> delete</Icon>}
-                                                        <img style={{ width: "100%", height: "calc(100vh - 250px)" }} src={idProof} alt="customer" />
+                                                        <img style={{ width: "250px", height: "auto" }} src={idProof} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -585,7 +585,7 @@ function AddEditEmployee() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setAddressPhoto(null)}> delete</Icon>}
-                                                        <img style={{width: "100%", height: "calc(100vh - 250px)" }} src={addressPhoto} alt="customer" />
+                                                        <img style={{width: "250px", height: "auto" }} src={addressPhoto} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>

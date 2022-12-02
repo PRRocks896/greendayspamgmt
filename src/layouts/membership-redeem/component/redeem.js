@@ -318,7 +318,7 @@ function Redeem(props) {
                                         // flexDirection: "row-reverse",
                                         cursor: "pointer",
                                     }}>
-                                        <img style={{ height: "calc(100vh - 500px)", width: "250px" }} src={selectedImage} alt="customer" />
+                                        <img style={{ width: "250px", height: "auto" }} src={selectedImage} alt="customer" />
                                         <Icon fontSize="large" onClick={() => setSelectedImage(null)}> delete</Icon>
                                     </MDBox>
                                 }

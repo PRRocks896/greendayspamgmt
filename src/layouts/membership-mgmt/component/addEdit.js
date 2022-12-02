@@ -709,7 +709,7 @@ function AddEditMembershipMgmt() {
                                                     }}>
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setSelectedImage(null)}> delete</Icon>}
-                                                        <img style={{ height: "calc(100vh - 300px)", width: "250px" }} src={selectedImage} alt="customer" />
+                                                        <img style={{ width: "250px", height: "auto" }} src={selectedImage} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
