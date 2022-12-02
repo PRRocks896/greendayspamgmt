@@ -77,6 +77,7 @@ function MembershipRedeem() {
   }
 
   const handleAfterRedeemSuccess = () => {
+    setRedeemList([]);
     setRedeemDetail(null);
     setRedeemFormShow(false);
   }
@@ -115,7 +116,7 @@ function MembershipRedeem() {
                       {redeemList?.map((data, index) => (
                         <Card onClick={() => handleFetchRedeem({phoneNumber: getValues().phoneNumber, branchId: data.branchId})} sx={{padding: "14px", marginBottom: "12px", cursor: "pointer"}} key={index}>
                           <p>Name: {data.customerName}</p>
-                          <p>Minutes: {data.minutes}</p>
+                          <p>Remaining Minutes: {data.remainingMinutes}</p>
                           <p>Branch: {data.branchName}</p>
                         </Card>
                         

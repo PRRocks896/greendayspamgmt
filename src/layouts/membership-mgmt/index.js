@@ -23,18 +23,46 @@ import { showToast, isAdmin, getUserData, confirmationBox } from "utils/helper";
 
 function MembershipMgmt() {
   const [rows, setRows] = useState([]);
-  const columns = [
-    { Header: "billNo", accessor: "billNo", align: "left" },
-    { Header: "customerName", accessor: "customerName", align: "left" },
-    { Header: "phoneNumber", accessor: "phoneNumber", align: "left" },
-    { Header: "membershipPlanId", accessor: "membershipPlanId", align: "left" },
-    { Header: "paidBy", accessor: "paidBy", align: "left" },
-    { Header: "managerName", accessor: "managerName", align: "left" },
-    { Header: "branchName", accessor: "branchName", align: "left" },
-    { Header: "cityName", accessor: "cityName", align: "left" },
-    { Header: "status", accessor: "isActive", align: "center"},
-    { Header: "action", accessor: "action", align: "center" },
-  ];
+  // const columns = [
+  //   { Header: "billNo", accessor: "billNo", align: "left" },
+  //   { Header: "customerName", accessor: "customerName", align: "left" },
+  //   { Header: "phoneNumber", accessor: "phoneNumber", align: "left" },
+  //   { Header: "membershipPlanId", accessor: "membershipPlanId", align: "left" },
+  //   { Header: "paidBy", accessor: "paidBy", align: "left" },
+  //   { Header: "managerName", accessor: "managerName", align: "left" },
+  //   { Header: "branchName", accessor: "branchName", align: "left" },
+  //   { Header: "cityName", accessor: "cityName", align: "left" },
+    // { Header: "status", accessor: "isActive", align: "center"},
+    // { Header: "action", accessor: "action", align: "center" },
+  // ];
+
+  const columns = useCallback(() => {
+    if(isAdmin()) {
+      return [
+        { Header: "billNo", accessor: "billNo", align: "left" },
+        { Header: "customerName", accessor: "customerName", align: "left" },
+        { Header: "phoneNumber", accessor: "phoneNumber", align: "left" },
+        { Header: "membershipPlanId", accessor: "membershipPlanId", align: "left" },
+        { Header: "paidBy", accessor: "paidBy", align: "left" },
+        { Header: "managerName", accessor: "managerName", align: "left" },
+        { Header: "branchName", accessor: "branchName", align: "left" },
+        { Header: "cityName", accessor: "cityName", align: "left" },
+        { Header: "status", accessor: "isActive", align: "center"},
+        { Header: "action", accessor: "action", align: "center" },
+      ]
+    } else {
+      return [
+        { Header: "billNo", accessor: "billNo", align: "left" },
+        { Header: "customerName", accessor: "customerName", align: "left" },
+        { Header: "phoneNumber", accessor: "phoneNumber", align: "left" },
+        { Header: "membershipPlanId", accessor: "membershipPlanId", align: "left" },
+        { Header: "paidBy", accessor: "paidBy", align: "left" },
+        { Header: "managerName", accessor: "managerName", align: "left" },
+        { Header: "branchName", accessor: "branchName", align: "left" },
+        { Header: "cityName", accessor: "cityName", align: "left" },
+      ]
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -137,7 +165,7 @@ function MembershipMgmt() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns, rows: rows?.map((data, index) => {
+                  table={{ columns: columns(), rows: rows?.map((data, index) => {
                     return {
                       ...data,
                       isActive: (

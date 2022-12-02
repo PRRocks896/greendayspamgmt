@@ -90,7 +90,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
     if(!isAdmin()) {
-      if(!['branch', 'report', 'membershipplan', 'paidmode'].includes(key)) {
+      if(!['branch', 'report', 'membershipplan', 'paidmode', 'employeetype'].includes(key)) {
       if (type === "collapse") {
         returnValue = href ? (
           <Link
