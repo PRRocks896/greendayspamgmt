@@ -501,12 +501,11 @@ function AddEditEmployee() {
                                                         border: "1px solid #344767",
                                                         borderRadius: "5px",
                                                         display: "flex",
-                                                        flexDirection: "row-reverse",
                                                         cursor: "pointer",
                                                     }}>
+                                                        <img style={{ width: "250px", height: "auto" }} src={livePhoto} alt="customer" />
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setLivePhoto(null)}> delete</Icon>}
-                                                        <img style={{ width: "250px", height: "auto" }} src={livePhoto} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -540,12 +539,12 @@ function AddEditEmployee() {
                                                     <MDBox style={{
                                                         border: "1px solid #344767",
                                                         borderRadius: "5px",
-                                                        flexDirection: "row-reverse",
+                                                        display: "flex",
                                                         cursor: "pointer",
                                                     }}>
+                                                        <img style={{ width: "250px", height: "auto" }} src={idProof} alt="customer" />
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setIdProof(null)}> delete</Icon>}
-                                                        <img style={{ width: "250px", height: "auto" }} src={idProof} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
@@ -579,13 +578,13 @@ function AddEditEmployee() {
                                                     <MDBox style={{
                                                         border: "1px solid #344767",
                                                         borderRadius: "5px",
-                                                        // display: "flex",
-                                                        flexDirection: "row-reverse",
+                                                        display: "flex",
+                                                        // flexDirection: "row-reverse",
                                                         cursor: "pointer",
                                                     }}>
+                                                        <img style={{width: "250px", height: "auto" }} src={addressPhoto} alt="customer" />
                                                         {id === null &&
                                                             <Icon fontSize="large" onClick={() => setAddressPhoto(null)}> delete</Icon>}
-                                                        <img style={{width: "250px", height: "auto" }} src={addressPhoto} alt="customer" />
                                                     </MDBox>
                                                 }
                                             </MDBox>
