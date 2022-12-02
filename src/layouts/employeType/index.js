@@ -87,7 +87,7 @@ function EmployeeType() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Paid Mode
+                  Employee Type
                 </MDTypography>
                 <MDTypography
                   variant="h6"

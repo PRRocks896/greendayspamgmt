@@ -128,7 +128,7 @@ export default function App() {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
-      if(!isAdmin() && ['branch', 'report', 'membershipplan', 'paidmode'].includes(route.key)) {
+      if(!isAdmin() && ['branch', 'report', 'membershipplan', 'paidmode', 'employeetype'].includes(route.key)) {
         return null;
       }
       if (route.route) {

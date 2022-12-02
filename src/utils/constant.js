@@ -41,6 +41,8 @@ export const api = {
   sendOtpForMembershipRedeem: "/v1/api/membershipRedeem/MembershipRedeem-otp-send?phone={{phone}}",
   membershipOtpSend: "/v1/api/membershipRedeem/MembershipRedeem-otp-send?phone={{phone}}&Minutes={{Minutes}}&ServiceDetail={{ServiceDetail}}",
   verifyOtpForMembershipRedee: "/v1/api/membershipRedeem?PhoneNumber={{PhoneNumber}}&OTP={{OTP}}",
+  listByPhone: "/v1/api/membershipRedeem/List-By-Phone?Phone={{phoneNumber}}",
+  detailByPhone: "/v1/api/membershipRedeem/Detail-By-Phone?Phone={{phoneNumber}}&BranchId={{branchId}}",
   // Employee
   createEmployee: "/v1/api/employee/AddUpdate-Employee-Web", //"/v1/api/employee",
   updateEmployee: "/v1/api/employee/Update-Employee",

@@ -11,3 +11,7 @@ export const createUpdateMembershipRedeem = (payload) => post(api.createEditMemb
 export const getVerifyToRedeemMembership = (payload) => get(`${replaceUrlVariable(api.membershipOtpSend, payload)}`);
 
 export const verifyOtpForRedeemMembership = (payload) => get(`${replaceUrlVariable(api.verifyOtpForMembershipRedee, payload)}`);
+
+export const listOfPhone = (payload) => get(`${replaceUrlVariable(api.listByPhone, payload)}`);
+
+export const detailOfPhone = (payload) => get(`${replaceUrlVariable(api.detailByPhone, payload)}`);

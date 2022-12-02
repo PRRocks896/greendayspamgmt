@@ -7,6 +7,8 @@ import * as m from "moment";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+// import List from "@mui/material/List";
+// import ListItem from "@mui/material/ListItem";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -21,10 +23,12 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 import Redeem from "layouts/membership-redeem/component/redeem";
 
-import { fetchMembershipRedeem } from "service/membership-redeem.service";
+// fetchMembershipRedeem, 
+import { listOfPhone, detailOfPhone } from "service/membership-redeem.service";
 import { showToast } from "utils/helper";
 
 function MembershipRedeem() {
+  const [redeemList, setRedeemList] = useState([]);
   const [redeemDetail, setRedeemDetail] = useState(null);
   const [redeemFormShow, setRedeemFormShow] = useState(false);
 
@@ -35,9 +39,33 @@ function MembershipRedeem() {
     },
   });
 
+  const handleRedeemList = async (info) => {
+    try { 
+      const response = await listOfPhone({phoneNumber: info.phoneNumber});
+      console.log(response);
+      if(response.status === 200) {
+        if(response.resultObject.length > 1) {
+          setRedeemList(response.resultObject);
+        } else {
+          handleFetchRedeem({
+            phoneNumber: info.phoneNumber,
+            branchId: response.resultObject[0].branchId
+          });
+        }
+      } else {
+        showToast(response.mesage, false);
+      }
+    } catch(err) {
+      showToast(err.message, false);
+    } 
+  }
+
   const handleFetchRedeem = async (info) => {
     try {
-      const response = await fetchMembershipRedeem(info.phoneNumber);
+      const response = await detailOfPhone({
+        phoneNumber: info.phoneNumber,
+        branchId: info.branchId
+      }) //fetchMembershipRedeem(info.phoneNumber);
       if (response.status === 200) {
           setRedeemDetail(response.resultObject);
       } else {
@@ -79,7 +107,24 @@ function MembershipRedeem() {
                 </MDTypography>
               </MDBox>
               <MDBox pt={3} pb={3} px={3}>
-                {(!redeemFormShow && !redeemDetail) ?
+                {!redeemDetail && redeemList && redeemList.length > 0 ?
+                  <MDBox>
+                    <MDTypography variant="h4">
+                      Membership List:
+                    </MDTypography>
+                      {redeemList?.map((data, index) => (
+                        <Card onClick={() => handleFetchRedeem({phoneNumber: getValues().phoneNumber, branchId: data.branchId})} sx={{padding: "14px", marginBottom: "12px", cursor: "pointer"}} key={index}>
+                          <p>Name: {data.customerName}</p>
+                          <p>Minutes: {data.minutes}</p>
+                          <p>Branch: {data.branchName}</p>
+                        </Card>
+                        
+                      ))}
+                  </MDBox>
+                :
+                  null
+                }
+                {(redeemList.length === 0 && !redeemFormShow && !redeemDetail) ?
                     <MDBox component="form" role="form">
                       <MDBox mb={2}>
                           <Controller
@@ -119,7 +164,7 @@ function MembershipRedeem() {
                           component="button"
                           variant="gradient"
                           color="info"
-                          onClick={handleSubmit(handleFetchRedeem)}
+                          onClick={handleSubmit(handleRedeemList)}
                           fullWidth
                           >
                           Get Info
