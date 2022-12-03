@@ -9,3 +9,4 @@ export const fetchByIdEmployee = (id) => get(replaceUrlVariable(api.fetchEmploye
 export const createEmployee = (payload) => post(api.createEmployee, payload);
 
 export const updateEmployee = (payload) => post(api.updateEmployee, payload);
+

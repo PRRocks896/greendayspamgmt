@@ -26,6 +26,8 @@ const PaidMode = lazy(() => import("layouts/paid"));
 const EmployeeType = lazy(() => import("layouts/employeType"));
 const DailyReport = lazy(() => import("layouts/dailyReport"));
 const Report = lazy(() => import("layouts/report"));
+const EmployeeReport = lazy(() => import("layouts/employeeReport"));
+const BranchEmployeeReport = lazy(() => import("layouts/branchReport"));
 const Attendance = lazy(() => import("layouts/attendance"));
 const AdvanceSalary = lazy(() => import("layouts/advanceSalary"));
 
@@ -309,6 +311,30 @@ export const routes = [
     component: (
       <Suspense fallback={<Loading/>}>
         <Report />
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Branch Employee Report",
+    key: "branch-employee-report",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/branch-employee-report",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <BranchEmployeeReport />
+      </Suspense>
+    ),
+  },
+  {
+    type: "collapse",
+    name: "Employee Attendance Report",
+    key: "employee-attendance-report",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/employee-attendance-report",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <EmployeeReport />
       </Suspense>
     ),
   },

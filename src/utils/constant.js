@@ -1,5 +1,9 @@
 export const endpoint = "https://greenapp.fabbang.com";
 
+export const months = [1,2,3,4,5,6,7,8,9,10,11,12];
+
+export const year = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015];
+
 export const api = {
   login: "/v1/api/user/login",
   loginOtpSend: "/v1/api/user/Login-otp-send?phone={{phone}}",
@@ -14,6 +18,7 @@ export const api = {
   updateBranch: "/v1/api/user/update-user",
   branchDropdownList: "/v1/api/user/get-branch-list-dropdown",
   branchById: "/v1/api/user/{{id}}",
+  branchEmployeeReport: "/api/Report/employee-monthly-report-pdf?BranchId={{branchId}}&Month={{month}}&Year={{year}}",
   // Membership Plan
   membershipPlanList: "/v1/api/membershipPlan/get-membershipPlan-list",
   createMembershipPlan: "/v1/api/membershipPlan",
@@ -48,6 +53,7 @@ export const api = {
   updateEmployee: "/v1/api/employee/Update-Employee",
   fetchEmployee: "/v1/api/employee/get-employee-list",
   fetchEmployeeById: "/v1/api/employee/{{id}}",
+  employeeReport: "/api/Report/employee-report-pdf?EmployeeId={{employeeId}}&Month={{month}}&Year={{year}}",
   //Daily Report
   fetchDailyReport: "/v1/api/dailyReport/get-dailyReport-list",
   createUpdateDailyReport: "/v1/api/dailyReport/AddUpdateDailyReport_Web",

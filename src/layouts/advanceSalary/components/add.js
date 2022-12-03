@@ -53,7 +53,6 @@ function AddAdvanceSalary() {
                     branchId: getUserData().userId
                 });
                 if(resEmployee.status === 200) {
-                    console.log(resEmployee?.resultObject?.data);
                     setEmployeeList(resEmployee?.resultObject?.data);
                 }
             }
