@@ -289,9 +289,9 @@ function Employee() {
                     Add Finger Print(click on fingerprint Icon)
                   </MDTypography>
                 </DialogTitle>
-                <DialogContent style={{textAlign: 'center'}}>
+                <DialogContent style={{textAlign: 'center', paddingLeft: '12rem'}}>
                   <MDBox style={{cursor: "pointer"}} onClick={() =>     handleFingerPrint()}>
-                    <MDAvatar src={fingerDefult} size="lg"/>
+                    <MDAvatar src={fingerDefult} size="xxl"/>
                   </MDBox>
                 </DialogContent>
                 <DialogActions>
