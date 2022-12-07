@@ -241,7 +241,7 @@ function Employee() {
                       ),
                       touchId: (
                         <>
-                          {data.touchId !== null ?
+                          {(data.touchId !== null && (typeof data.touchId === 'string' && data.touchId.length > 0)) ?
                             <MDAvatar src={fingerSuccess} size="lg"/>
                           :
                           <MDBox style={{cursor: "pointer"}} onClick={() => [setId(data.employeeId), setOpenModal(true)]}>
