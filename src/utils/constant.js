@@ -49,11 +49,12 @@ export const api = {
   listByPhone: "/v1/api/membershipRedeem/List-By-Phone?Phone={{phoneNumber}}",
   detailByPhone: "/v1/api/membershipRedeem/Detail-By-Phone?Phone={{phoneNumber}}&BranchId={{branchId}}",
   // Employee
-  createEmployee: "/v1/api/employee/AddUpdate-Employee-Web", //"/v1/api/employee",
+  createEmployee: "/v1/api/employee/AddUpdate-Employee-Web",
   updateEmployee: "/v1/api/employee/Update-Employee",
   fetchEmployee: "/v1/api/employee/get-employee-list",
   fetchEmployeeById: "/v1/api/employee/{{id}}",
   employeeReport: "/api/Report/employee-report-pdf?EmployeeId={{employeeId}}&Month={{month}}&Year={{year}}",
+  updateFingerPrint: "/v1/api/employee/Update-TouchId",
   //Daily Report
   fetchDailyReport: "/v1/api/dailyReport/get-dailyReport-list",
   createUpdateDailyReport: "/v1/api/dailyReport/AddUpdateDailyReport_Web",

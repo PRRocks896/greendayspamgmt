@@ -10,3 +10,4 @@ export const createEmployee = (payload) => post(api.createEmployee, payload);
 
 export const updateEmployee = (payload) => post(api.updateEmployee, payload);
 
+export const addFingerPrint = (payload) => post(api.updateFingerPrint, payload);

@@ -221,7 +221,7 @@ function Attendance() {
                                             <b>Employee Type:</b> {matchData?.employeeTypeName}
                                         </MDBox>
                                         <MDBox>
-                                            <b>Date:</b> {m(new Date()).format('yyyy-MM-DD hh:mm a')}
+                                            <b>Date:</b> {m(new Date()).format('DD-MM-yyyy hh:mm a')}
                                         </MDBox>
                                         {isShowCustomerAttend &&
                                             <>
