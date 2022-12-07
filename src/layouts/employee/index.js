@@ -57,6 +57,7 @@ function Employee() {
         { Header: "mobileNumber", accessor: "mobileNumber", align: "center" },
         { Header: "branchName", accessor: "branchName", align: "center" },
         { Header: "cityName", accessor: "cityName", align: "center" },
+        { Header: "Bio Metric", accessor: "touchId", align: "center"},
       ];
     }
   }, []);
