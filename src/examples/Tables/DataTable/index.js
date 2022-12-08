@@ -48,7 +48,7 @@ function DataTable({
   isSorted,
   noEndBorder,
 }) {
-  const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 1000;
+  const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10000;
   const entries = entriesPerPage.entries
     ? entriesPerPage.entries.map((el) => el.toString())
     : ["5", "10", "15", "20", "25"];
@@ -61,7 +61,6 @@ function DataTable({
     useSortBy,
     usePagination
   );
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -81,16 +80,16 @@ function DataTable({
   } = tableInstance;
 
   // Set the default value for the entries per page when component mounts
-  useEffect(() => setPageSize(defaultValue || 1000), [defaultValue, setPageSize]);
+  useEffect(() => setPageSize(defaultValue || 10000), [defaultValue, setPageSize]);
 
   // Set the entries per page value based on the select value
   const setEntriesPerPage = (value) => setPageSize(value);
 
   // Render the paginations
-  const renderPagination = pageOptions.map((option) => (
+  const renderPagination = pageOptions.map((option, index) => (
     <MDPagination
       item
-      key={option}
+      key={index}
       onClick={() => gotoPage(Number(option))}
       active={pageIndex === option}
     >
@@ -99,7 +98,7 @@ function DataTable({
   ));
 
   // Handler for the input to set the pagination index
-  const handleInputPagination = ({ target: { value } }) =>
+  const handleInputPagination = ({ target: { value } }) => 
     value > pageOptions.length || value < 0 ? gotoPage(0) : gotoPage(Number(value));
 
   // Customized page options starting from 1

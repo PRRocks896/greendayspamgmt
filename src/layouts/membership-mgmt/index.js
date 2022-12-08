@@ -153,7 +153,7 @@ function MembershipMgmt() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns: columns(), rows: rows?.map((data, index) => {
+                  table={{ columns: columns(), rows: rows?.map((data) => {
                     return {
                       ...data,
                       isActive: (
