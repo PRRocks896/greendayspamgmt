@@ -62,7 +62,7 @@ export const routes = [
     type: "collapse",
     name: "Branch",
     key: "branch",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">store</Icon>,
     route: "/branch",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -75,7 +75,7 @@ export const routes = [
     href: true,
     name: "Branch",
     key: "branch",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">store</Icon>,
     route: "/branch/:mode/:id",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -88,7 +88,7 @@ export const routes = [
     href: true,
     name: "Branch",
     key: "branch",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">store</Icon>,
     route: "/branch/:mode",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -100,7 +100,7 @@ export const routes = [
     type: "collapse",
     name: "Employee",
     key: "employee",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">group_icon</Icon>,
     route: "/employee",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -112,7 +112,7 @@ export const routes = [
     type: "subComponent",
     name: "Employee",
     key: "employee",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">group_icon</Icon>,
     route: "/employee/:mode",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -124,7 +124,7 @@ export const routes = [
     type: "subComponent",
     name: "Employee",
     key: "employee",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">group_icon</Icon>,
     route: "/employee/:mode/:id",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -136,7 +136,7 @@ export const routes = [
     type: "collapse",
     name: "Attendance",
     key: "attendance",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">today</Icon>,
     route: "/attendance",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -148,7 +148,7 @@ export const routes = [
     type: "collapse",
     name: "Advance Salary",
     key: "advanceSalary",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">post_add_icon</Icon>,
     route: "/advanceSalary",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -160,7 +160,7 @@ export const routes = [
     type: "subComponent",
     name: "Advance Salary",
     key: "advanceSalary",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">post_add_icon</Icon>,
     route: "/advanceSalary/:mode",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -179,7 +179,7 @@ export const routes = [
     type: "collapse",
     name: "Membership Plan",
     key: "membershipplan",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">people_alt</Icon>,
     route: "/membershipplan",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -191,7 +191,7 @@ export const routes = [
     type: "subComponent",
     name: "Membership Plan",
     key: "membershipplan",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">people_alt</Icon>,
     route: "/membershipplan/:mode",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -203,7 +203,7 @@ export const routes = [
     type: "subComponent",
     name: "Membership Plan",
     key: "membershipplan",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">people_alt</Icon>,
     route: "/membershipplan/:mode/:id",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -215,7 +215,7 @@ export const routes = [
     type: "collapse",
     name: "Membership Management",
     key: "membershipmgmt",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">group_add</Icon>,
     route: "/membershipmgmt",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -227,7 +227,7 @@ export const routes = [
     type: "subComponent",
     name: "Membership Management",
     key: "membershipmgmt",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">group_add</Icon>,
     route: "/membershipmgmt/:mode",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -239,7 +239,7 @@ export const routes = [
     type: "subComponent",
     name: "Membership Management",
     key: "membershipmgmt",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">group_add</Icon>,
     route: "/membershipmgmt/:mode/:id",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -251,7 +251,7 @@ export const routes = [
     type: "collapse",
     name: "Membership Redeem",
     key: "membership-redeem",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">redeem</Icon>,
     route: "/membership-redeem",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -381,7 +381,7 @@ export const routes = [
     type: "collapse",
     name: "Employee Type",
     key: "employeetype",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">dynamic_feed</Icon>,
     route: "/employeetype",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -393,7 +393,7 @@ export const routes = [
     type: "subComponent",
     name: "Employee Type",
     key: "employeetype",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">dynamic_feed</Icon>,
     route: "/employeetype/:mode",
     component: (
       <Suspense fallback={<Loading/>}>
@@ -405,7 +405,7 @@ export const routes = [
     type: "subComponent",
     name: "Employee Type",
     key: "employeetype",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
+    icon: <Icon fontSize="small">dynamic_feed</Icon>,
     route: "/employeetype/:mode/:id",
     component: (
       <Suspense fallback={<Loading/>}>
