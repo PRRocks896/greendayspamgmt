@@ -1,4 +1,4 @@
-export const endpoint = "https://greenapp.fabbang.com";
+export const endpoint = "https://dev-green-api.myjilo.com" // "https://greenapp.fabbang.com";
 
 export const months = [1,2,3,4,5,6,7,8,9,10,11,12];
 
