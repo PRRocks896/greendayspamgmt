@@ -90,7 +90,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
     if(!isAdmin()) {
-      if(!['branch', 'report', 'membershipplan', 'paidmode', 'employeetype', 'employee-attendance-report', 'branch-employee-report'].includes(key)) {
+      if(!['branch', 'report', 'membershipplan', 'paidmode', 'employeetype', 'employee-attendance-report', 'branch-employee-report', 'membershipmgmt', 'advanceSalary', 'membership-redeem', 'daily-report'].includes(key)) {
       if (type === "collapse") {
         returnValue = href ? (
           <Link
@@ -112,7 +112,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
           </NavLink>
         );
-      } else if (type === "title") {
+      } else if (type === "title" && ['membershipplan'].includes(key)) {
         returnValue = (
           <MDTypography
             key={key}
@@ -129,7 +129,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             {title}
           </MDTypography>
         );
-      } else if (type === "divider") {
+      } else if (type === "divider" && ['membershipplan', 'daily-report'].includes(key)) {
         returnValue = (
           <Divider
             key={key}
@@ -252,7 +252,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
               <Icon sx={{ fontWeight: "bold" }}>close</Icon>
             </MDTypography>
           </MDBox>
-          <MDBox component={NavLink} to="/" display="flex" alignItems="center">
+          <MDBox component={NavLink} to="/dashboard" display="flex" alignItems="center">
             {brand && <MDBox component="img" src={brand} alt="Brand" width="2rem" />}
             <MDBox
               width={!brandName && "100%"}
