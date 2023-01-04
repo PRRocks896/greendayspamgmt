@@ -37,29 +37,30 @@ function Employee() {
   const [ id, setId ] = useState(null);
   const [rows, setRows] = useState([]);
   const columns = useCallback(() => {
-    if(isAdmin()) {
+    // if(isAdmin()) {
       return [
         { Header: "index", accessor: "index", width: "15%", align: "left" },
         { Header: "firstName", accessor: "firstName", align: "left" },
-        { Header: "fatherName", accessor: "fatherName", align: "center" },
+        { Header: "petName", accessor: "petName", align: "left" },
+        { Header: "fatherName", accessor: "fatherName", align: "left" },
         { Header: "mobileNumber", accessor: "mobileNumber", align: "center" },
         { Header: "branchName", accessor: "branchName", align: "center" },
         { Header: "cityName", accessor: "cityName", align: "center" },
         { Header: "status", accessor: "isActive", align: "center"},
         { Header: "Bio Metric", accessor: "touchId", align: "center"},
-        { Header: "action", accessor: "action", align: "center" },
+        // { Header: "action", accessor: "action", align: "center" },
       ];
-    } else {
-      return [
-        { Header: "index", accessor: "index", width: "15%", align: "left" },
-        { Header: "firstName", accessor: "firstName", align: "left" },
-        { Header: "fatherName", accessor: "fatherName", align: "center" },
-        { Header: "mobileNumber", accessor: "mobileNumber", align: "center" },
-        { Header: "branchName", accessor: "branchName", align: "center" },
-        { Header: "cityName", accessor: "cityName", align: "center" },
-        { Header: "Bio Metric", accessor: "touchId", align: "center"},
-      ];
-    }
+    // } else {
+    //   return [
+    //     { Header: "index", accessor: "index", width: "15%", align: "left" },
+    //     { Header: "firstName", accessor: "firstName", align: "left" },
+    //     { Header: "fatherName", accessor: "fatherName", align: "center" },
+    //     { Header: "mobileNumber", accessor: "mobileNumber", align: "center" },
+    //     { Header: "branchName", accessor: "branchName", align: "center" },
+    //     { Header: "cityName", accessor: "cityName", align: "center" },
+    //     { Header: "Bio Metric", accessor: "touchId", align: "center"},
+    //   ];
+    // }
   }, []);
 
   const navigate = useNavigate();
@@ -290,7 +291,7 @@ function Employee() {
                   </MDTypography>
                 </DialogTitle>
                 <DialogContent style={{textAlign: 'center', paddingLeft: '12rem'}}>
-                  <MDBox style={{cursor: "pointer"}} onClick={() =>     handleFingerPrint()}>
+                  <MDBox style={{cursor: "pointer"}} onClick={() => handleFingerPrint()}>
                     <MDAvatar src={fingerDefult} size="xxl"/>
                   </MDBox>
                 </DialogContent>

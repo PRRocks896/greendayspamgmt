@@ -212,7 +212,7 @@ function Attendance() {
                                             <img style={{borderRadius: '25px', width: '200px', height: 'auto'}} src={`${endpoint}/${matchData?.livePhotoPath}`} alt="Employee"/>
                                         </MDBox>
                                         <MDBox>
-                                            <b>Name:</b> {matchData?.firstName} 
+                                            <b>Name:</b> {matchData?.petName} 
                                         </MDBox>
                                         <MDBox>
                                             <b>Phone Number:</b> {matchData?.mobileNumber}
