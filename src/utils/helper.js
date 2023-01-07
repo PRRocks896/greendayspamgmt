@@ -7,11 +7,12 @@ export const convertDate = (passingDate) => {
   const formattedDate = new Date(passingDate);
   const fullYear = formattedDate.getFullYear();
   const month = formattedDate.getMonth() + 1;
+  const formatedMonth = month > 9 ? month : '0' + month;
   const date = formattedDate.getDate() > 9 ? formattedDate.getDate() : '0' +formattedDate.getDate() ;
   const hour = formattedDate.getHours() > 9 ? formattedDate.getHours() : '0' +formattedDate.getHours();
   const minutes = formattedDate.getMinutes() > 9 ? formattedDate.getMinutes() : '0' + formattedDate.getMinutes();
   const seconds = formattedDate.getSeconds() > 9 ? formattedDate.getSeconds() : '0' + formattedDate.getSeconds();
-  return `${fullYear}-${month}-${date}T${hour}:${minutes}:${seconds}.000Z`
+  return `${fullYear}-${formatedMonth}-${date}T${hour}:${minutes}:${seconds}.000Z`
 }
 export const confirmationBox = (msg) => {
   return window.confirm(msg);
