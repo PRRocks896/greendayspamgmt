@@ -39,8 +39,7 @@ import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
-import { isAdmin } from "utils/helper";
-
+import { isAdmin, getUserData } from "utils/helper";
 // Material Dashboard 2 React context
 import {
   useMaterialUIController,
@@ -48,6 +47,9 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+
+import { logOut } from "service/auth.service";
+import { showToast } from "utils/helper";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
@@ -85,6 +87,21 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleMiniSidenav);
   }, [dispatch, location, transparentSidenav, whiteSidenav]);
+
+  const handleLogOut = async () => {
+    try {
+      const response = await logOut({userId: getUserData().userId });
+      if(response.status === 200) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userData");
+        navigate("/");
+      } else {
+        showToast(response.message, false);
+      }
+    } catch(err) {
+      showToast(err.message, false);
+    }
+  }
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
@@ -146,11 +163,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             icon={icon}
             active={key === collapseName}
             noCollapse={noCollapse}
-            onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("userData");
-              navigate("/");
-            }}
+            onClick={() => handleLogOut()}
           />
         );
       } else {
@@ -216,11 +229,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             icon={icon}
             active={key === collapseName}
             noCollapse={noCollapse}
-            onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("userData");
-              navigate("/");
-            }}
+            onClick={() => handleLogOut()}
           />
         );
       } else {

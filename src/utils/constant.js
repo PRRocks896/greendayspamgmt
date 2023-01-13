@@ -1,4 +1,4 @@
-export const endpoint = "https://dev-green-api.myjilo.com" //"https://green-api.myjilo.com"
+export const endpoint = "https://dev-green-api.myjilo.com"; //"https://green-api.myjilo.com"
 //"https://dev-green-api.myjilo.com" // "https://greenapp.fabbang.com";
 
 export const months = [1,2,3,4,5,6,7,8,9,10,11,12];
@@ -6,8 +6,9 @@ export const months = [1,2,3,4,5,6,7,8,9,10,11,12];
 export const year = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015];
 
 export const api = {
-  login: "/v1/api/user/login",
-  loginOtpSend: "/v1/api/user/Login-otp-send?phone={{phone}}",
+  logOut: "/v1/api/user/Logout_Web?UserId={{userId}}",
+  login: "/v1/api/user/login_web", //"/v1/api/user/login",
+  loginOtpSend: "/v1/api/user/Login-otp-send_Web?phone={{phone}}", //"/v1/api/user/Login-otp-send?phone={{phone}}",
   cityList: "/v1/api/user/get-city-list-dropdown",
   delete: "/v1/api/delete?ModuleName={{moduleName}}&id={{id}}",
   statusChange: "/v1/api/status",
