@@ -34,6 +34,7 @@ export const api = {
   verifyOtp: "/v1/api/membershipManagement/Verified-ExtraHour-OTP?branchId={{branchId}}&OTP={{otp}}",
   sendOtpToSave: "/v1/api/membershipManagement/Send-Membership-OTP?PhoneNumber={{phoneNumber}}&branchId={{branchId}}",
   verifyOtpSave: "/v1/api/membershipManagement/Verified-Membership-OTP?PhoneNumber={{phoneNumber}}&OTP={{otp}}",
+  importExcelMembership: "/api/ExcelData/Add-MembershipData",
   // Paid Mode
   fetchPaidMode: "/v1/api/paidMode/get-paidMode-list",
   createUpdatePaidMode: "/v1/api/paidMode/addUpdate-PaidMode",
@@ -50,6 +51,7 @@ export const api = {
   verifyOtpForMembershipRedee: "/v1/api/membershipRedeem?PhoneNumber={{PhoneNumber}}&OTP={{OTP}}",
   listByPhone: "/v1/api/membershipRedeem/List-By-Phone?Phone={{phoneNumber}}",
   detailByPhone: "/v1/api/membershipRedeem/Detail-By-Phone?Phone={{phoneNumber}}&BranchId={{branchId}}",
+  importExcelMembershipRedeem: "/api/ExcelData/Add-MembershipRedeemData",
   // Employee
   createEmployee: "/v1/api/employee/AddUpdate-Employee-Web",
   updateEmployee: "/v1/api/employee/Update-Employee",
@@ -74,5 +76,5 @@ export const api = {
   fetchEmployeeTypeDropDown: "/v1/api/employeeType/get-employeeType-list-dropdown",
   // Advance Salary
   fetchAdvanceSalaryList: "/v1/api/advanceSalary/get-advanceSalary-list",
-  createAdvanceSalary: "/v1/api/advanceSalary"
+  createAdvanceSalary: "/v1/api/advanceSalary",
 };

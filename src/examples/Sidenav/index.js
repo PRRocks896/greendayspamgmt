@@ -107,7 +107,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
     if(!isAdmin()) {
-      if(!['branch', 'report', 'membershipplan', 'paidmode', 'employeetype', 'employee-attendance-report', 'branch-employee-report', 'membershipmgmt', 'advanceSalary', 'membership-redeem', 'daily-report'].includes(key)) {
+      if(!['import-excel', 'branch', 'report', 'membershipplan', 'paidmode', 'employeetype', 'employee-attendance-report', 'branch-employee-report', 'membershipmgmt', 'advanceSalary', 'membership-redeem', 'daily-report'].includes(key)) {
       if (type === "collapse") {
         returnValue = href ? (
           <Link

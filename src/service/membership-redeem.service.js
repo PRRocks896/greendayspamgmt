@@ -15,3 +15,5 @@ export const verifyOtpForRedeemMembership = (payload) => get(`${replaceUrlVariab
 export const listOfPhone = (payload) => get(`${replaceUrlVariable(api.listByPhone, payload)}`);
 
 export const detailOfPhone = (payload) => get(`${replaceUrlVariable(api.detailByPhone, payload)}`);
+
+export const importExcelMembershipRedeem = (payload) => post(api.importExcelMembershipRedeem, payload);

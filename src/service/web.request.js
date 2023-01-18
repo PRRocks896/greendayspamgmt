@@ -40,6 +40,18 @@ export const getPDF = async (url) => {
   });
 };
 
+export const postSheets = async (url, payload) => {
+  const response = await axios.post(`${endpoint}${url}`, payload, authHeader());
+  console.log(response);
+  if(response.status === 200) {
+    if(response.data) {
+      return response;
+    } else {
+      return {message: 'Added Successfully'};
+    }
+  }
+}
+
 export const get = async (url) => {
   const response = await axios
     .get(`${endpoint}${url}`, authHeader())

@@ -20,6 +20,7 @@ const Branch = lazy(() => import("layouts/branch"));
 const Dashboard = lazy(() => import("layouts/dashboard"));
 const Employee = lazy(() => import("layouts/employee"));
 const MembershipPlan = lazy(() => import("layouts/membershipplan"));
+const ImportExcel = lazy(() => import("layouts/importExcel"));
 // const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
 // const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
@@ -210,6 +211,18 @@ export const routes = [
         <AddEditMembershipPlan />
       </Suspense>
     ),
+  },
+  {
+    type: 'collapse',
+    name: "Import Excel",
+    key: "import-excel",
+    icon: <Icon fontSize="small">group_add</Icon>,
+    route: "/import-excel",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <ImportExcel/>
+      </Suspense>
+    )
   },
   // {
   //   type: "collapse",

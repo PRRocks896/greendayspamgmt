@@ -28,7 +28,7 @@ export default function DragDrop(props) {
                     </Typography>
                 ) : (
                     <Typography display="block" gutterBottom>
-                        Drag your image here
+                        Drag your file here
                     </Typography>
                     )}
             </MDBox>

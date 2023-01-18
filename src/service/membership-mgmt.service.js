@@ -16,3 +16,5 @@ export const verifyOtp = (branchId, otp) => get(`${replaceUrlVariable(api.verify
 export const sendOtpSave = (payload) => get(`${replaceUrlVariable(api.sendOtpToSave, payload)}`);
 
 export const verifyOtpSave = (payload) => get(`${replaceUrlVariable(api.verifyOtpSave, payload)}`);
+
+export const importExcelMembership = (payload) => post(api.importExcelMembership, payload);
