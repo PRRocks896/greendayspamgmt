@@ -10,7 +10,7 @@ import SignIn from "layouts/authentication/sign-in";
 // Material Dashboard 2 React layouts
 const AddEditBranch = lazy(() => import("layouts/branch/component/addEdit"));
 const AddEditMembershipPlan = lazy(() => import("layouts/membershipplan/component/addEdit"));
-// const AddEditMembershipMgmt = lazy(() => import("layouts/membership-mgmt/component/addEdit"));
+const AddEditMembershipMgmt = lazy(() => import("layouts/membership-mgmt/component/addEdit"));
 const AddEditPaidMode = lazy(() => import("layouts/paid/component/addEdit"));
 const AddEditEmployeeType = lazy(() => import("layouts/employeType/component/addEdit"));
 const AddEditEmployee = lazy(() => import("layouts/employee/component/addEdit"));
@@ -21,7 +21,7 @@ const Dashboard = lazy(() => import("layouts/dashboard"));
 const Employee = lazy(() => import("layouts/employee"));
 const MembershipPlan = lazy(() => import("layouts/membershipplan"));
 const ImportExcel = lazy(() => import("layouts/importExcel"));
-// const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
+const MembershipMgmt = lazy(() => import("layouts/membership-mgmt"));
 // const MembershipRedeem = lazy(() => import("layouts/membership-redeem"));
 const PaidMode = lazy(() => import("layouts/paid"));
 const EmployeeType = lazy(() => import("layouts/employeType"));
@@ -224,18 +224,18 @@ export const routes = [
       </Suspense>
     )
   },
-  // {
-  //   type: "collapse",
-  //   name: "Membership Management",
-  //   key: "membershipmgmt",
-  //   icon: <Icon fontSize="small">group_add</Icon>,
-  //   route: "/membershipmgmt",
-  //   component: (
-  //     <Suspense fallback={<Loading/>}>
-  //       <MembershipMgmt />
-  //     </Suspense>
-  //   ),
-  // },
+  {
+    type: "collapse",
+    name: "Membership Management",
+    key: "membershipmgmt",
+    icon: <Icon fontSize="small">group_add</Icon>,
+    route: "/membershipmgmt",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <MembershipMgmt />
+      </Suspense>
+    ),
+  },
   // {
   //   type: "subComponent",
   //   name: "Membership Management",
@@ -248,18 +248,18 @@ export const routes = [
   //     </Suspense>
   //   ),
   // },
-  // {
-  //   type: "subComponent",
-  //   name: "Membership Management",
-  //   key: "membershipmgmt",
-  //   icon: <Icon fontSize="small">group_add</Icon>,
-  //   route: "/membershipmgmt/:mode/:id",
-  //   component: (
-  //     <Suspense fallback={<Loading/>}>
-  //       <AddEditMembershipMgmt />
-  //     </Suspense>
-  //   ),
-  // },
+  {
+    type: "subComponent",
+    name: "Membership Management",
+    key: "membershipmgmt",
+    icon: <Icon fontSize="small">group_add</Icon>,
+    route: "/membershipmgmt/:mode/:id",
+    component: (
+      <Suspense fallback={<Loading/>}>
+        <AddEditMembershipMgmt />
+      </Suspense>
+    ),
+  },
   // {
   //   type: "collapse",
   //   name: "Membership Redeem",

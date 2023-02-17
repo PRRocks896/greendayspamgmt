@@ -18,3 +18,5 @@ export const sendOtpSave = (payload) => get(`${replaceUrlVariable(api.sendOtpToS
 export const verifyOtpSave = (payload) => get(`${replaceUrlVariable(api.verifyOtpSave, payload)}`);
 
 export const importExcelMembership = (payload) => post(api.importExcelMembership, payload);
+
+export const directSave = (payload) => post(api.directUpdateMembership, payload);

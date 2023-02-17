@@ -128,7 +128,8 @@ export default function App() {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
-      if(!isAdmin() && ['branch', 'report', 'membershipplan', 'paidmode', 'employeetype', 'employee-attendance-report', 'branch-employee-report', 'membershipmgmt', 'advanceSalary', 'membership-redeem', 'daily-report', 'import-excel'].includes(route.key)) {
+      // 'membershipmgmt',
+      if(!isAdmin() && ['branch', 'report', 'membershipplan', 'paidmode', 'employeetype', 'employee-attendance-report', 'branch-employee-report', 'advanceSalary', 'membership-redeem', 'daily-report', 'import-excel'].includes(route.key)) {
         return null;
       }
       if (route.route) {

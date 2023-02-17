@@ -1,5 +1,6 @@
-export const endpoint = "https://dev-green-api.myjilo.com"; //"https://green-api.myjilo.com"
-//"https://dev-green-api.myjilo.com" // "https://greenapp.fabbang.com";
+export const endpoint = "https://dev-green-api.myjilo.com"
+//"https://dev-green-api.myjilo.com"
+//"https://green-api.myjilo.com"
 
 export const months = [1,2,3,4,5,6,7,8,9,10,11,12];
 
@@ -35,6 +36,7 @@ export const api = {
   sendOtpToSave: "/v1/api/membershipManagement/Send-Membership-OTP?PhoneNumber={{phoneNumber}}&branchId={{branchId}}",
   verifyOtpSave: "/v1/api/membershipManagement/Verified-Membership-OTP?PhoneNumber={{phoneNumber}}&OTP={{otp}}",
   importExcelMembership: "/api/ExcelData/Add-MembershipData",
+  directUpdateMembership: "/v1/api/membershipManagement/Direct-AddUpdate-MembershipManagement",
   // Paid Mode
   fetchPaidMode: "/v1/api/paidMode/get-paidMode-list",
   createUpdatePaidMode: "/v1/api/paidMode/addUpdate-PaidMode",
